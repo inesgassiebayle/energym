@@ -1,0 +1,118 @@
+***
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="lab1">
+        <class>org.austral.ing.lab1.model.User</class>
+        <class>org.austral.ing.lab1.model.Publication</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/xdb;shutdown=true"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
+
+
+***PUBLICATION
+package org.austral.ing.lab1.model;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+public class Publication {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Column
+    private String description;
+
+    @Column
+    private LocalDateTime creationDate;
+
+    @ManyToOne
+    private User author;
+
+    @ManyToMany()
+    private final List<User> liked = new ArrayList<>();
+
+    public void isLikedBy(User user) {
+        liked.add(user);
+    }
+
+}
+
+***USER
+
+package org.austral.ing.lab1.model;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Column()
+    private String firstName;
+
+    @Column()
+    private String lastName;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private final List<Publication> publications = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "liked")
+    private final List<Publication> likes = new ArrayList<>();
+
+    public User() {}
+
+    public User(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    public void likes(Publication publication) {
+        likes.add(publication);
+        publication.isLikedBy(this);
+    }
+
+    public void addPublication(Publication publication) {
+        publication.isPublishedBy(this);
+        publications.add(publication);
+    }
+
+}
+
+***MAIN
+
+public static void main(String[] args) {
+    final EntityManagerFactory factory = Persistence.createEntityManagerFactory("lab1");
+
+    final EntityManager entityManager = factory.createEntityManager();
+
+    sample3(entityManager);
+
+    entityManager.close();
+}
