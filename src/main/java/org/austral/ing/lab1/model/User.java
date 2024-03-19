@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 public class User {
@@ -18,6 +19,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número")
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -31,4 +33,7 @@ public class User {
         this.password=password;
     }
 
+    public User() {
+
+    }
 }

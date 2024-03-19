@@ -6,11 +6,15 @@
         <class>org.austral.ing.lab1.model.User</class>
         <class>org.austral.ing.lab1.model.Professor</class>
         <class>org.austral.ing.lab1.model.Administrator</class>
+        <class>org.austral.ing.lab1.model.Room</class>
+        <class>org.austral.ing.lab1.model.Activity</class>
+
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/xdb;shutdown=true"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/energymDB;shutdown=true"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
