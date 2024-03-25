@@ -8,7 +8,7 @@ import password_icon from "../Assets/password.png";
 
 const Login = ()=>{
     return (
-        <div className="container">
+        <div className="container-login">
 
             <div className='header'>
                 <div className='title'>

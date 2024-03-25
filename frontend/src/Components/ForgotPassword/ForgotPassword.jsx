@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 const ForgotPassword = ()=>{
     return(
-        <div className="container">
+        <div className="container-forgotpassword">
             <div className='header'>
                 <div className='title'>
                     <div className='text-title'>Restore Password</div>

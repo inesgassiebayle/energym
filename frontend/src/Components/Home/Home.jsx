@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 
 const Home = ()=>{
     return (
-        <div className='container'>
+        <div className='container-home'>
             <div className='logo'>
                 <img src={logo} alt="" style={{width: '300px'}}/>
             </div>
