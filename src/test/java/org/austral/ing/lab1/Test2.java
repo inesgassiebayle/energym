@@ -40,8 +40,8 @@ public class Test2 {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
-        Administrator user = new Administrator("Ines", "Gassiebayle", "inegassiebayle@gmail.com", "inegassiebayle", "hola123456");
-        entityManager.persist(user);
+        //User user = new Administrator("Ines", "Gassiebayle", "inegassiebayle@gmail.com", "inegassiebayle", "hola123456");
+        //entityManager.persist(user);
 
         entityManager.close();
     }
