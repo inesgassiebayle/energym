@@ -6,7 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Administrator extends User {
+public class Administrator{
+
+    @Id
+    @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
+    private Long adminId;
+
     @OneToMany(mappedBy = "administrator", cascade = CascadeType.ALL)
     private Set<Room> rooms = new HashSet<>();
 
@@ -19,7 +24,8 @@ public class Administrator extends User {
     }
 
     public Administrator(String firstName, String lastName, String email, String username, String password) {
-        super(firstName, lastName, email, username, password);
+        super();
     }
+
 }
 
