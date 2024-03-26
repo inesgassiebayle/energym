@@ -6,6 +6,10 @@ import java.util.Set;
 
 @Entity
 public class Student{
+
+    @Id
+    @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
+    private Long studentId;
     @ManyToMany
     @JoinTable(
             name = "bookedClasses",
