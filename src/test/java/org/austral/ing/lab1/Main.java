@@ -1,4 +1,7 @@
-package org.austral.ing.lab1.model;
+package org.austral.ing.lab1;
+
+import org.austral.ing.lab1.model.*;
+import org.austral.ing.lab1.model.Class;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -46,7 +49,7 @@ public class Main {
         entityManager.merge(persistedRoom);
         entityManager.merge(persistedActivity);
 
-        Class clase = new Class("Aquagym", LocalDate.of(2024, 4, 9), LocalTime.of(8, 30));
+        org.austral.ing.lab1.model.Class clase = new Class("Aquagym", LocalDate.of(2024, 4, 9), LocalTime.of(8, 30));
         clase.setActivity(activity);
         clase.setRoom(room);
         clase.setProfessor(user3);
