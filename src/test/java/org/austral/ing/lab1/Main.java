@@ -23,9 +23,20 @@ public class Main {
     }
 
     private static void users(EntityManager entityManager){
-        Administrator user = new Administrator("Ines", "Gassiebayle", "inegassiebayle@gmail.com", "inegassiebayle", "hola123456");
         entityManager.getTransaction().begin();
+
+        final User user =
+                User.create("luke.skywalker@jedis.org", "lukeskywalker1")
+                        .firstName("Luke")
+                        .lastName("Skywalker")
+                        .password("hola11111")
+                        .build();
+
         entityManager.persist(user);
+
+        entityManager.getTransaction().commit();
+
+        /*
 
         Student student = new Student("Luz", "Laura", "llaura@gmail.com", "luzlaura", "2j2j2j2j2j2j2j");
         entityManager.persist(student);
@@ -69,6 +80,7 @@ public class Main {
         student.setMembership(membership);
 
         entityManager.getTransaction().commit();
+        */
     }
 
 
