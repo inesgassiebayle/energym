@@ -1,4 +1,7 @@
-package org.austral.ing.lab1.model;
+package org.austral.ing.lab1;
+
+import org.austral.ing.lab1.model.*;
+import org.austral.ing.lab1.model.Class;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -20,9 +23,20 @@ public class Main {
     }
 
     private static void users(EntityManager entityManager){
-        Administrator user = new Administrator("Ines", "Gassiebayle", "inegassiebayle@gmail.com", "inegassiebayle", "hola123456");
         entityManager.getTransaction().begin();
+
+        final User user =
+                User.create("luke.skywalker@jedis.org", "lukeskywalker1")
+                        .firstName("Luke")
+                        .lastName("Skywalker")
+                        .password("hola11111")
+                        .build();
+
         entityManager.persist(user);
+
+        entityManager.getTransaction().commit();
+
+        /*
 
         Student student = new Student("Luz", "Laura", "llaura@gmail.com", "luzlaura", "2j2j2j2j2j2j2j");
         entityManager.persist(student);
@@ -46,7 +60,7 @@ public class Main {
         entityManager.merge(persistedRoom);
         entityManager.merge(persistedActivity);
 
-        Class clase = new Class("Aquagym", LocalDate.of(2024, 4, 9), LocalTime.of(8, 30));
+        org.austral.ing.lab1.model.Class clase = new Class("Aquagym", LocalDate.of(2024, 4, 9), LocalTime.of(8, 30));
         clase.setActivity(activity);
         clase.setRoom(room);
         clase.setProfessor(user3);
@@ -66,6 +80,7 @@ public class Main {
         student.setMembership(membership);
 
         entityManager.getTransaction().commit();
+        */
     }
 
 

@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Student extends User{
+public class Student{
+
+    @Id
+    @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
+    private Long studentId;
     @ManyToMany
     @JoinTable(
             name = "bookedClasses",
@@ -25,6 +29,10 @@ public class Student extends User{
     @OneToMany(mappedBy = "student")
     private Set<Review> reviews = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
+
     public Set<Review> getReviews() {
         return reviews;
     }
@@ -43,12 +51,6 @@ public class Student extends User{
     public void setMembership(Membership membership) {
         this.membership = membership;
     }
-    public Student() {
-        super();
-    }
-    public Student(String firstName, String lastName, String email, String username, String password) {
-        super(firstName, lastName, email, username, password);
-    }
-
+    public Student() {}
 
 }

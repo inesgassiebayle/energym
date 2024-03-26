@@ -5,7 +5,7 @@ import password_icon from "../Assets/password.png";
 
 const ChangePassword = ()=>{
     return(
-        <div className="container">
+        <div className="container-changepassword">
             <div className='header'>
                 <div className='title'>
                     <div className='text-title'>Change Password</div>
