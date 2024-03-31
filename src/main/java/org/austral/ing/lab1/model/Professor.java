@@ -17,6 +17,10 @@ public class Professor {
     @JoinColumn(name = "professorid", referencedColumnName = "professorid")
     private User user;
 
+    public void setUser(User user){
+        this.user=user;
+    }
+
     public Set<Class> getClasses() {
         return classes;
     }

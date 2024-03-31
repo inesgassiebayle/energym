@@ -52,14 +52,14 @@ public class User{
         this.username = username;
     }
 
-    @Column(nullable = false)
-    private String type;
+    @Column
+    private UserType type;
 
-    public String getType() {
+    public UserType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(UserType type) {
         this.type = type;
     }
 
@@ -86,22 +86,12 @@ public class User{
         this.email = email;
     }
 
-    public User(){}
-
-    public static UserBuilder create(String email, String username) {
-        return new UserBuilder(email, username);
-    }
-
-    private User(UserBuilder builder) {
-        this.firstName = builder.firstName;
-        this.lastName = builder.lastName;
-        this.password = builder.password;
-        this.email = builder.email;
-    }
-
-    public static User fromJson(String json) {
-        final Gson gson = new Gson();
-        return gson.fromJson(json, User.class);
+    public User(String firstName, String lastName, String email, String username, String password){
+        setUsername(username);
+        setLastName(lastName);
+        setFirstName(firstName);
+        setEmail(email);
+        setPassword(password);
     }
 
     public String asJson() {
@@ -109,43 +99,6 @@ public class User{
         return gson.toJson(this);
     }
 
-    public static class UserBuilder {
-        private final String email;
-        private String firstName;
-        private String lastName;
-        private String password;
-        private String type;
-        private String username;
 
-        public UserBuilder(String email, String username) {
-            this.email = email;
-            this.username = username;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserBuilder firstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public UserBuilder lastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public UserBuilder type(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
-        }
-
-    }
 
 }

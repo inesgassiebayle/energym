@@ -33,6 +33,10 @@ public class Student{
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
+    public void setUser(User user){
+        this.user=user;
+    }
+
     public Set<Review> getReviews() {
         return reviews;
     }
