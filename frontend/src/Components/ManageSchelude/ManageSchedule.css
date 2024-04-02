@@ -1,0 +1,74 @@
+.container-manage-schedule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    width: 650px; /* Más espacio */
+    padding: 40px 20px;
+    margin: 80px auto 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    border-radius: 10px; /* Bordes redondeados */
+    transition: transform 0.3s ease;
+}
+
+.container-manage-schedule:hover {
+    transform: translateY(-5px); /* Efecto flotante */
+}
+
+.header-schedule {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px; /* Más espacio */
+}
+
+.header-schedule h1 {
+    color: #004aad;
+    font-size: 28px; /* Más grande */
+    font-family: 'Poppins', sans-serif; /* Fuente Poppins */
+    font-weight: 600; /* Semi-negrita */
+}
+
+.schedule-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Más espacio entre botones */
+    width: 100%; /* Uso completo del ancho disponible */
+}
+
+.schedule-button, .back {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px; /* Bordes más redondeados */
+    color: #fff;
+    font-size: 20px; /* Fuente más grande */
+    font-weight: 600; /* Semi-negrita */
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%; /* Ajuste al contenedor */
+    font-family: 'Poppins', sans-serif; /* Fuente Poppins */
+    background-image: linear-gradient(145deg, #004aad, #0084d1); /* Gradiente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.schedule-button:not(:last-child) {
+    margin-bottom: 10px; /* Espacio entre botones */
+}
+
+.schedule-button:hover, .back:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05); /* Efecto de crecimiento */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra al hacer hover */
+}
+
+.back {
+    background-image: linear-gradient(145deg, #777, #999); /* Gradiente para el botón de regresar */
+}
+
+.back:hover {
+    background-image: linear-gradient(145deg, #999, #bbb); /* Gradiente más claro al hacer hover */
+}

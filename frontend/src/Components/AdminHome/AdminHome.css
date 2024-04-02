@@ -1,0 +1,70 @@
+.container-admin-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    width: 650px; /* Ajuste del ancho para dar más espacio */
+    padding: 40px 20px;
+    margin: 80px auto 20px auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+    border-radius: 10px; /* Bordes redondeados para suavidad */
+    transition: transform 0.3s ease;
+}
+
+.container-admin-home:hover {
+    transform: translateY(-5px); /* Efecto flotante sutil */
+}
+
+.logo-admin img {
+    width: 150px;
+    margin-bottom: 40px;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Más espacio entre botones */
+    width: 100%; /* Aprovechar todo el ancho del contenedor */
+}
+
+.admin-button, .logout {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px; /* Más redondeado */
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600; /* Poppins semi-negrita */
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(145deg, #004aad, #0084d1); /* Gradiente */
+    font-family: 'Poppins', sans-serif; /* Aplica Poppins a tus botones */
+}
+
+
+.admin-button:not(:last-child) {
+    margin-bottom: 10px; /* Espacio entre botones */
+}
+
+.admin-button:hover, .logout:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05); /* Efecto de crecimiento */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra al hacer hover */
+}
+
+.logout {
+    background-image: linear-gradient(145deg, #006494, #0095d5); /* Gradiente más oscuro para logout */
+}
+
+/* Mejora visual para separar visualmente el botón de cerrar sesión */
+.logout + .logout {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #004aad;
+}
