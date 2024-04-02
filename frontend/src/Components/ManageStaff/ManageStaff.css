@@ -1,0 +1,50 @@
+.container-manage-staff {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    width: 600px;
+    padding-bottom: 30px;
+    margin-top: 120px;
+    margin-bottom: 15px;
+    margin-left: 450px;
+}
+
+.staff-list {
+    list-style: none;
+    padding: 0;
+}
+
+.staff-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+}
+
+.staff-item:last-child {
+    border-bottom: none;
+}
+
+.staff-item button {
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.staff-item button:hover {
+    background-color: #d00;
+}
+
+.staff-item button.generate-id-button {
+    background-color: #00f;
+}
+
+.staff-item button.generate-id-button:hover {
+    background-color: #00d;
+}
