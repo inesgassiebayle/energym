@@ -2,12 +2,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #fff;
+    background: linear-gradient(145deg, #2a5298, #1e3c72); /* Fondo con gradiente azul para profundidad visual */
+    color: #e0e0e0; /* Color de texto claro para contraste */
     width: 650px;
     padding: 40px 20px;
     margin: 60px auto;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más definida para un efecto 3D */
     border-radius: 8px;
+    backdrop-filter: blur(8px); /* Efecto de desenfoque trasero para un aspecto más moderno */
 }
 
 .rooms-actions {
@@ -25,13 +27,14 @@
     font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
     width: 100%;
-    background-image: linear-gradient(145deg, #004aad, #0084d1);
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Gradiente azul más vibrante */
     font-family: 'Poppins', sans-serif;
 }
 
 .rooms-button:hover {
-    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px); /* Efecto de elevación para dar dinamismo */
+    background-image: linear-gradient(to right, #003366, #001a33); /* Gradiente oscuro para hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada para profundidad */
 }

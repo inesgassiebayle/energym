@@ -2,17 +2,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #fff;
-    width: 650px; /* Ajuste del ancho para dar más espacio */
+    background: linear-gradient(145deg, #89CFF0, #B3D9FF); /* Gradiente de fondo en tonos celestes */
+    color: #ffffff; /* Texto en blanco para contraste */
+    width: 650px;
     padding: 40px 20px;
     margin: 80px auto 20px auto;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
-    border-radius: 10px; /* Bordes redondeados para suavidad */
-    transition: transform 0.3s ease;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Sombra más profunda para un efecto 3D */
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .container-admin-home:hover {
-    transform: translateY(-5px); /* Efecto flotante sutil */
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Sombra más pronunciada en hover para mayor profundidad */
 }
 
 .logo-admin img {
@@ -23,48 +25,45 @@
 .admin-actions {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Más espacio entre botones */
-    width: 100%; /* Aprovechar todo el ancho del contenedor */
+    gap: 20px;
+    width: 100%;
 }
 
 .admin-button, .logout {
     padding: 15px 30px;
     border: none;
-    border-radius: 30px; /* Más redondeado */
+    border-radius: 30px;
     color: #fff;
     font-size: 18px;
-    font-weight: 600; /* Poppins semi-negrita */
+    font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
-    box-sizing: border-box;
-    outline: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(145deg, #004aad, #0084d1); /* Gradiente */
-    font-family: 'Poppins', sans-serif; /* Aplica Poppins a tus botones */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Gradiente azul vibrante */
+    font-family: 'Poppins', sans-serif;
 }
 
-
 .admin-button:not(:last-child) {
-    margin-bottom: 10px; /* Espacio entre botones */
+    margin-bottom: 10px;
 }
 
 .admin-button:hover, .logout:hover {
-    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
-    transform: scale(1.05); /* Efecto de crecimiento */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra al hacer hover */
+    background-image: linear-gradient(to right, #003366, #001a33); /* Gradiente oscuro para hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* Sombra más intensa para un efecto de profundidad */
 }
 
 .logout {
-    background-image: linear-gradient(145deg, #006494, #0095d5); /* Gradiente más oscuro para logout */
+    background-image: linear-gradient(to right, #00497a, #002851); /* Gradiente más oscuro para logout */
 }
 
-/* Mejora visual para separar visualmente el botón de cerrar sesión */
+/* Añadido para separar visualmente el botón de cerrar sesión y dar un toque futurista */
 .logout + .logout {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 2px solid #004aad;
+    border-top: 2px dashed #007bff; /* Bordes punteados para un estilo más tecnológico */
 }

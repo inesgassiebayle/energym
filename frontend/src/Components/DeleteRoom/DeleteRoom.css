@@ -3,12 +3,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #f5faff; /* Fondo azul claro */
-    width: 70%; /* Ajuste del ancho */
-    padding: 40px; /* Espaciado uniforme */
+    background: linear-gradient(145deg, #2a5f9e, #203354); /* Fondo con gradiente azul */
+    color: #e0e0e0; /* Texto claro para contraste */
+    width: 70%;
+    padding: 40px;
     margin: 60px auto;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 12px; /* Bordes más redondeados */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px); /* Efecto de desenfoque para un look futurista */
 }
 
 .container-delete-room form {
@@ -22,10 +24,12 @@
 .container-delete-room select {
     padding: 12px;
     border-radius: 4px;
-    border: 1px solid #b3d4fc; /* Borde azul claro */
-    background-color: #edf5ff; /* Fondo azul más claro */
+    border: 1px solid #62a4d8; /* Borde con color azul más vibrante */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
+    color: #ffffff; /* Texto blanco para contraste */
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
+    backdrop-filter: blur(5px); /* Efecto de desenfoque en los campos para un look futurista */
 }
 
 .container-delete-room .form-actions {
@@ -34,7 +38,7 @@
 }
 
 .container-delete-room button {
-    padding: 12px 24px; /* Aumento del espaciado */
+    padding: 12px 24px;
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -42,26 +46,27 @@
     font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
     width: 48%;
     font-family: 'Poppins', sans-serif;
-}
-
-
-.container-delete-room button.cancel {
-    background-color: #007bff; /* Azul claro */
-}
-
-.container-delete-room button.confirm {
-    background-color: #0000dd; /* Azul claro */
+    background-image: linear-gradient(to right, #007bff, #00488e); /* Gradiente para botones */
 }
 
 .container-delete-room button:hover {
-    background-color: #0056b3; /* Azul más oscuro al hacer hover */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px); /* Efecto de elevación al hacer hover */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+/* Personalización específica para botones cancel y confirm */
+.container-delete-room button.cancel {
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+}
+
+.container-delete-room button.confirm {
+    background-image: linear-gradient(to right, #00488e, #002855);
 }
 
 .container-delete-room button.confirm:hover,
 .container-delete-room button.cancel:hover {
-    background-color: #004481; /* Azul más oscuro al hacer hover */
+    background-image: linear-gradient(to right, #003366, #001a33); /* Gradiente más oscuro al hacer hover */
 }

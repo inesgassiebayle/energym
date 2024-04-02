@@ -22,27 +22,3 @@ const AdminHome = () => {
 }
 
 export default AdminHome;
-
-
-// import {Link} from "react-router-dom";
-// import React from "react";
-// import './AdminHome.css';
-// import logo from "../Assets/Logo.png"; // Asegúrate de tener el logo en la carpeta correspondiente
-//
-// const AdminHome = () => {
-//     return (
-//         <div className='container-admin-home'>
-//             <div className='logo-admin'>
-//                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
-//             </div>
-//             <div className='admin-actions'>
-//                 <Link to={"/ManageStaff"}><button className='admin-button'>Manage Staff</button></Link>
-//                 <Link to={"/ManageSchedule"}><button className='admin-button'>Manage Schedule</button></Link>
-//                 <Link to={"/ManageRooms"}><button className='admin-button'>Manage Rooms</button></Link>
-//                 <Link to={"/"}><button className='admin-button logout'>Log Out</button></Link>
-//             </div>
-//         </div>
-//     )
-// }
-//
-// export default AdminHome;
