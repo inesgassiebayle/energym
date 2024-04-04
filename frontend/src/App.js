@@ -32,9 +32,6 @@ function App() {
           <Route path="/Home/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
           <Route path="/Home/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
 
-
-
-
       </Routes>
   );
 }
