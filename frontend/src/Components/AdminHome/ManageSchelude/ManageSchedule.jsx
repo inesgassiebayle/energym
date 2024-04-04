@@ -13,7 +13,7 @@ const ManageSchedule = () => {
             <div className='schedule-actions'>
                 <button className='schedule-button'>Add Class</button>
                 <button className='schedule-button'>Delete Class</button>
-                <Link to={"/AdminHome"}><button className='schedule-button back'>Back to Admin Home</button></Link>
+                <Link to={"/Home"}><button className='schedule-button back'>Back to Admin Home</button></Link>
             </div>
         </div>
     )

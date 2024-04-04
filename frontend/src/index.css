@@ -6,7 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('/Users/inegassiebayle/projects/energym/frontend/src/Components/Assets/background4.avif');
+  background-image: url('./Components/Assets/background4.avif');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

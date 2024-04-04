@@ -12,7 +12,7 @@ const CreateRoom = () => {
         e.preventDefault();
         // Aquí implementarías la lógica para crear la clase
         console.log(`Creating class: ${className}, Activity: ${activity}, Capacity: ${capacity}`);
-        navigate('/ManageRooms'); // Vuelve a ManageRooms después de crear la clase
+        navigate('Home/ManageRooms'); // Vuelve a ManageRooms después de crear la clase
     };
 
     return (
@@ -41,7 +41,7 @@ const CreateRoom = () => {
                 />
                 <div className='form-actions'>
                     <button type='submit'>Confirm</button>
-                    <button type='button' onClick={() => navigate('/ManageRooms')}>Cancel</button>
+                    <button type='button' onClick={() => navigate('/Home/ManageRooms')}>Cancel</button>
                 </div>
             </form>
         </div>

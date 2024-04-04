@@ -8,11 +8,11 @@ import TrainerSignup from "./Components/TrainerSignup/TrainerSignup";
 import {useNavigate, Route, Routes} from "react-router-dom";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import AdminHome from "./Components/AdminHome/AdminHome";
-import ManageSchedule from "./Components/ManageSchelude/ManageSchedule";
-import ManageStaff from "./Components/ManageStaff/ManageStaff";
-import ManageRooms from "./Components/ManageRooms/ManageRooms";
-import CreateRoom from "./Components/CreateRoom/CreateRoom";
-import DeleteRoom from "./Components/DeleteRoom/DeleteRoom";
+import ManageSchedule from "./Components/AdminHome/ManageSchelude/ManageSchedule";
+import ManageStaff from "./Components/AdminHome/ManageStaff/ManageStaff";
+import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
+import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
+import DeleteRoom from "./Components/AdminHome/ManageRooms/DeleteRoom/DeleteRoom";
 
 
 function App() {
@@ -25,12 +25,12 @@ function App() {
           <Route path="/Login/RestorePassword" element={<ForgotPassword/>}/>
           <Route path="/SignUp/TrainerSignUp" element={<TrainerSignup/>}/>
           <Route path="/Login/RestorePassword/ChangePassword" element={<ChangePassword/>}/>
-          <Route path="/AdminHome" element={<AdminHome/>}/>
-          <Route path="/ManageSchedule" element={<ManageSchedule/>}/>
-          <Route path="/ManageStaff" element={<ManageStaff/>}/>
-          <Route path="/ManageRooms" element={<ManageRooms/>}/>
-          <Route path="/CreateRoom" element={<CreateRoom/>}/>
-          <Route path="/DeleteRoom" element={<DeleteRoom/>}/>
+          <Route path="/Home" element={<AdminHome/>}/>
+          <Route path="/Home/ManageSchedule" element={<ManageSchedule/>}/>
+          <Route path="/Home/ManageStaff" element={<ManageStaff/>}/>
+          <Route path="/Home/ManageRooms" element={<ManageRooms/>}/>
+          <Route path="/Home/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
+          <Route path="/Home/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
 
 
 

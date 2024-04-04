@@ -12,7 +12,7 @@ const DeleteRoom = () => {
         // Aquí implementarías la lógica para eliminar la sala
         console.log(`Deleting room: ${roomName}`);
         setConfirmDelete(false); // Restablecer el estado después de la eliminación
-        navigate('/AdminHome'); // Vuelve a AdminHome después de eliminar la sala
+        navigate('/Home'); // Vuelve a AdminHome después de eliminar la sala
     };
 
     return (
@@ -29,7 +29,7 @@ const DeleteRoom = () => {
                     />
                     <div className='form-actions'>
                         <button type='submit'>Confirm</button>
-                        <button type='button' onClick={() => navigate('/AdminHome')} className='cancel'>Cancel</button>
+                        <button type='button' onClick={() => navigate('/Home/ManageRooms')} className='cancel'>Cancel</button>
                     </div>
                 </form>
             ) : (

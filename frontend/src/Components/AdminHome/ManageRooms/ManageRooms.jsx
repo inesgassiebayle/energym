@@ -9,8 +9,8 @@ const ManageRooms = () => {
         <div className='container-manage-rooms'>
             <h1>Manage Rooms</h1>
             <div className='rooms-actions'>
-                <button className='rooms-button' onClick={() => navigate('/CreateRoom')}>Create Room</button>
-                <button className='rooms-button' onClick={() => navigate('/DeleteRoom')}>Delete Room</button>
+                <button className='rooms-button' onClick={() => navigate('/Home/ManageRooms/CreateRoom')}>Create Room</button>
+                <button className='rooms-button' onClick={() => navigate('/Home/ManageRooms/DeleteRoom')}>Delete Room</button>
             </div>
         </div>
     );
