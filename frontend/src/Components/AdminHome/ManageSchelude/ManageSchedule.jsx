@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React from "react";
 import './ManageSchedule.css';
-import logo from "../Assets/Logo.png"; // Asegúrate de tener el logo en la carpeta correspondiente
+import logo from "../../Assets/Logo.png"; // Asegúrate de tener el logo en la carpeta correspondiente
 
 const ManageSchedule = () => {
     return (

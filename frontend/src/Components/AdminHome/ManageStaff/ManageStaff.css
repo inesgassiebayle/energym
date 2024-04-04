@@ -1,0 +1,67 @@
+.container-manage-staff {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(145deg, #89CFF0, #B3D9FF); /* Gradiente de fondo en tonos azules claros */
+    color: #ffffff; /* Texto en blanco para contraste */
+    width: 650px; /* Ajustado para una mejor visualización en ventana de computadora */
+    padding: 40px 20px; /* Espaciado interno ampliado para más aireación */
+    margin: 80px auto; /* Margen superior e inferior ajustado */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Sombra más profunda para un efecto 3D */
+    border-radius: 10px; /* Esquinas redondeadas suaves */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves para interactividad */
+}
+
+.container-manage-staff:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Efecto hover para mayor profundidad */
+}
+
+.staff-list {
+    list-style: none;
+    padding: 0;
+    width: 100%; /* Asegura que la lista ocupe todo el contenedor */
+}
+
+.staff-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px; /* Padding aumentado para mejor visualización */
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.2s ease-in-out; /* Transición suave para hover */
+}
+
+.staff-item:last-child {
+    border-bottom: none;
+}
+
+.staff-item:hover {
+    background-color: #E0F2FF; /* Color de fondo al pasar el mouse, más claro para mejor contraste */
+}
+
+.staff-item button {
+    padding: 10px 15px; /* Aumento del padding para botones más grandes y fáciles de interactuar */
+    border: none;
+    border-radius: 20px; /* Bordes redondeados para un aspecto más moderno */
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición suave */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Gradiente azul vibrante */
+    font-family: 'Poppins', sans-serif; /* Fuente consistente con el diseño general */
+    font-weight: 600; /* Texto más audaz */
+}
+
+.staff-item button:hover {
+    background-image: linear-gradient(to right, #003366, #001a33); /* Gradiente más oscuro para hover */
+    transform: scale(1.05); /* Ligero aumento de tamaño para feedback interactivo */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* Sombra para efecto de profundidad */
+}
+
+.staff-item button.generate-id-button {
+    background-image: linear-gradient(to right, #4DB8FF, #1A75FF); /* Gradiente azul personalizado para botón de generación de ID */
+}
+
+.staff-item button.generate-id-button:hover {
+    background-image: linear-gradient(to right, #0056b3, #003366); /* Gradiente oscuro para hover en botón de generación de ID */
+}
