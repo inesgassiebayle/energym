@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.model;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -93,12 +94,21 @@ public class User{
         setEmail(email);
         setPassword(password);
     }
+    public User(){
+
+    }
 
     public String asJson() {
         Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("userId", this.userId);
+        jsonObject.addProperty("firstName", this.firstName);
+        jsonObject.addProperty("lastName", this.lastName);
+        jsonObject.addProperty("username", this.username);
+        jsonObject.addProperty("type", this.type.toString());
+        jsonObject.addProperty("password", this.password);
+        jsonObject.addProperty("email", this.email);
+        return gson.toJson(jsonObject);
     }
-
-
 
 }

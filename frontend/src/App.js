@@ -13,6 +13,7 @@ import ManageStaff from "./Components/AdminHome/ManageStaff/ManageStaff";
 import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
 import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
 import DeleteRoom from "./Components/AdminHome/ManageRooms/DeleteRoom/DeleteRoom";
+import StudentHome from "./Components/StudentHome/StudentHome";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
           <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
           <Route path="/AdministratorHome/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
+          <Route path="/StudentHome" element={<StudentHome/>}/>
 
       </Routes>
   );

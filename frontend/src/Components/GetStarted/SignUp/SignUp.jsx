@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import './SignUp.css';
 import email_icon from '../../Assets/email.png';
 import password_icon from '../../Assets/password.png';
 import person_icon from '../../Assets/person.png';
 import logo from '../../Assets/Logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
     const [firstName, setFirstName] = useState('');
@@ -13,6 +13,7 @@ const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSignUp = async () => {
         try {
@@ -24,6 +25,7 @@ const SignUp = () => {
                 password: password
             });
             console.log(response.data);
+            navigate('/Login');
         } catch (error) {
             console.error('Error al enviar solicitud:', error);
         }

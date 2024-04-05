@@ -1,5 +1,5 @@
 import logo from "../../Assets/Logo.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import React from "react";
 import './Login.css'
@@ -10,6 +10,7 @@ import axios from "axios";
 const Login = ()=>{
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const login = async () => {
         try {
@@ -19,8 +20,16 @@ const Login = ()=>{
                     password: password,
                 },
             });
-            // Manejar la respuesta del backend aquí
-            console.log(response.data);
+
+            const userData = response.data;
+
+            if (userData.type === 'STUDENT') {
+                navigate('/StudentHome');
+            } else if (userData.type === 'ADMINISTRATOR') {
+                navigate('/AdministratorHome');
+            } else {
+                console.log(userData);
+            }
         } catch (error) {
             console.error("Error de inicio de sesión:", error);
         }

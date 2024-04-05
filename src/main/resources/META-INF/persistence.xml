@@ -13,8 +13,6 @@
         <class>org.austral.ing.lab1.model.Review</class>
         <class>org.austral.ing.lab1.model.Membership</class>
 
-
-
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/energymDB;shutdown=true"/>
