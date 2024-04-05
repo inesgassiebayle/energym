@@ -1,4 +1,4 @@
-.manage-schedule-container {
+.get-started-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,78 +11,47 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
-.schedule-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.schedule-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 30px;
-
+.get-started-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
 }
 
 .logo img {
     width: 150px;
-    margin-right: 5px;
+    margin-bottom: 40px;
 }
 
-.logo{
-    margin-right: 20px;
-}
-
-.schedule-actions {
+.get-started-actions {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
 }
 
-.schedule-button, .back {
+.get-started-button {
     padding: 15px 30px;
     border: none;
     border-radius: 30px;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
-    font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(145deg, #004aad, #0084d1);
     display: flex;
     justify-content: center;
     align-items: center;
-    outline: none;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
 }
 
-.schedule-button:not(:last-child) {
+.get-started-button:not(:last-child) {
     margin-bottom: 10px;
 }
 
-.schedule-button:hover, .back:hover {
+.get-started-button:hover {
     background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.back {
-    background-image: linear-gradient(145deg, #777, #999);
-}
-
-.back:hover {
-    background-image: linear-gradient(145deg, #999, #bbb);
-}
-
-a {
-    text-decoration: none;
 }

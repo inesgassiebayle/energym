@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DeleteRoom.css';
+import logo from "../../../Assets/Logo.png";
 
 const DeleteRoom = () => {
     let navigate = useNavigate();
@@ -12,12 +13,19 @@ const DeleteRoom = () => {
         // Aquí implementarías la lógica para eliminar la sala
         console.log(`Deleting room: ${roomName}`);
         setConfirmDelete(false); // Restablecer el estado después de la eliminación
-        navigate('/Home'); // Vuelve a AdminHome después de eliminar la sala
+        navigate('/AdministratorHome'); // Vuelve a AdminHome después de eliminar la sala
     };
 
     return (
-        <div className='container-delete-room'>
-            <h1>Delete Room</h1>
+        <div className='delete-room-container'>
+            <div className="delete-rooms-header">
+                <div className="delete-rooms-title">
+                    <div className="text">Delete Room</div>
+                </div>
+                <div className="logo">
+                    <img src={logo} alt=""/>
+                </div>
+            </div>
             {!confirmDelete ? (
                 <form onSubmit={() => setConfirmDelete(true)}>
                     <input
@@ -29,7 +37,8 @@ const DeleteRoom = () => {
                     />
                     <div className='form-actions'>
                         <button type='submit'>Confirm</button>
-                        <button type='button' onClick={() => navigate('/Home/ManageRooms')} className='cancel'>Cancel</button>
+                        <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')} className='cancel'>Cancel
+                        </button>
                     </div>
                 </form>
             ) : (

@@ -1,4 +1,4 @@
-.container-forgotpassword {
+.signup-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,12 +6,17 @@
     width: 650px;
     padding: 40px 20px;
     margin: 80px auto 20px auto;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Sombra más profunda para un efecto 3D */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.header {
+.signup-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.signup-header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -19,43 +24,35 @@
     gap: 20px;
     width: 100%;
     margin-top: 30px;
-    margin-right: 25px;
-    margin-left: 25px;
 }
 
-.title {
+.signup-title {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 20px;
+    margin-right: 100px;
 }
 
-.logo-change img {
+
+.logo img {
     width: 150px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
-.text-title{
+.text{
     color: #00d6d1;
-    font-size: 35px;
+    font-size: 48px;
     font-weight: 700;
     margin-bottom: 10px;
 }
 
-.underline{
-    width: 61px;
-    height: 6px;
-    background: #00d6d1;
-    border-radius: 9px;
-}
-
-.inputs{
+.signup-inputs{
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.input{
+.signup-input{
     display: flex;
     align-items: center;
     margin: auto;
@@ -68,11 +65,11 @@
     border-radius: 6px;
 }
 
-.input img{
+.signup-input img{
     margin: 0px 30px;
 }
 
-.input input{
+.signup-input input{
     height: 50px;
     width: 400px;
     background: transparent;
@@ -81,43 +78,31 @@
     font-size: 19px;
     border-radius: 25px;
 }
-.trainer-signup{
-    padding-left: 62px;
-    margin-top: 27px;
-    color: #797979;
-    font-size: 18px;
-}
-
-.trainer-signup button{
-    background: transparent;
-    color: #004aad;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    font-size: 18px;
-}
-
 .signup-button {
-    padding: 10px 15px;
+    padding: 15px 30px;
     border: none;
-    border-radius: 25px;
-    background-color: #004aad;
+    border-radius: 30px;
     color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 50%;
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(145deg, #004aad, #0084d1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    margin-top: 20px;
 }
 
 .signup-button:hover {
-    background-color: #00d6d1;
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-image: url('/Users/inegassiebayle/projects/energym/frontend/src/Components/Assets/background4.avif');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+
+

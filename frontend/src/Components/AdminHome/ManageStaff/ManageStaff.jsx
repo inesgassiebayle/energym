@@ -2,6 +2,7 @@ import './ManageStaff.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../Assets/Logo.png';
+import person_icon from "../../Assets/person.png";
 
 const ManageStaff = () => {
     const [userName, setUserName] = useState('');
@@ -18,19 +19,25 @@ const ManageStaff = () => {
     };
 
     return (
-        <div className='container-manage-staff'>
-            <div className='header-staff'>
-                <img src={logo} alt='Logo' style={{ width: '100px' }} />
-                <h1>Manage Staff</h1>
+        <div className='manage-staff-container'>
+            <div className="manage-staff-header">
+                <div className="manage-staff-title">
+                    <div className="text">Manage Staff</div>
+                </div>
+                <div className="logo">
+                    <img src={logo} alt=""/>
+                </div>
             </div>
             <div className='staff-actions'>
                 <div className='user-input'>
-                    <input type='text' value={userName} onChange={(e) => setUserName(e.target.value)} placeholder='Enter user name' />
+                    <img src={person_icon} alt=""/>
+                    <input type='text' value={userName} onChange={(e) => setUserName(e.target.value)}
+                           placeholder='Enter username'/>
                 </div>
                 <button className='staff-button' onClick={handleGenerateId}>Generate ID</button>
                 <button className='staff-button' onClick={handleDeleteUser}>Delete User</button>
-                <Link to={'/AdminHome'}>
-                    <button className='staff-button back'>Back to Admin Home</button>
+                <Link to={'/AdministratorHome'}>
+                    <button className='staff-button back'>Home</button>
                 </Link>
             </div>
         </div>

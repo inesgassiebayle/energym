@@ -1,4 +1,4 @@
-.container {
+.trainer-signup-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,12 +6,18 @@
     width: 650px;
     padding: 40px 20px;
     margin: 80px auto 20px auto;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Sombra más profunda para un efecto 3D */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.header {
+.trainer-signup-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.trainer-signup-header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,7 +27,7 @@
     margin-top: 30px;
 }
 
-.title {
+.trainer-signup-title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,21 +46,13 @@
     font-weight: 700;
     margin-bottom: 10px;
 }
-
-.underline{
-    width: 61px;
-    height: 6px;
-    background: #00d6d1;
-    border-radius: 9px;
-}
-
-.inputs{
+.trainer.signup-inputs{
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.input{
+.trainer-signup-input {
     display: flex;
     align-items: center;
     margin: auto;
@@ -65,13 +63,15 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 6px;
+    margin-bottom: 25px;
 }
 
-.input img{
+
+.trainer-signup-input img{
     margin: 0px 30px;
 }
 
-.input input{
+.trainer-signup-input input{
     height: 50px;
     width: 400px;
     background: transparent;
@@ -80,19 +80,30 @@
     font-size: 19px;
     border-radius: 25px;
 }
-.signup-button {
-    padding: 10px 15px;
+
+.trainer-signup-button {
+    padding: 15px 30px;
     border: none;
-    border-radius: 25px;
-    background-color: #004aad;
+    border-radius: 30px;
     color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 50%;
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(145deg, #004aad, #0084d1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    margin-top: 20px;
 }
 
-.signup-button:hover {
-    background-color: #00d6d1;
+.trainer-signup-button:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 

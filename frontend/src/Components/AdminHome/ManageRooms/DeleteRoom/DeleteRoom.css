@@ -1,72 +1,102 @@
-.container-delete-room {
+.delete-room-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(145deg, #2a5f9e, #203354); /* Fondo con gradiente azul */
-    color: #e0e0e0; /* Texto claro para contraste */
-    width: 70%;
-    padding: 40px;
-    margin: 60px auto;
+    background: #fff;
+    width: 650px;
+    padding: 40px 20px;
+    margin: 80px auto 20px auto;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    backdrop-filter: blur(10px); /* Efecto de desenfoque para un look futurista */
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.container-delete-room form {
+.delete-rooms-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.delete-rooms-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 30px;
+
+}
+
+.logo img {
+    width: 150px;
+    margin-right: 5px;
+}
+
+.logo{
+    margin-right: 20px;
+}
+
+.text{
+    color: #00d6d1;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.delete-room-container form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
 }
 
-.container-delete-room input,
+.delete-room-container input,
 .container-delete-room select {
     padding: 12px;
     border-radius: 4px;
-    border: 1px solid #62a4d8; /* Borde con color azul más vibrante */
-    background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente */
-    color: #ffffff; /* Texto blanco para contraste */
+    border: 1px solid #62a4d8;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: black;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    backdrop-filter: blur(5px); /* Efecto de desenfoque en los campos para un look futurista */
+    backdrop-filter: blur(5px);
 }
 
-.container-delete-room .form-actions {
+.delete-room-container .form-actions {
     display: flex;
     justify-content: space-between;
 }
 
-.container-delete-room button {
-    padding: 12px 24px;
+.delete-room-container button {
+    padding: 15px 30px;
     border: none;
-    border-radius: 4px;
+    border-radius: 30px;
     color: #fff;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-    width: 48%;
-    font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(to right, #007bff, #00488e); /* Gradiente para botones */
-}
-
-.container-delete-room button:hover {
-    transform: translateY(-2px); /* Efecto de elevación al hacer hover */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-}
-
-/* Personalización específica para botones cancel y confirm */
-.container-delete-room button.cancel {
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
+    flex: 1;
+    margin: 0 5px;
 }
 
-.container-delete-room button.confirm {
-    background-image: linear-gradient(to right, #00488e, #002855);
+.delete-room-container button:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.container-delete-room button.confirm:hover,
-.container-delete-room button.cancel:hover {
-    background-image: linear-gradient(to right, #003366, #001a33); /* Gradiente más oscuro al hacer hover */
+.delete-room-container .confirmation-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

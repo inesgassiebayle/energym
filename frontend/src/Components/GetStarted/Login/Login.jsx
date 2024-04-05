@@ -1,18 +1,17 @@
-import logo from "../Assets/Logo.png";
+import logo from "../../Assets/Logo.png";
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import React from "react";
 import './Login.css'
-import person_icon from "../Assets/person.png";
-import email_icon from "../Assets/email.png";
-import password_icon from "../Assets/password.png";
+import person_icon from "../../Assets/person.png";
+import password_icon from "../../Assets/password.png";
 import axios from "axios";
 
 const Login = ()=>{
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = async () => {
+    const login = async () => {
         try {
             const response = await axios.get(`http://localhost:3333/user/login`, {
                 params: {
@@ -28,29 +27,27 @@ const Login = ()=>{
     };
 
     return (
-        <div className="container-login">
-
-            <div className='header'>
-                <div className='title'>
+        <div className="login-container">
+            <div className='login-header'>
+                <div className='login-title'>
                     <div className='text'>Login</div>
-                    <div className='underline'></div>
                 </div>
                 <div className='logo'>
                     <img src={logo} alt=""/>
                 </div>
             </div>
-            <div className='inputs'>
-                <div className='input'>
+            <div className='login-inputs'>
+                <div className='login-input'>
                     <img src={person_icon} alt=""/>
                     <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
                 </div>
-                <div className='input'>
+                <div className='login-input'>
                     <img src={password_icon} alt=""/>
                     <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
             </div>
             <div className='forgot-password'>Forgot your password? <Link to={"/Login/RestorePassword"}><button>Click Here!</button></Link></div>
-            <button className='login-button' onClick={handleLogin}>Login</button>
+            <button className='login-button' onClick={login}>Login</button>
         </div>
     )
 }

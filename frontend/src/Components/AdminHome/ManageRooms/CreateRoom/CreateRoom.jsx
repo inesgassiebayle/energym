@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateRoom.css';
+import logo from "../../../Assets/Logo.png";
 
 const CreateRoom = () => {
     let navigate = useNavigate();
@@ -12,12 +13,19 @@ const CreateRoom = () => {
         e.preventDefault();
         // Aquí implementarías la lógica para crear la clase
         console.log(`Creating class: ${className}, Activity: ${activity}, Capacity: ${capacity}`);
-        navigate('Home/ManageRooms'); // Vuelve a ManageRooms después de crear la clase
+        navigate('AdministratorHome/ManageRooms'); // Vuelve a ManageRooms después de crear la clase
     };
 
     return (
-        <div className='container-create-class'>
-            <h1>Create Room</h1>
+        <div className='create-rooms-container'>
+                <div className="create-rooms-header">
+                    <div className="create-rooms-title">
+                        <div className="text">Create Room</div>
+                    </div>
+                    <div className="logo">
+                        <img src={logo} alt=""/>
+                    </div>
+                </div>
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -41,7 +49,7 @@ const CreateRoom = () => {
                 />
                 <div className='form-actions'>
                     <button type='submit'>Confirm</button>
-                    <button type='button' onClick={() => navigate('/Home/ManageRooms')}>Cancel</button>
+                    <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Cancel</button>
                 </div>
             </form>
         </div>
