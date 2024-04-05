@@ -1,6 +1,7 @@
 package org.austral.ing.lab1;
 
 import com.google.gson.Gson;
+import org.austral.ing.lab1.controller.RoomsController;
 import org.austral.ing.lab1.controller.UserController;
 import spark.Spark;
 import com.google.common.base.Strings;
@@ -19,6 +20,7 @@ public class Application {
         final EntityManager entityManager = factory.createEntityManager();
 
         final UserController userController = new UserController(entityManager);
+        final RoomsController roomsController = new RoomsController(entityManager);
 
         Spark.port(3333);
 
@@ -40,6 +42,7 @@ public class Application {
 
         Spark.post("/user/studentSignup", userController::studentSignup);
         Spark.get("/user/login", userController::login);
+        Spark.get("/room/creation", roomsController::roomCreation);
     }
 
     private static String capitalized(String name) {

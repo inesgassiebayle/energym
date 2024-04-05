@@ -1,5 +1,9 @@
 package org.austral.ing.lab1.model;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,6 +30,10 @@ public class Room {
 
     public Set<Activity> getActivities(){
         return activities;
+    }
+
+    public void setActivity(Activity activity){
+        activities.add(activity);
     }
 
     @ManyToOne
@@ -55,6 +63,19 @@ public class Room {
 
     public Room(){
         this.activities = new HashSet<>();
+    }
+
+    public String asJson() {
+        Gson gson = new Gson();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("roomId", this.roomId);
+        jsonObject.addProperty("name", this.name);
+        JsonArray activityJson = new JsonArray();
+        for (Activity activity : activities) {
+            activityJson.add(activity.getName());
+        }
+        jsonObject.add("activities", activityJson);
+        return gson.toJson(jsonObject);
     }
 
 }

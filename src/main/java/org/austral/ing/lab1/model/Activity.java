@@ -18,6 +18,10 @@ public class Activity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "activityRoom",
@@ -25,6 +29,10 @@ public class Activity {
             inverseJoinColumns = @JoinColumn(name = "roomId")
     )
     private Set<Room> rooms;
+
+    public void setRoom(Room room){
+        rooms.add(room);
+    }
 
     public Set<Room> getRooms(){
         return rooms;

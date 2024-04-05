@@ -1,4 +1,4 @@
-package org.austral.ing.lab1;
+package org.austral.ing.lab1.querrys;
 
 import org.austral.ing.lab1.model.Room;
 import org.austral.ing.lab1.model.User;
@@ -23,6 +23,10 @@ public class Rooms {
                 "FROM Room r " +
                 "WHERE r.name LIKE :name", Room.class);
         query.setParameter("name", name);
+        List<Room> rooms = query.getResultList();
+        if(rooms.isEmpty()){
+            return null;
+        }
         return query.getSingleResult();
     }
 

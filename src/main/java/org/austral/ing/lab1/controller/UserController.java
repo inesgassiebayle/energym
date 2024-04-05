@@ -1,7 +1,7 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
-import org.austral.ing.lab1.Students;
-import org.austral.ing.lab1.Users;
+import org.austral.ing.lab1.querrys.Students;
+import org.austral.ing.lab1.querrys.Users;
 import org.austral.ing.lab1.dto.SignupUserDto;
 import org.austral.ing.lab1.model.Student;
 import org.austral.ing.lab1.model.User;

@@ -1,4 +1,4 @@
-package org.austral.ing.lab1;
+package org.austral.ing.lab1.querrys;
 
 import org.austral.ing.lab1.model.User;
 
