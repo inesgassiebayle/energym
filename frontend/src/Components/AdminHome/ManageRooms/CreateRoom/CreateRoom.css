@@ -45,8 +45,6 @@
     font-weight: 700;
     margin-bottom: 10px;
 }
-
-
 .create-rooms-container form {
     display: flex;
     flex-direction: column;
@@ -109,3 +107,4 @@
     display: flex;
     justify-content: center; /* Centrar horizontalmente los botones */
 }
+

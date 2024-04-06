@@ -1,31 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateRoom.css';
 import logo from "../../../Assets/Logo.png";
+import axios from "axios";
 
 const CreateRoom = () => {
     let navigate = useNavigate();
     const [className, setClassName] = useState('');
-    const [activity, setActivity] = useState('');
     const [capacity, setCapacity] = useState('');
+    const [selectedActivities, setSelectedActivities] = useState({});
+    const [activityNames, setActivityNames] = useState([]);
+    const [showOptions, setShowOptions] = useState(false); // Estado para mostrar u ocultar las opciones
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        const fetchActivityNames = async () => {
+            try {
+                const response = await axios.get('http://localhost:3333/activity/get');
+                setActivityNames(response.data);
+            } catch (error) {
+                console.error('Error fetching activity names:', error);
+            }
+        };
+        fetchActivityNames();
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aquí implementarías la lógica para crear la clase
-        console.log(`Creating class: ${className}, Activity: ${activity}, Capacity: ${capacity}`);
-        navigate('AdministratorHome/ManageRooms'); // Vuelve a ManageRooms después de crear la clase
+        try {
+            const activities = Object.entries(selectedActivities)
+                .filter(([activityName, isSelected]) => isSelected)
+                .map(([activityName]) => activityName);
+
+            const response = await axios.post('http://localhost:3333/room/create', {
+                name: className,
+                capacity: capacity,
+                activities: activities.join(',')
+            });
+            console.log(response.data);
+            navigate('/AdministratorHome');
+        } catch (error) {
+            console.error('Error al enviar solicitud:', error);
+        }
+    };
+
+    const handleSelectChange = (e) => {
+        const { name, checked } = e.target;
+        setSelectedActivities({ ...selectedActivities, [name]: checked });
     };
 
     return (
         <div className='create-rooms-container'>
-                <div className="create-rooms-header">
-                    <div className="create-rooms-title">
-                        <div className="text">Create Room</div>
-                    </div>
-                    <div className="logo">
-                        <img src={logo} alt=""/>
-                    </div>
+            <div className="create-rooms-header">
+                <div className="create-rooms-title">
+                    <div className="text">Create Room</div>
                 </div>
+                <div className="logo">
+                    <img src={logo} alt=""/>
+                </div>
+            </div>
             <form onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -34,12 +66,26 @@ const CreateRoom = () => {
                     placeholder='Room Name'
                     required
                 />
-                <select value={activity} onChange={(e) => setActivity(e.target.value)} required>
-                    <option value=''>Select Activity</option>
-                    <option value='Spinning'>Spinning</option>
-                    <option value='Pilates'>Pilates</option>
-                    {/* Añade más opciones según sea necesario */}
-                </select>
+                <div className="select-activity-container">
+                    <div className="select-activity" onClick={() => setShowOptions(!showOptions)}>
+                        Select Activity
+                    </div>
+                    {showOptions && (
+                        <div className="activity-options">
+                            {activityNames.map((activityName, index) => (
+                                <div key={index}>
+                                    <input
+                                        type="checkbox"
+                                        name={activityName}
+                                        checked={selectedActivities[activityName] || false}
+                                        onChange={handleSelectChange}
+                                    />
+                                    <label>{activityName}</label>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
                 <input
                     type='number'
                     value={capacity}

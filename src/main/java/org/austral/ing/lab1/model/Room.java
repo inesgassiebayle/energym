@@ -27,7 +27,12 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity;
 
-    @ManyToMany(mappedBy = "rooms")
+    @ManyToMany
+    @JoinTable(
+            name = "activityRoom",
+            joinColumns = @JoinColumn(name = "roomId"),
+            inverseJoinColumns = @JoinColumn(name = "activityId")
+    )
     private Set<Activity> activities;
 
     public Set<Activity> getActivities(){
@@ -36,6 +41,11 @@ public class Room {
 
     public void setActivity(Activity activity){
         activities.add(activity);
+    }
+
+    public void removeActivity(Activity activity){
+        activities.remove(activity);
+        activity.getRooms().remove(this);
     }
 
     @ManyToOne
@@ -65,5 +75,18 @@ public class Room {
 
     public Room(){
         this.activities = new HashSet<>();
+    }
+
+    public String asJson(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("roomId", this.roomId);
+        jsonObject.addProperty("name", this.name);
+        jsonObject.addProperty("capacitiy", this.capacity);
+        JsonArray activitiesNames = new JsonArray();
+        for (Activity activity : this.activities) {
+            activitiesNames.add(activity.getName());
+        }
+        jsonObject.add("activities", activitiesNames);
+        return jsonObject.toString();
     }
 }

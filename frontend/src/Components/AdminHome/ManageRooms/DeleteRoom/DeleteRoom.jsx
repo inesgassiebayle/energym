@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DeleteRoom.css';
 import logo from "../../../Assets/Logo.png";
+import axios from "axios";
 
 const DeleteRoom = () => {
     let navigate = useNavigate();
-    const [roomName, setRoomName] = useState('');
+
+    const [roomNames, setRoomNames] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState('');
     const [confirmDelete, setConfirmDelete] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Aquí implementarías la lógica para eliminar la sala
-        console.log(`Deleting room: ${roomName}`);
-        setConfirmDelete(false); // Restablecer el estado después de la eliminación
-        navigate('/AdministratorHome'); // Vuelve a AdminHome después de eliminar la sala
+    useEffect(() => {
+        const fetchRoomNames = async () => {
+            try {
+                const response = await axios.get('http://localhost:3333/room/get');
+                setRoomNames(response.data);
+            } catch (error) {
+                console.error('Error fetching room names:', error);
+            }
+        };
+        fetchRoomNames();
+    }, []);
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post('http://localhost:3333/room/delete', {
+                name: selectedRoom
+            });
+            console.log('Room deleted:', response.data);
+            navigate('/AdministratorHome');
+        } catch (error) {
+            console.error('Error deleting room:', error);
+        }
     };
 
     return (
@@ -28,22 +47,20 @@ const DeleteRoom = () => {
             </div>
             {!confirmDelete ? (
                 <form onSubmit={() => setConfirmDelete(true)}>
-                    <input
-                        type='text'
-                        value={roomName}
-                        onChange={(e) => setRoomName(e.target.value)}
-                        placeholder='Room Name'
-                        required
-                    />
+                    <select value={selectedRoom} onChange={(e) => setSelectedRoom(e.target.value)} required>
+                        <option value=''>Select Room</option>
+                        {roomNames.map((roomName, index) => (
+                            <option key={index} value={roomName}>{roomName}</option>
+                        ))}
+                    </select>
                     <div className='form-actions'>
                         <button type='submit'>Confirm</button>
-                        <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')} className='cancel'>Cancel
-                        </button>
+                        <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')} className='cancel'>Cancel</button>
                     </div>
                 </form>
             ) : (
                 <div className='confirmation-message'>
-                    <p>Are you sure you want to delete the room "{roomName}"?</p>
+                    <p>Are you sure you want to delete the room "{selectedRoom}"?</p>
                     <div className='confirmation-actions'>
                         <button onClick={handleSubmit}>Yes</button>
                         <button onClick={() => setConfirmDelete(false)} className='cancel'>No</button>

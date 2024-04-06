@@ -1,6 +1,8 @@
 package org.austral.ing.lab1;
 import org.austral.ing.lab1.controller.ActivityController;
+import org.austral.ing.lab1.controller.RoomController;
 import org.austral.ing.lab1.controller.UserController;
+import org.austral.ing.lab1.model.Room;
 import spark.Spark;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +17,7 @@ public class Application {
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
+        final RoomController roomController = new RoomController(entityManager);
 
 
         Spark.port(3333);
@@ -41,6 +44,11 @@ public class Application {
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);
         Spark.get("/activity/get", activityController::getActivities);
+
+        Spark.post("/room/create", roomController::addRoom);
+        Spark.post("/room/delete", roomController::deleteRoom);
+        Spark.get("/room/get", roomController::getRooms);
+
 
     }
 }

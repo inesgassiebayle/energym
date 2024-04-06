@@ -26,12 +26,7 @@ public class Activity {
         return name;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "activityRoom",
-            joinColumns = @JoinColumn(name = "activityId"),
-            inverseJoinColumns = @JoinColumn(name = "roomId")
-    )
+    @ManyToMany(mappedBy = "activities")
     private Set<Room> rooms;
 
     public void setRoom(Room room){
