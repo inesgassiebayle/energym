@@ -14,6 +14,9 @@ import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
 import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
 import DeleteRoom from "./Components/AdminHome/ManageRooms/DeleteRoom/DeleteRoom";
 import StudentHome from "./Components/StudentHome/StudentHome";
+import ManageActivities from "./Components/AdminHome/ManageActivities/ManageActivities";
+import ActivityAddition from "./Components/AdminHome/ManageActivities/AddActivity/ActivityAddition";
+import ActivityDeletion from "./Components/AdminHome/ManageActivities/DeleteActivity/ActivityDeletion";
 
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
           <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
           <Route path="/AdministratorHome/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
           <Route path="/StudentHome" element={<StudentHome/>}/>
+          <Route path="/AdministratorHome/ManageActivities" element={<ManageActivities/>}/>
+          <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>
+          <Route path="/AdministratorHome/ManageActivities/DeleteActivity" element={<ActivityDeletion/>}/>
 
       </Routes>
   );

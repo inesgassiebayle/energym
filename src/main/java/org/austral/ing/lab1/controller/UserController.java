@@ -1,9 +1,10 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.austral.ing.lab1.dto.SignUpDto;
+import org.austral.ing.lab1.model.Student;
 import org.austral.ing.lab1.querrys.Students;
 import org.austral.ing.lab1.querrys.Users;
-import org.austral.ing.lab1.dto.SignupUserDto;
-import org.austral.ing.lab1.model.Student;
 import org.austral.ing.lab1.model.User;
 import org.austral.ing.lab1.model.UserType;
 import spark.Request;
@@ -14,40 +15,45 @@ import java.util.regex.Pattern;
 public class UserController {
     private final Users users;
     private final Students students;
+
     private final Gson gson = new Gson();
 
     public UserController(EntityManager entityManager) {
         this.users = new Users(entityManager);
-        this.students =new Students(entityManager);
+        this.students = new Students(entityManager);
     }
 
     public String studentSignup(Request req, Response res) {
-        SignupUserDto userDto = gson.fromJson(req.body(), SignupUserDto.class);
-        if(!isValidEmailFormat(userDto.getEmail())){
+        SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
+
+        String firstName = signUpDto.getFirstName();
+        String lastName = signUpDto.getLastName();
+        String email = signUpDto.getEmail();
+        String username = signUpDto.getUsername();
+        String password = signUpDto.getPassword();
+
+        if(!isValidEmailFormat(email)){
             return "Invalid email";
         }
 
-
-        if(users.findUserByUsername(userDto.getUsername())!=null){
-            return "Username already exists";
+        if(users.findUserByUsernameOrEmail(username, email)!=null){
+            return "Username or email already registered";
         }
 
-        User user = userSignup(userDto);
+        User user = new User(firstName, lastName, email, username, password);
+        user.setType(UserType.STUDENT);
+        users.persist(user);
+
         Student student = new Student();
         student.setUser(user);
         students.persist(student);
 
         res.type("application/json");
+
+
         return user.asJson();
     }
 
-
-    private User userSignup(SignupUserDto userDto){
-        User user = new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getUsername(), userDto.getPassword());
-        user.setType(UserType.STUDENT);
-        users.persist(user);
-        return user;
-    }
 
     public String login(Request req, Response res) {
         // Get the parameters from the request (username and password)

@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.querrys;
 
 import org.austral.ing.lab1.model.Activity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Activities {
         this.entityManager = entityManager;
     }
 
-    public Activity findActivityrById(Long id) {
+    public Activity findActivityById(Long id) {
         return entityManager.find(Activity.class, id);
     }
 
@@ -20,7 +21,6 @@ public class Activities {
         TypedQuery<Activity> query = entityManager.createQuery("SELECT a FROM Activity a", Activity.class);
         return query.getResultList();
     }
-
 
     public Activity findActivityByName(String name) {
         TypedQuery<Activity> query = entityManager.createQuery("SELECT a " +

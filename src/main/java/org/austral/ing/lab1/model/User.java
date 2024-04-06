@@ -94,21 +94,14 @@ public class User{
         setEmail(email);
         setPassword(password);
     }
+
     public User(){
 
     }
 
     public String asJson() {
         Gson gson = new Gson();
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userId", this.userId);
-        jsonObject.addProperty("firstName", this.firstName);
-        jsonObject.addProperty("lastName", this.lastName);
-        jsonObject.addProperty("username", this.username);
-        jsonObject.addProperty("type", this.type.toString());
-        jsonObject.addProperty("password", this.password);
-        jsonObject.addProperty("email", this.email);
-        return gson.toJson(jsonObject);
+        return gson.toJson(this);
     }
 
 }

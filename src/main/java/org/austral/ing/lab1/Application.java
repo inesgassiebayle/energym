@@ -1,26 +1,21 @@
 package org.austral.ing.lab1;
-
-import com.google.gson.Gson;
-import org.austral.ing.lab1.controller.RoomsController;
+import org.austral.ing.lab1.controller.ActivityController;
 import org.austral.ing.lab1.controller.UserController;
 import spark.Spark;
-import com.google.common.base.Strings;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import static spark.Spark.before;
 import static spark.Spark.options;
 
 public class Application {
-    private static final Gson gson = new Gson();
     public static void main(String[] args) {
+
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
         final EntityManager entityManager = factory.createEntityManager();
-
         final UserController userController = new UserController(entityManager);
-        final RoomsController roomsController = new RoomsController(entityManager);
+        final ActivityController activityController = new ActivityController(entityManager);
+
 
         Spark.port(3333);
 
@@ -40,12 +35,12 @@ public class Application {
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
-        Spark.post("/user/studentSignup", userController::studentSignup);
+        Spark.post("/user/student-signup", userController::studentSignup);
         Spark.get("/user/login", userController::login);
-        Spark.get("/room/creation", roomsController::roomCreation);
-    }
 
-    private static String capitalized(String name) {
-        return Strings.isNullOrEmpty(name) ? name : name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        Spark.post("/activity/add", activityController::addActivity);
+        Spark.post("/activity/delete", activityController::deleteActivity);
+        Spark.get("/activity/get", activityController::getActivities);
+
     }
 }

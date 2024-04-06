@@ -23,7 +23,7 @@ const ManageRooms = () => {
                 <button className='rooms-button'
                         onClick={() => navigate('/AdministratorHome/ManageRooms/DeleteRoom')}>Delete Room
                 </button>
-                <Link to={"/AdministratorHome"}><button className='schedule-button back'>Home</button></Link>
+                <Link to={"/AdministratorHome"}><button className='rooms-button back'>Home</button></Link>
             </div>
         </div>
     );

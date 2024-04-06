@@ -22,6 +22,8 @@ public class Room {
     @Column(nullable = false, unique = true)
     private String name;
 
+    public String getName(){return name; }
+
     @Column(nullable = false)
     private Integer capacity;
 
@@ -64,18 +66,4 @@ public class Room {
     public Room(){
         this.activities = new HashSet<>();
     }
-
-    public String asJson() {
-        Gson gson = new Gson();
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("roomId", this.roomId);
-        jsonObject.addProperty("name", this.name);
-        JsonArray activityJson = new JsonArray();
-        for (Activity activity : activities) {
-            activityJson.add(activity.getName());
-        }
-        jsonObject.add("activities", activityJson);
-        return gson.toJson(jsonObject);
-    }
-
 }

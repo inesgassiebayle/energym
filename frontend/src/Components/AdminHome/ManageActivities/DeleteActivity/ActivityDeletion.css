@@ -1,4 +1,4 @@
-.delete-room-container {
+.delete-activity-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +11,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.delete-rooms-header {
+.delete-activity-header {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,7 +21,7 @@
     margin-top: 20px;
 }
 
-.delete-rooms-title {
+.delete-activity-title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,15 +45,14 @@
     margin-bottom: 10px;
 }
 
-.delete-room-container form {
+.delete-activity-container form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
 }
 
-.delete-room-container input,
-.delete-room-container select {
+.delete-activity-container select {
     padding: 12px;
     border-radius: 4px;
     border: 1px solid #62a4d8;
@@ -64,12 +63,12 @@
     backdrop-filter: blur(5px);
 }
 
-.delete-room-container .form-actions {
+.delete-activity-container .form-actions {
     display: flex;
     justify-content: space-between;
 }
 
-.delete-room-container button {
+.delete-activity-container button {
     padding: 15px 30px;
     border: none;
     border-radius: 30px;
@@ -89,13 +88,13 @@
     margin: 0 5px;
 }
 
-.delete-room-container button:hover {
+.delete-activity-container button:hover {
     background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.delete-room-container .confirmation-actions {
+.delete-activity-container .confirmation-actions {
     display: flex;
     justify-content: space-between;
     width: 100%;
