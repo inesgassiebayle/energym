@@ -21,27 +21,27 @@ import ActivityDeletion from "./Components/AdminHome/ManageActivities/DeleteActi
 
 function App() {
     const navigate = useNavigate();
-  return (
-      <Routes>
-          <Route path="/" element={<GetStarted/>}/>
-          <Route path="/Login" element={<Login/>}/>
-          <Route path="/Signup" element={<SignUp/>}/>
-          <Route path="/Login/RestorePassword" element={<ForgotPassword/>}/>
-          <Route path="/SignUp/TrainerSignUp" element={<TrainerSignup/>}/>
-          <Route path="/Login/RestorePassword/ChangePassword" element={<ChangePassword/>}/>
-          <Route path="/AdministratorHome" element={<AdminHome/>}/>
-          <Route path="/AdministratorHome/ManageSchedule" element={<ManageSchedule/>}/>
-          <Route path="/AdministratorHome/ManageStaff" element={<ManageStaff/>}/>
-          <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
-          <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
-          <Route path="/AdministratorHome/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
-          <Route path="/StudentHome" element={<StudentHome/>}/>
-          <Route path="/AdministratorHome/ManageActivities" element={<ManageActivities/>}/>
-          <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>
-          <Route path="/AdministratorHome/ManageActivities/DeleteActivity" element={<ActivityDeletion/>}/>
+    return (
+        <Routes>
+            <Route path="/" element={<GetStarted/>}/>
+            <Route path="/Login" element={<Login/>}/>
+            <Route path="/Signup" element={<SignUp/>}/>
+            <Route path="/Login/RestorePassword" element={<ForgotPassword/>}/>
+            <Route path="/SignUp/TrainerSignUp" element={<TrainerSignup/>}/>
+            <Route path="/Login/RestorePassword/ChangePassword" element={<ChangePassword/>}/>
+            <Route path="/AdministratorHome" element={<AdminHome/>}/>
+            <Route path="/AdministratorHome/ManageSchedule" element={<ManageSchedule/>}/>
+            <Route path="/AdministratorHome/ManageStaff" element={<ManageStaff/>}/>
+            <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
+            <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
+            <Route path="/AdministratorHome/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
+            <Route path="/StudentHome" element={<StudentHome/>}/>
+            <Route path="/AdministratorHome/ManageActivities" element={<ManageActivities/>}/>
+            <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>
+            <Route path="/AdministratorHome/ManageActivities/DeleteActivity" element={<ActivityDeletion/>}/>
 
-      </Routes>
-  );
+        </Routes>
+    );
 }
 
 export default App;
