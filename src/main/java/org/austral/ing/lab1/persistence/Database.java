@@ -6,7 +6,8 @@ import java.sql.Connection;
 
 public class Database {
 
-    final String dbLocation = "/Users/inegassiebayle/projects/lab1/hsqldb-2.7.2/hsqldb/db/";
+    final String getDbLocation = "/Users/inegassiebayle/projects/lab1/hsqldb-2.7.2/hsqldb/db/";
+    final String dbLocation = "../hsqldb-2.7.2/hsqldb/db/";
     org.hsqldb.server.Server server;
 
     public void startDBServer() {
