@@ -1,5 +1,7 @@
 package org.austral.ing.lab1.model;
 
+import com.google.gson.Gson;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Class{
+public class Lesson {
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long classId;
@@ -16,7 +18,7 @@ public class Class{
     private String name;
 
     @Column()
-    private LocalDate date;
+    private LocalDate startDate;
 
     @Column()
     private LocalTime time;
@@ -24,6 +26,9 @@ public class Class{
     @ManyToOne
     @JoinColumn(name = "activityId")
     private Activity activity;
+
+
+
 
     public Activity getActivity() {
         return activity;
@@ -79,13 +84,17 @@ public class Class{
         this.reviews = reviews;
     }
 
-    public Class(String name, LocalDate date, LocalTime time){
-        this.name = name;
-        this.date = date;
-        this.time = time;
+    @Column()
+    private LocalDate endDate;
+
+    public Lesson(String name, LocalTime time, LocalDate startDate) {
+    }
+    public Lesson() {
+
     }
 
-    public Class(){
-
+    public String asJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
