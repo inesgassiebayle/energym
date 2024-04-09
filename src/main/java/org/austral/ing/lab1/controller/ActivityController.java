@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.ActivityDto;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Room;
-import org.austral.ing.lab1.querrys.Activities;
-import org.austral.ing.lab1.querrys.Rooms;
+import org.austral.ing.lab1.queries.Activities;
+import org.austral.ing.lab1.queries.Rooms;
 import spark.Request;
 import spark.Response;
 

@@ -11,7 +11,7 @@ public class Professor {
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long professorid;
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    private Set<Class> classes = new HashSet<>();
+    private Set<Lesson> classes = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "professorid", referencedColumnName = "professorid")
@@ -21,16 +21,16 @@ public class Professor {
         this.user=user;
     }
 
-    public Set<Class> getClasses() {
+    public Set<Lesson> getClasses() {
         return classes;
     }
 
-    public void addClass(Class lesson) {
+    public void addClass(Lesson lesson) {
         classes.add(lesson);
         lesson.setProfessor(this);
     }
 
-    public void removeClass(Class lesson) {
+    public void removeClass(Lesson lesson) {
         classes.remove(lesson);
         lesson.setProfessor(null);
     }

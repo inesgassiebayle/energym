@@ -1,7 +1,5 @@
-package org.austral.ing.lab1.querrys;
+package org.austral.ing.lab1.queries;
 import org.austral.ing.lab1.model.Student;
-import org.austral.ing.lab1.model.User;
-import org.austral.ing.lab1.model.UserType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

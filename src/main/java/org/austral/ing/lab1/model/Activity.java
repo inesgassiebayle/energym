@@ -38,9 +38,9 @@ public class Activity {
     }
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
-    private Set<Class> classes = new HashSet<>();
+    private Set<Lesson> classes = new HashSet<>();
 
-    public Set<Class> getClasses() {
+    public Set<Lesson> getClasses() {
         return classes;
     }
 

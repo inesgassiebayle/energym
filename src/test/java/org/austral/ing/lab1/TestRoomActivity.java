@@ -2,14 +2,13 @@ package org.austral.ing.lab1;
 
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Room;
-import org.austral.ing.lab1.querrys.Activities;
-import org.austral.ing.lab1.querrys.Rooms;
+import org.austral.ing.lab1.queries.Activities;
+import org.austral.ing.lab1.queries.Rooms;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.swing.*;
 
 public class TestRoomActivity {
     final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");

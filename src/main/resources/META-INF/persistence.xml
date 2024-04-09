@@ -9,7 +9,7 @@
         <class>org.austral.ing.lab1.model.Student</class>
         <class>org.austral.ing.lab1.model.Room</class>
         <class>org.austral.ing.lab1.model.Activity</class>
-        <class>org.austral.ing.lab1.model.Class</class>
+        <class>org.austral.ing.lab1.model.Lesson</class>
         <class>org.austral.ing.lab1.model.Review</class>
         <class>org.austral.ing.lab1.model.Membership</class>
 

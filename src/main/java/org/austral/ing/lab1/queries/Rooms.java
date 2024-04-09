@@ -1,4 +1,4 @@
-package org.austral.ing.lab1.querrys;
+package org.austral.ing.lab1.queries;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Room;
 import javax.persistence.EntityManager;

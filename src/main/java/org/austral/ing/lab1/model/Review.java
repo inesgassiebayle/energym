@@ -33,13 +33,13 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "class_id")
-    private Class lesson;
+    private Lesson lesson;
 
-    public Class getLesson() {
+    public Lesson getLesson() {
         return lesson;
     }
 
-    public void setLesson(Class lesson) {
+    public void setLesson(Lesson lesson) {
         this.lesson = lesson;
     }
 

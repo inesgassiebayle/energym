@@ -1,10 +1,9 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.Student;
-import org.austral.ing.lab1.querrys.Students;
-import org.austral.ing.lab1.querrys.Users;
+import org.austral.ing.lab1.queries.Students;
+import org.austral.ing.lab1.queries.Users;
 import org.austral.ing.lab1.model.User;
 import org.austral.ing.lab1.model.UserType;
 import spark.Request;

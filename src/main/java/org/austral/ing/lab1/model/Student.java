@@ -16,13 +16,13 @@ public class Student{
             joinColumns = @JoinColumn(name = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "classId")
     )
-    private Set<Class> classes = new HashSet<>();
+    private Set<Lesson> classes = new HashSet<>();
 
-    public Set<Class> getClasses() {
+    public Set<Lesson> getClasses() {
         return classes;
     }
 
-    public void setClasses(Set<Class> classes) {
+    public void setClasses(Set<Lesson> classes) {
         this.classes = classes;
     }
 

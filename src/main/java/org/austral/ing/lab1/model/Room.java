@@ -65,9 +65,9 @@ public class Room {
     }
 
     @OneToMany(mappedBy = "room")
-    private Set<Class> classes = new HashSet<>();
+    private Set<Lesson> classes = new HashSet<>();
 
-    public Set<Class> getClasses(){
+    public Set<Lesson> getClasses(){
         return classes;
     }
 

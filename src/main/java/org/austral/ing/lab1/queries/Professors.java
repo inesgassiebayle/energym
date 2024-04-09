@@ -5,6 +5,7 @@ import org.austral.ing.lab1.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 public class Professors {
@@ -28,6 +29,18 @@ public class Professors {
             return null;
         }
         return professors.get(0);
+    }
+
+    public void persist(Professor professor) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(professor);
+        entityManager.getTransaction().commit();
+    }
+
+    public void delete(Professor professor){
+        entityManager.getTransaction().begin();
+        entityManager.remove(professor);
+        entityManager.getTransaction().commit();
     }
 
 
