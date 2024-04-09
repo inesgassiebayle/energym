@@ -1,5 +1,4 @@
 package org.austral.ing.lab1.dto;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -7,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 public class LessonDto {
     private String name;
     private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
-
     private String activity;
     private String professor;
     private String startDate; // Should match the ISO_LOCAL_DATE format (yyyy-MM-dd)
@@ -45,7 +43,6 @@ public class LessonDto {
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-
 
     public String getActivity() {
         return activity;

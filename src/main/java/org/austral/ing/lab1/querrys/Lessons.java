@@ -1,9 +1,9 @@
 package org.austral.ing.lab1.querrys;
-
 import org.austral.ing.lab1.model.Lesson;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 public class Lessons {
@@ -48,13 +48,4 @@ public class Lessons {
 
 
 }
-
-
-//    public List<Lesson> findLessonByDate(LocalDate date){
-//        TypedQuery<Lesson> query = entityManager.createQuery("SELECT l " +
-//                "FROM Lesson l " +
-//                "WHERE l.date = :date", Lesson.class);
-//        query.setParameter("date", date);
-//        return query.getResultList();
-//    }
 

@@ -1,9 +1,11 @@
 package org.austral.ing.lab1.querrys;
+
 import org.austral.ing.lab1.model.Professor;
 import org.austral.ing.lab1.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 public class Professors {

@@ -1,17 +1,13 @@
 package org.austral.ing.lab1.controller;
-
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.LessonDto;
 import org.austral.ing.lab1.dto.ConcurrentLessonDto;
 import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Activity;
-import org.austral.ing.lab1.model.User;
 import org.austral.ing.lab1.model.Professor;
-
 import org.austral.ing.lab1.querrys.Lessons;
 import org.austral.ing.lab1.querrys.Professors;
 import org.austral.ing.lab1.querrys.Users;
-
 import org.austral.ing.lab1.querrys.Activities;
 
 import spark.Request;

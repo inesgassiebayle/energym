@@ -1,7 +1,5 @@
 package org.austral.ing.lab1.model;
-
 import com.google.gson.Gson;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,9 +24,6 @@ public class Lesson {
     @ManyToOne
     @JoinColumn(name = "activityId")
     private Activity activity;
-
-
-
 
     public Activity getActivity() {
         return activity;
@@ -87,11 +82,14 @@ public class Lesson {
     @Column()
     private LocalDate endDate;
 
+
+
     public Lesson(String name, LocalTime time, LocalDate startDate) {
     }
     public Lesson() {
 
     }
+
 
     public String asJson() {
         Gson gson = new Gson();
