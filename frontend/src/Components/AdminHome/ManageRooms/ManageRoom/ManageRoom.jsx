@@ -1,16 +1,16 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './DeleteRoom.css';
+import './ManageRoom.css';
 import logo from "../../../Assets/Logo.png";
 import axios from "axios";
 
-const DeleteRoom = () => {
+const ManageRoom = (room) => {
     let navigate = useNavigate();
 
     const [roomNames, setRoomNames] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState('');
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const fetchRoomNames = async () => {
@@ -26,9 +26,7 @@ const DeleteRoom = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/room/delete', {
-                name: selectedRoom
-            });
+            const response = await axios.delete(`http://localhost:3333/room/${selectedRoom}/delete`);
             console.log('Room deleted:', response.data);
             navigate('/AdministratorHome');
         } catch (error) {
@@ -40,7 +38,7 @@ const DeleteRoom = () => {
         <div className='delete-room-container'>
             <div className="delete-rooms-header">
                 <div className="delete-rooms-title">
-                    <div className="text">Delete Room</div>
+                    <div className="text">Manage Room</div>
                 </div>
                 <div className="logo">
                     <img src={logo} alt=""/>
@@ -55,8 +53,14 @@ const DeleteRoom = () => {
                         ))}
                     </select>
                     <div className='form-actions'>
-                        <button type='submit'>Confirm</button>
-                        <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')} className='cancel'>Cancel</button>
+                        <button type='submit'>Delete</button>
+                        { isEditing &&
+                        <div>
+                        <ManageRoom room={selectedRoom}/>
+                        </div>
+
+                        }
+                        <button type='button' onClick={() => navigate(`/AdministratorHome/ManageRooms/ManageRoom/ModifyRoom/${selectedRoom}`)} className='cancel'>Modify Room</button>
                     </div>
                 </form>
             ) : (
@@ -72,4 +76,4 @@ const DeleteRoom = () => {
     );
 }
 
-export default DeleteRoom;
+export default ManageRoom;

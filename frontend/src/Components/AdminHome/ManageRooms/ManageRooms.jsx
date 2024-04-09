@@ -21,9 +21,11 @@ const ManageRooms = () => {
                         onClick={() => navigate('/AdministratorHome/ManageRooms/CreateRoom')}>Create Room
                 </button>
                 <button className='rooms-button'
-                        onClick={() => navigate('/AdministratorHome/ManageRooms/DeleteRoom')}>Delete Room
+                        onClick={() => navigate('/AdministratorHome/ManageRooms/ManageRoom')}>Modify Room
                 </button>
-                <Link to={"/AdministratorHome"}><button className='rooms-button back'>Home</button></Link>
+                <Link to={"/AdministratorHome"}>
+                    <button className='rooms-button back'>Home</button>
+                </Link>
             </div>
         </div>
     );

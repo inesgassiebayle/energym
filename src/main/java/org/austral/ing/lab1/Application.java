@@ -46,9 +46,11 @@ public class Application {
         Spark.get("/activity/get", activityController::getActivities);
 
         Spark.post("/room/create", roomController::addRoom);
-        Spark.post("/room/delete", roomController::deleteRoom);
+        Spark.delete("/room/:name/delete", roomController::deleteRoom);
         Spark.get("/room/get", roomController::getRooms);
-
+        Spark.patch("/room", roomController::getRooms);
+        Spark.get("/room/:name/getActivities", roomController::getRoomActivities);
+        Spark.get("/room/:name/getCapacity", roomController::getRoomCapacity);
 
     }
 }

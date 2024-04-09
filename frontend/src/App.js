@@ -12,7 +12,8 @@ import ManageSchedule from "./Components/AdminHome/ManageSchelude/ManageSchedule
 import ManageStaff from "./Components/AdminHome/ManageStaff/ManageStaff";
 import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
 import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
-import DeleteRoom from "./Components/AdminHome/ManageRooms/DeleteRoom/DeleteRoom";
+import ModifyRoom from "./Components/AdminHome/ManageRooms/ManageRoom/ModifyRoom/ModifyRoom";
+import ManageRoom from "./Components/AdminHome/ManageRooms/ManageRoom/ManageRoom";
 import StudentHome from "./Components/StudentHome/StudentHome";
 import ManageActivities from "./Components/AdminHome/ManageActivities/ManageActivities";
 import ActivityAddition from "./Components/AdminHome/ManageActivities/AddActivity/ActivityAddition";
@@ -34,7 +35,8 @@ function App() {
             <Route path="/AdministratorHome/ManageStaff" element={<ManageStaff/>}/>
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
-            <Route path="/AdministratorHome/ManageRooms/DeleteRoom" element={<DeleteRoom/>}/>
+            <Route path="/AdministratorHome/ManageRooms/ManageRoom" element={<ManageRoom/>}/>
+            <Route path="/AdministratorHome/ManageRooms/ManageRoom/ModifyRoom/:name" element={<ModifyRoom/>}/>
             <Route path="/StudentHome" element={<StudentHome/>}/>
             <Route path="/AdministratorHome/ManageActivities" element={<ManageActivities/>}/>
             <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>

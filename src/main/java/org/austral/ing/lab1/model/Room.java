@@ -27,6 +27,10 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity;
 
+    public Integer getCapacity(){
+        return capacity;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "activityRoom",

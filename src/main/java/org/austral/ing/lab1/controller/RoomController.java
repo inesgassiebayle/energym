@@ -55,8 +55,7 @@ public class RoomController {
     }
 
     public String deleteRoom(Request req, Response res){
-        RoomDeletionDto roomDeletionDto = gson.fromJson(req.body(), RoomDeletionDto.class);
-        String name = roomDeletionDto.getName();
+        String name = req.params(":name");
         if(name == null){
             return "Invalid input";
         }
@@ -77,5 +76,27 @@ public class RoomController {
         }
         res.type("application/json");
         return gson.toJson(names);
+    }
+
+    public String getRoomActivities(Request req, Response res){
+        Room room = rooms.findRoomByName(req.params(":name"));
+        List<String> names = new ArrayList<>();
+        if(room == null){
+            return "Room does not exist";
+        }
+        for(Activity activity: room.getActivities()){
+            names.add(activity.getName());
+        }
+        res.type("application/json");
+        return gson.toJson(names);
+    }
+
+    public String getRoomCapacity(Request req, Response res){
+        Room room = rooms.findRoomByName(req.params(":name"));
+        if(room == null){
+            return "Room does not exist";
+        }
+        res.type("application/json");
+        return gson.toJson((room.getCapacity()).toString());
     }
 }

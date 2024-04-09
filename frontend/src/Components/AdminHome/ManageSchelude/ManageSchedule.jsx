@@ -15,8 +15,8 @@ const ManageSchedule = () => {
                 </div>
             </div>
             <div className='schedule-actions'>
-                <button className='schedule-button'>Add Class</button>
-                <button className='schedule-button'>Delete Class</button>
+                <button className='schedule-button'>Add Lesson</button>
+                <button className='schedule-button'>Delete Lesson</button>
                 <Link to={"/AdministratorHome"}>
                     <button className='schedule-button back'>Home</button>
                 </Link>
