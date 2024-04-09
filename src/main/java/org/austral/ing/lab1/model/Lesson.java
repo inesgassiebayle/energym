@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Class{
+public class Lesson {
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long classId;
@@ -79,13 +79,13 @@ public class Class{
         this.reviews = reviews;
     }
 
-    public Class(String name, LocalDate date, LocalTime time){
+    public Lesson(String name, LocalDate date, LocalTime time){
         this.name = name;
         this.date = date;
         this.time = time;
     }
 
-    public Class(){
+    public Lesson(){
 
     }
 }
