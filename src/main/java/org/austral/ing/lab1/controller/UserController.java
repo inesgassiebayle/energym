@@ -17,7 +17,6 @@ public class UserController {
     private final Users users;
     private final Students students;
     private final Professors professsors;
-
     private final Gson gson = new Gson();
 
     public UserController(EntityManager entityManager) {
