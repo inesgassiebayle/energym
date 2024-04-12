@@ -3,6 +3,7 @@ package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.RoomCreationDto;
 import org.austral.ing.lab1.dto.RoomDeletionDto;
+import org.austral.ing.lab1.dto.RoomModifyDto;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Room;
 import org.austral.ing.lab1.queries.Activities;
@@ -52,20 +53,24 @@ public class RoomController {
         res.type("application/json");
         return room.asJson();
     }
-
     public String deleteRoom(Request req, Response res){
         String name = req.params(":name");
-        if(name == null){
+
+        if(name == null || name.isBlank()){
             return "Invalid input";
         }
-        if(rooms.findRoomByName(name)==null){
+
+        Room room = rooms.findRoomByName(name);
+        if(room == null){
             return "Room does not exist";
         }
-        Room room = rooms.findRoomByName(name);
+
         rooms.delete(room);
         res.type("application/json");
+
         return room.asJson();
     }
+
 
     public String getRooms(Request req, Response res){
         List<Room> rooms1 = rooms.findAllRooms();
@@ -98,4 +103,50 @@ public class RoomController {
         res.type("application/json");
         return gson.toJson((room.getCapacity()).toString());
     }
+
+    public String modifyRoom(Request req, Response res){
+        RoomModifyDto roomDto = gson.fromJson(req.body(), RoomModifyDto.class);
+        String name = roomDto.getName();
+        String newName = roomDto.getNewName();
+        Integer capacity = roomDto.getCapacity();
+        String[] activities1 = roomDto.getActivities();
+
+        if(name.isBlank()){
+            return "No room selected";
+        }
+
+        Room room = rooms.findRoomByName(name);
+        if(room == null){
+            return "Room does not exist";
+        }
+
+        if (!newName.isBlank() && !newName.equalsIgnoreCase(name)) {
+            if (rooms.findRoomByName(newName) != null) {
+                return "New room name already exists";
+            }
+            room.setName(newName);
+        }
+
+        if (capacity != null && capacity > 0) {
+            room.setCapacity(capacity);
+        } else {
+            return "Invalid capacity";
+        }
+
+        room.getActivities().clear();
+        for(String activityName: activities1){
+            Activity activity = activities.findActivityByName(activityName);
+            if (activity != null) {
+                room.getActivities().add(activity);
+            } else {
+                return "Activity named " + activityName + " does not exist";
+            }
+        }
+
+        rooms.persist(room); // You might need to update this method if it only handles new entities
+
+        res.type("application/json");
+        return room.asJson();
+    }
+
 }

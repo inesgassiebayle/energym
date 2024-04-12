@@ -22,6 +22,10 @@ public class Room {
     @Column(nullable = false, unique = true)
     private String name;
 
+    public void setName(String name){
+        this.name = name;
+    }
+
     public String getName(){return name; }
 
     @Column(nullable = false)
@@ -29,6 +33,10 @@ public class Room {
 
     public Integer getCapacity(){
         return capacity;
+    }
+
+    public void setCapacity(Integer capacity){
+        this.capacity = capacity;
     }
 
     @ManyToMany
