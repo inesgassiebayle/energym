@@ -29,6 +29,15 @@ const ManageRooms = () => {
         setConfirmDelete(true);
     };
 
+    const reloadRoomNames = async () => {
+        try {
+            const response = await axios.get('http://localhost:3333/room/get');
+            setRoomNames(response.data);
+        } catch (error) {
+            console.error('Error fetching room names:', error);
+        }
+    };
+
     const handleModify = (roomName) => {
         setSelectedRoom(roomName);
         setShowModifyModal(true);
@@ -81,7 +90,7 @@ const ManageRooms = () => {
                     isOpen={showModifyModal}
                     onClose={() => setShowModifyModal(false)}
                     roomName={selectedRoom}
-                    onSave={() => console.log('Save changes')} // Implement or pass the save logic
+                    onSave={reloadRoomNames} // Cambia esto para pasar la función de recarga
                 />
             </div>
         </>

@@ -33,5 +33,10 @@ public class TestRoomActivity {
         room.setActivity(activity2);
 
         rooms.persist(room);
+
+        Room room2 = rooms.findRoomByName("Lounge");
+
+        room2.setName("Spa");
+        rooms.persist(room2);
     }
 }

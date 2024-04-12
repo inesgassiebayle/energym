@@ -45,7 +45,11 @@ public class RoomController {
         Room room = new Room(name, capacity);
 
         for(String activity: activities1){
-            room.setActivity(activities.findActivityByName(activity));
+            Activity activity1 = activities.findActivityByName(activity);
+            if(activity1 == null){
+                return "Activity does not exist";
+            }
+            room.setActivity(activity1);
         }
 
         rooms.persist(room);
@@ -116,9 +120,12 @@ public class RoomController {
         }
 
         Room room = rooms.findRoomByName(name);
+
         if(room == null){
             return "Room does not exist";
         }
+
+
 
         if (!newName.isBlank() && !newName.equalsIgnoreCase(name)) {
             if (rooms.findRoomByName(newName) != null) {
@@ -133,6 +140,7 @@ public class RoomController {
             return "Invalid capacity";
         }
 
+
         room.getActivities().clear();
         for(String activityName: activities1){
             Activity activity = activities.findActivityByName(activityName);
@@ -143,7 +151,7 @@ public class RoomController {
             }
         }
 
-        rooms.persist(room); // You might need to update this method if it only handles new entities
+        rooms.persist(room);
 
         res.type("application/json");
         return room.asJson();
