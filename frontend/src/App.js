@@ -16,6 +16,9 @@ import ActivityAddition from "./Components/AdminHome/ManageActivities/AddActivit
 import ActivityDeletion from "./Components/AdminHome/ManageActivities/DeleteActivity/ActivityDeletion";
 import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
 import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
+import AddLesson from "./Components/AdminHome/ManageSchelude/AddLesson/AddLesson";
+import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
+import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
 
 
 function App() {
@@ -37,6 +40,11 @@ function App() {
             <Route path="/AdministratorHome/ManageActivities/DeleteActivity" element={<ActivityDeletion/>}/>
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
+            <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
+            <Route path="/ProfessorHome" element={<ProfessorHome/>}/>
+            <Route path="/ProfessorHome/MySchedule" element={<MySchedule/>}/>
+
+
 
         </Routes>
     );

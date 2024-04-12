@@ -4,22 +4,16 @@ import './AddLesson.css';
 import logo from "../../../Assets/Logo.png";
 import axios from "axios";
 
-// const AddClass = () => {
-//     return (
-//         <div className='create-lessons-container'>
-//         </div>
-//     );
-// }
-//
-// export default AddClass;
 
 const LessonAddition = () => {
     const [lessonName, setLessonName] = useState('');
     const [lessonTime, setLessonTime] = useState('');
-    const [lessonStartDate, setLessonStartDate] = useState('');
     const [activityName, setActivityName] = useState('');
     const [professorName, setProfessorName] = useState('');
+    const [lessonStartDate, setLessonStartDate] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
+    const [endDate, setEndDate] = useState('');
+
 
     let navigate = useNavigate();
 
@@ -29,9 +23,10 @@ const LessonAddition = () => {
             const response = await axios.post('http://localhost:3333/lesson/add', {
                 name: lessonName,
                 time: lessonTime,
-                startDate: lessonStartDate,
                 activity: activityName,
                 professor: professorName,
+                startDate: lessonStartDate,
+                endDate: endDate, // Nuevo campo endDate
                 recurring: isRecurring
             });
             console.log(response.data);
@@ -53,22 +48,27 @@ const LessonAddition = () => {
             </div>
             <form onSubmit={handleSubmit}>
                 <input type='text' value={lessonName} onChange={(e) => setLessonName(e.target.value)}
-                       placeholder='Lesson Name' required/> 
+                       placeholder='Lesson Name' required/>
                 <input type='time' value={lessonTime} onChange={(e) => setLessonTime(e.target.value)}
                        placeholder='Lesson Time' required/>
-                <input type='date' value={lessonStartDate} onChange={(e) => setLessonStartDate(e.target.value)}
-                       placeholder='Lesson Start Date' required/>
                 <input type='text' value={activityName} onChange={(e) => setActivityName(e.target.value)}
                        placeholder='Activity Name' required/>
                 <input type='text' value={professorName} onChange={(e) => setProfessorName(e.target.value)}
                        placeholder='Professor Name' required/>
+                <input type='date' value={lessonStartDate} onChange={(e) => setLessonStartDate(e.target.value)}
+                       placeholder='Lesson Start Date' required/>
+                {/* Nuevo campo para End Date, visible solo si isRecurring es verdadero */}
+                {isRecurring && (
+                    <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)}
+                           placeholder='End Date' required/>
+                )}
                 <label>
                     Recurring Lesson:
-                    <input type="checkbox" checked={isRecurring} onChange={() => setIsRecurring(!isRecurring)} />
+                    <input type="checkbox" checked={isRecurring} onChange={() => setIsRecurring(!isRecurring)}/>
                 </label>
                 <div className='form-actions'>
                     <button type='submit'>Add</button>
-                    <button type='button' onClick={() => navigate('/AdministratorHome/ManageLessons')}>Cancel</button>
+                    <button type='button' onClick={() => navigate('/AdministratorHome/ManageSchedule')}>Cancel</button>
                 </div>
             </form>
         </div>
