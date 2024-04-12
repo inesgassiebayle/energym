@@ -11,6 +11,7 @@ import org.austral.ing.lab1.model.UserType;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class UserController {
@@ -100,6 +101,10 @@ public class UserController {
         if (user == null || !user.getPassword().equals(password)) {
             return "Invalid username or password";
         }
+
+        Calendar expiration = Calendar.getInstance();
+        expiration.add(Calendar.MINUTE, 30);
+
 
         // Check if the user already has a session started
         if (req.session().attribute("userId") != null) {

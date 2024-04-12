@@ -28,4 +28,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.8'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
+    implementation 'com.auth0:java-jwt:3.18.2'
+
 }
