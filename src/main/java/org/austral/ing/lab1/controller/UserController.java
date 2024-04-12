@@ -1,4 +1,5 @@
 package org.austral.ing.lab1.controller;
+import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.Professor;
@@ -104,6 +105,8 @@ public class UserController {
 
         Calendar expiration = Calendar.getInstance();
         expiration.add(Calendar.MINUTE, 30);
+
+        //String token = JWT.create().withClaim("userId", user.getId()).withExpiresAt(expiration.getTime()).sign();
 
 
         // Check if the user already has a session started
