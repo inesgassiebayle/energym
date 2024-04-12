@@ -15,7 +15,7 @@ import static spark.Spark.options;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
@@ -55,6 +55,7 @@ public class Application {
         //Spark.patch("/room", roomController::getRooms);
         Spark.get("/room/:name/getActivities", roomController::getRoomActivities);
         Spark.get("/room/:name/getCapacity", roomController::getRoomCapacity);
+        Spark.patch("room/modify", roomController::modifyRoom);
 
         // Lesson routes
         Spark.post("/lesson/addSingle", lessonController::addSingleLessonWithActivityAndProfessor);
