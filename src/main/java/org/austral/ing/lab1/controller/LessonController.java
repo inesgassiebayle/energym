@@ -25,7 +25,7 @@ public class LessonController {
     private final Activities activities;
     private final Professors professors;
 
-    public LessonController(EntityManager entityManager, Activities activities, Users users) {
+    public LessonController(EntityManager entityManager) {
         this.lessons = new Lessons(entityManager);
         this.activities = new Activities(entityManager);
         this.professors = new Professors(entityManager);
@@ -91,7 +91,7 @@ public class LessonController {
             Lesson lesson = new Lesson(
                     lessonDto.getName(),
                     lessonDto.getTime(),
-                    startDate
+                    lessonDto.getStartDate()
             );
 
             // Set the fetched Activity and Professor to each Lesson
