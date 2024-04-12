@@ -10,7 +10,7 @@
 }
 
 .modal-content {
-    width: 400px; /* Ajusta el ancho del modal según sea necesario */
+    width: 100%; /* Ajusta el ancho del modal según sea necesario */
 }
 
 .modal-title {
@@ -28,20 +28,23 @@
     margin-bottom: 20px;
 }
 
-.input-field {
-    width: 100%;
+.input-field,
+.select-activity,
+.capacity-input {
+    width: calc(100% - 22px); /* Ancho del 100% del contenedor menos el padding */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
 }
 
+
 .select-activity-container {
     position: relative;
 }
 
 .select-activity {
-    cursor: pointer;
+    width: calc(100% - 42px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
