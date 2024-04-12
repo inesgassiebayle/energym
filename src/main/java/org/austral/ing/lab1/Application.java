@@ -15,7 +15,7 @@ import static spark.Spark.options;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
@@ -42,6 +42,7 @@ public class Application {
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
+        Spark.post("/user/professor-signup", userController::professorSignup);
         Spark.post("/user/student-signup", userController::studentSignup);
         Spark.get("/user/login", userController::login);
 
@@ -58,8 +59,8 @@ public class Application {
         Spark.patch("room/modify", roomController::modifyRoom);
 
         // Lesson routes
-        Spark.post("/lesson/addSingle", lessonController::addSingleLessonWithActivityAndProfessor);
-        Spark.post("/lesson/addConcurrent", lessonController::addConcurrentLessonsWithActivityAndProfessor);
+        Spark.post("/lesson/addSingle", lessonController :: addSingleLesson);
+//        Spark.post("/lesson/addConcurrent", lessonController::addConcurrentLessonsWithActivityAndProfessor);
 
     }
 }
