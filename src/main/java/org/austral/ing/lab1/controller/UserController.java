@@ -1,7 +1,9 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.SignUpDto;
+import org.austral.ing.lab1.model.Professor;
 import org.austral.ing.lab1.model.Student;
+import org.austral.ing.lab1.queries.Professors;
 import org.austral.ing.lab1.queries.Students;
 import org.austral.ing.lab1.queries.Users;
 import org.austral.ing.lab1.model.User;
@@ -14,12 +16,14 @@ import java.util.regex.Pattern;
 public class UserController {
     private final Users users;
     private final Students students;
+    private final Professors professsors;
 
     private final Gson gson = new Gson();
 
     public UserController(EntityManager entityManager) {
         this.users = new Users(entityManager);
         this.students = new Students(entityManager);
+        this.professsors = new Professors(entityManager);
     }
 
     public String studentSignup(Request req, Response res) {
@@ -46,6 +50,37 @@ public class UserController {
         Student student = new Student();
         student.setUser(user);
         students.persist(student);
+
+        res.type("application/json");
+
+
+        return user.asJson();
+    }
+
+    public String professorSignup(Request req, Response res) {
+        SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
+
+        String firstName = signUpDto.getFirstName();
+        String lastName = signUpDto.getLastName();
+        String email = signUpDto.getEmail();
+        String username = signUpDto.getUsername();
+        String password = signUpDto.getPassword();
+
+        if(!isValidEmailFormat(email)){
+            return "Invalid email";
+        }
+
+        if(users.findUserByUsernameOrEmail(username, email)!=null){
+            return "Username or email already registered";
+        }
+
+        User user = new User(firstName, lastName, email, username, password);
+        user.setType(UserType.PROFESSOR);
+        users.persist(user);
+
+        Professor professor = new Professor();
+        professor.setUser(user);
+        professsors.persist(professor);
 
         res.type("application/json");
 
