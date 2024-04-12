@@ -9,12 +9,12 @@ public class Professor {
 
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
-    private Long professorid;
+    private Long professorId;
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
     private Set<Lesson> classes = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "professorid", referencedColumnName = "professorid")
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
     public void setUser(User user){
@@ -24,6 +24,8 @@ public class Professor {
     public Set<Lesson> getClasses() {
         return classes;
     }
+
+    public User getUser(){ return user; }
 
     public void addClass(Lesson lesson) {
         classes.add(lesson);

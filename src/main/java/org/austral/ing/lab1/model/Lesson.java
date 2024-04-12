@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 public class Lesson {
+
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long classId;
@@ -90,9 +91,15 @@ public class Lesson {
         this.startDate = startDate;
     }
 
+
+
+
     public Lesson() {
 
     }
+
+
+
 
 
     public String asJson() {

@@ -1,7 +1,9 @@
 package org.austral.ing.lab1.queries;
 
 import org.austral.ing.lab1.model.Professor;
+import org.austral.ing.lab1.model.Student;
 import org.austral.ing.lab1.model.User;
+import org.austral.ing.lab1.model.UserType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -20,16 +22,29 @@ public class Professors {
     }
 
     public Professor findProfessorByUsername(String username) {
-        TypedQuery<Professor> query = entityManager.createQuery("SELECT p " +
-                "FROM Professor p " +
-                "WHERE p.user.username LIKE :username", Professor.class);
-        query.setParameter("username", username);
-        List<Professor> professors = query.getResultList();
-        if (professors.isEmpty()) {
+        Users users = new Users(entityManager);
+
+        User user = users.findUserByUsername(username);
+
+        // Comprobar si el usuario existe
+        if (user == null) {
             return null;
         }
-        return professors.get(0);
+
+        if(!user.getType().equals(UserType.PROFESSOR)){
+            return null;
+        }
+
+        TypedQuery<Professor> query = entityManager.createQuery(
+                "SELECT p FROM Professor p WHERE p.user.id = :userId", Professor.class);
+        query.setParameter("userId", user.getId());
+
+        if (query.getResultList().isEmpty()) {
+            return null;
+        }
+        return query.getSingleResult();
     }
+
 
     public void persist(Professor professor) {
         entityManager.getTransaction().begin();

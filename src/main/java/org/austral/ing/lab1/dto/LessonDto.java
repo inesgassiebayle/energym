@@ -7,57 +7,51 @@ public class LessonDto {
     private String name;
     private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
     private String activity;
+
     private String professor;
     private String startDate; // Should match the ISO_LOCAL_DATE format (yyyy-MM-dd)
 
-    public LessonDto() {}
+    private String roomName;
 
-    public LessonDto(String name, String time, String activity, String professor, String startDate) {
+
+
+    public LessonDto(String name, String time, String startDate, String activity, String professor, String roomName) {
         this.name = name;
         this.time = time;
+        this.startDate = startDate;
         this.activity = activity;
         this.professor = professor;
-        this.startDate = startDate;
+        this.roomName = roomName;
+
     }
+
 
     // Getters and setters for each field
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
     public LocalTime getTime() {
         return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public LocalDate getStartDate() {
         return LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
     public String getActivity() {
         return activity;
     }
 
-    public void setActivity(String activity){
-        this.activity = activity;
+    public String getRoomName() {
+        return roomName;
     }
+
     public String getProfessor() {
         return professor;
     }
 
-    public void setProfessor(String professor){
-        this.professor = professor;
-    }
 
 
 }
