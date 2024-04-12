@@ -59,8 +59,8 @@ public class Application {
         Spark.patch("room/modify", roomController::modifyRoom);
 
         // Lesson routes
-        Spark.post("/lesson/addSingle", lessonController::addSingleLessonWithActivityAndProfessor);
-        Spark.post("/lesson/addConcurrent", lessonController::addConcurrentLessonsWithActivityAndProfessor);
+        Spark.post("/lesson/addSingle", lessonController :: addSingleLesson);
+//        Spark.post("/lesson/addConcurrent", lessonController::addConcurrentLessonsWithActivityAndProfessor);
 
     }
 }
