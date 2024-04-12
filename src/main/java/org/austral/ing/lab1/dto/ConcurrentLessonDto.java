@@ -9,16 +9,18 @@ public class ConcurrentLessonDto {
     private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
     private String activity;
     private String professor;
+    private String roomName;
     private String startDate; // Should match the ISO_LOCAL_DATE format (yyyy-MM-dd)
     private String endDate;   // Should be provided if weeklyRepeat is true
 
     public ConcurrentLessonDto() {}
 
-    public ConcurrentLessonDto(String name, String time, String activity, String professor, String startDate, String endDate) {
+    public ConcurrentLessonDto(String name, String time, String activity, String professor, String roomName , String startDate, String endDate) {
         this.name = name;
         this.time = time;
         this.activity = activity;
         this.professor = professor;
+        this.roomName = roomName;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -70,5 +72,7 @@ public class ConcurrentLessonDto {
     }
 
 
-
+    public String getRoomName() {
+        return roomName;
+    }
 }

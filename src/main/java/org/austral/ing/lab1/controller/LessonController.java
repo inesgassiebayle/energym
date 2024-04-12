@@ -76,6 +76,61 @@ public class LessonController {
         return lesson.asJson();
     }
 
+    public String addConcurrentLessons(Request req, Response res) {
+        // Parse the JSON body to the ConcurrentLessonDto
+        ConcurrentLessonDto lessonDto = gson.fromJson(req.body(), ConcurrentLessonDto.class);
+
+        // Fetch and set Activity
+        Activity activity = getActivityByName(lessonDto.getActivity());
+        if (activity == null) {
+            res.status(404);
+            return "Activity not found";
+        }
+
+        // Fetch and set Professor
+        Professor professor = getProfessorByUsername(lessonDto.getProfessor());
+        if (professor == null) {
+            res.status(404);
+            return "Professor not found";
+        }
+
+        //get room
+        Room room = rooms.findRoomByName(lessonDto.getRoomName());
+        if (room == null) {
+            res.status(404);
+            return "Room not found";
+        }
+
+        // Create multiple lesson instances
+        Set<Lesson> lessonsToAdd = new HashSet<>();
+        LocalDate startDate = lessonDto.getStartDate();
+        LocalDate endDate = lessonDto.getEndDate();
+
+        while (!startDate.isAfter(endDate)) {
+            Lesson lesson = new Lesson(
+                    lessonDto.getName(),
+                    lessonDto.getTime(),
+                    startDate
+            );
+
+            // Set the fetched Activity and Professor to each Lesson
+            lesson.setActivity(activity);
+            lesson.setProfessor(professor);
+            lesson.setRoom(room);
+
+
+            lessonsToAdd.add(lesson);
+            startDate = startDate.plusWeeks(1);
+        }
+
+        // Persist all the lessons
+        lessonsToAdd.forEach(lesson -> lessons.persist(lesson));
+
+        res.type("application/json");
+        return gson.toJson(lessonsToAdd.stream().map(Lesson::asJson).collect(Collectors.toList()));
+    }
+
+
     private Activity getActivityByName(String name) {
         return activities.findActivityByName(name);
     }
