@@ -7,6 +7,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
 }
 
 .modal-content {
@@ -31,11 +32,13 @@
 .input-field,
 .select-activity,
 .capacity-input {
-    width: calc(100% - 22px); /* Ancho del 100% del contenedor menos el padding */
+    width: calc(100% - 42px); /* Ancho del 100% del contenedor menos el padding */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
+    box-sizing: border-box; /* Asegurar que el padding se tenga en cuenta en el ancho */
 }
 
 
@@ -49,6 +52,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
 }
 
 .activity-options {
@@ -75,6 +79,8 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: calc(50% - 10px); /* Ancho del 50% del contenedor menos el margen */
+    box-sizing: border-box; /* Asegurar que el padding se tenga en cuenta en el ancho */
 }
 
 .apply-changes {
