@@ -18,9 +18,7 @@ const AdminHome = () => {
                 <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageSchedule')}>Manage
                     Schedule
                 </button>
-                <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Manage
-                    Rooms
-                </button>
+                <button className='admin-button'onClick={() => navigate('/AdministratorHome/ManageRooms')}>Manage Rooms </button>
                 <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageActivities')}>Manage
                     Activities
                 </button>
