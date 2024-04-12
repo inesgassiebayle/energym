@@ -2,6 +2,8 @@ package org.austral.ing.lab1;
 import org.austral.ing.lab1.controller.ActivityController;
 import org.austral.ing.lab1.controller.RoomController;
 import org.austral.ing.lab1.controller.UserController;
+import org.austral.ing.lab1.controller.LessonController;
+
 import org.austral.ing.lab1.model.Room;
 import spark.Spark;
 import javax.persistence.EntityManager;
@@ -13,11 +15,13 @@ import static spark.Spark.options;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
         final RoomController roomController = new RoomController(entityManager);
+        final LessonController lessonController = new LessonController(entityManager);
+
 
 
         Spark.port(3333);
@@ -48,9 +52,13 @@ public class Application {
         Spark.post("/room/create", roomController::addRoom);
         Spark.delete("/room/:name/delete", roomController::deleteRoom);
         Spark.get("/room/get", roomController::getRooms);
-        Spark.patch("/room", roomController::getRooms);
+        //Spark.patch("/room", roomController::getRooms);
         Spark.get("/room/:name/getActivities", roomController::getRoomActivities);
         Spark.get("/room/:name/getCapacity", roomController::getRoomCapacity);
+
+        // Lesson routes
+        Spark.post("/lesson/addSingle", lessonController::addSingleLessonWithActivityAndProfessor);
+        Spark.post("/lesson/addConcurrent", lessonController::addConcurrentLessonsWithActivityAndProfessor);
 
     }
 }

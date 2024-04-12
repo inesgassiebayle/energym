@@ -85,7 +85,11 @@ public class Lesson {
 
 
     public Lesson(String name, LocalTime time, LocalDate startDate) {
+        this.name = name;
+        this.time = time;
+        this.startDate = startDate;
     }
+
     public Lesson() {
 
     }
