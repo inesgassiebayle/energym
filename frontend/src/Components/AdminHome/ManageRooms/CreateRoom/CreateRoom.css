@@ -102,6 +102,10 @@
     margin-left: 5px; /* Margen izquierdo solo para el botón "Confirm" */
 }
 
+.select-activity-container {
+    position: relative;
+    z-index: 10; /* Higher than the z-index of any elements it should overlap */
+}
 .create-rooms-container button:hover {
     background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
     transform: scale(1.05);
