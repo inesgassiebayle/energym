@@ -18,7 +18,7 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .manage-rooms-title {
@@ -39,7 +39,7 @@
 
 .text {
     color: #00d6d1;
-    font-size: 48px;
+    font-size: 36px;
     font-weight: 700;
     margin-bottom: 10px;
 }

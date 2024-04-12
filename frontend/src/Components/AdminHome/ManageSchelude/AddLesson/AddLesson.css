@@ -1,0 +1,66 @@
+.create-activity-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px; /* Ancho máximo del contenedor principal */
+    margin: auto; /* Centrar el formulario horizontalmente */
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    max-width: 500px; /* Ancho máximo del contenedor de campos */
+    margin: auto; /* Centrar el contenedor de campos horizontalmente */
+}
+
+.form-container input {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #62a4d8;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    width: 100%; /* Ancho completo del campo */
+    margin-bottom: 15px; /* Espacio entre campos */
+}
+
+.create-activity-container .form-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.create-activity-container button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.create-activity-container button:nth-child(1) {
+    margin-right: 5px;
+}
+
+.create-activity-container button:nth-child(2) {
+    margin-left: 5px;
+}
+
+.create-activity-container button:hover {
+    background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

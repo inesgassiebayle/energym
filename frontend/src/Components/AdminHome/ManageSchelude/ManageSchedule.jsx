@@ -15,7 +15,10 @@ const ManageSchedule = () => {
                 </div>
             </div>
             <div className='schedule-actions'>
-                <button className='schedule-button'>Add Lesson</button>
+                <Link to="/AdministratorHome/ManageSchedule/AddLesson">
+                    {/*agregue esto*/}
+                 <button className='schedule-button'>Add Lesson</button>
+                </Link>
                 <button className='schedule-button'>Delete Lesson</button>
                 <Link to={"/AdministratorHome"}>
                     <button className='schedule-button back'>Home</button>

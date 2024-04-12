@@ -1,0 +1,93 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+    width: 400px; /* Ajusta el ancho del modal según sea necesario */
+}
+
+.modal-title {
+    color: #00d6d1;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.select-activity-container {
+    position: relative;
+}
+
+.select-activity {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.activity-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 150px; /* Ajusta la altura máxima del contenedor de opciones según sea necesario */
+    overflow-y: auto;
+}
+
+.activity-options div {
+    margin-bottom: 5px;
+}
+
+.apply-changes,
+.cancel {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.apply-changes {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.apply-changes:hover {
+    background-color: #0056b3;
+}
+
+.cancel {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.cancel:hover {
+    background-color: #c82333;
+}
