@@ -39,7 +39,7 @@ const AdminHome = () => {
     };
 
     useEffect(() => {
-        verifyToken();
+        //verifyToken();
     }, []);
 
     const handleLogout = async () => {

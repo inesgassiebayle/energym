@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ActivityAddition.css';
 import logo from "../../../Assets/Logo.png";
@@ -7,6 +7,42 @@ import axios from "axios";
 const ActivityAddition = () => {
     const [activityName, setActivityName] = useState('');
     let navigate = useNavigate();
+    const [username, setUsername] = useState('');
+
+    // Function to verify token validity and user role
+    const verifyToken = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log('No token found, redirecting to login.');
+            navigate('/Login');
+            return;
+        }
+
+        try {
+            const response = await axios.get('http://localhost:3333/user/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            // Check if the user is an administrator
+            if (response.data.type !== 'ADMINISTRATOR') {
+                console.log('User is not an administrator, redirecting to login.');
+                navigate('/Login');
+                return;
+            }
+
+            setUsername(response.data.username);
+        } catch (error) {
+            console.error('Token validation failed:', error);
+            navigate('/Login');
+        }
+    };
+
+    useEffect(() => {
+        verifyToken();
+    }, []);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Evitar el envío automático del formulario
