@@ -18,10 +18,10 @@ public class LessonDto {
     public LessonDto(String name, String time, String startDate, String activity, String professor, String roomName) {
         this.name = name;
         this.time = time;
-        this.startDate = startDate;
         this.activity = activity;
         this.professor = professor;
         this.roomName = roomName;
+        this.startDate = startDate;
 
     }
 
