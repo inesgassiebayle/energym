@@ -68,8 +68,8 @@ const ManageRooms = () => {
                         {roomNames.map((roomName, index) => (
                             <div key={index} className='room-item'>
                                 <span>{roomName}</span>
-                                <button onClick={() => handleDelete(roomName)}>Delete</button>
-                                <button onClick={() => handleModify(roomName)}>Modify</button>
+                                <button className='modification-button' onClick={() => handleDelete(roomName)}>Delete</button>
+                                <button className='modification-button' onClick={() => handleModify(roomName)}>Modify</button>
                             </div>
                         ))}
                     </div>

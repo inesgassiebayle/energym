@@ -14,12 +14,13 @@ const Login = ()=>{
 
     const login = async () => {
         try {
-            const response = await axios.get(`http://localhost:3333/user/login`, {
-                params: {
-                    username: username,
-                    password: password,
-                },
+            const response = await axios.post(`http://localhost:3333/user/login`, {
+                username: username,
+                password: password
             });
+
+            localStorage.setItem('token', response.data.token);
+            console.log("Inicio de sesión exitoso:", response.data.token);
 
             const userData = response.data;
 
@@ -27,7 +28,10 @@ const Login = ()=>{
                 navigate('/StudentHome');
             } else if (userData.type === 'ADMINISTRATOR') {
                 navigate('/AdministratorHome');
-            } else {
+            } else if(userData.type === 'PROFESSOR'){
+                navigate('/ProfessorHome')
+            }
+            else {
                 console.log(userData);
             }
         } catch (error) {

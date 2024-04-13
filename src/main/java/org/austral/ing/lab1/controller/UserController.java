@@ -2,13 +2,11 @@ package org.austral.ing.lab1.controller;
 import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.SignUpDto;
-import org.austral.ing.lab1.model.Professor;
-import org.austral.ing.lab1.model.Student;
+import org.austral.ing.lab1.model.*;
+import org.austral.ing.lab1.queries.Administrators;
 import org.austral.ing.lab1.queries.Professors;
 import org.austral.ing.lab1.queries.Students;
 import org.austral.ing.lab1.queries.Users;
-import org.austral.ing.lab1.model.User;
-import org.austral.ing.lab1.model.UserType;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
@@ -19,12 +17,15 @@ public class UserController {
     private final Users users;
     private final Students students;
     private final Professors professsors;
+    private final Administrators administrators;
+
     private final Gson gson = new Gson();
 
     public UserController(EntityManager entityManager) {
         this.users = new Users(entityManager);
         this.students = new Students(entityManager);
         this.professsors = new Professors(entityManager);
+        this.administrators = new Administrators(entityManager);
     }
 
     public String studentSignup(Request req, Response res) {
@@ -89,8 +90,39 @@ public class UserController {
         return user.asJson();
     }
 
+    public String administratorSignup(Request req, Response res) {
+        SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
+
+        String firstName = signUpDto.getFirstName();
+        String lastName = signUpDto.getLastName();
+        String email = signUpDto.getEmail();
+        String username = signUpDto.getUsername();
+        String password = signUpDto.getPassword();
+
+        if(!isValidEmailFormat(email)){
+            return "Invalid email";
+        }
+
+        if(users.findUserByUsernameOrEmail(username, email)!=null){
+            return "Username or email already registered";
+        }
+
+        User user = new User(firstName, lastName, email, username, password);
+        user.setType(UserType.ADMINISTRATOR);
+        users.persist(user);
+
+        Administrator administrator = new Administrator();
+        administrator.setUser(user);
+        administrators.persist(administrator);
+
+        res.type("application/json");
+
+
+        return user.asJson();
+    }
 
     public String login(Request req, Response res) {
+
         // Get the parameters from the request (username and password)
         final String username = req.queryParams("username");
         final String password = req.queryParams("password");
@@ -102,11 +134,6 @@ public class UserController {
         if (user == null || !user.getPassword().equals(password)) {
             return "Invalid username or password";
         }
-
-        Calendar expiration = Calendar.getInstance();
-        expiration.add(Calendar.MINUTE, 30);
-
-        //String token = JWT.create().withClaim("userId", user.getId()).withExpiresAt(expiration.getTime()).sign();
 
 
         // Check if the user already has a session started

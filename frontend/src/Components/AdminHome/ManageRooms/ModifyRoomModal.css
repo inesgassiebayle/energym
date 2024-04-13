@@ -29,17 +29,20 @@
     margin-bottom: 20px;
 }
 
+
 .input-field,
-.select-activity,
-.capacity-input {
-    width: calc(100% - 42px); /* Ancho del 100% del contenedor menos el padding */
+.select-activity-container, /* Contenedor del select */
+.capacity-input { /* Asegúrate de que esta clase se aplique al input de capacidad */
+    width: calc(100% - 20px); /* Cambia 42px a 20px si el padding es de 10px */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
-    box-sizing: border-box; /* Asegurar que el padding se tenga en cuenta en el ancho */
+    margin-bottom: 10px; /* Espacio debajo de cada input */
+    box-sizing: border-box; /* El ancho incluye el padding y el borde */
+    display: block; /* Asegúrate de que cada elemento sea un bloque para tomar el ancho completo */
 }
+
 
 
 .select-activity-container {
@@ -73,14 +76,10 @@
 
 .apply-changes,
 .cancel {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    width: calc(50% - 10px); /* Ancho del 50% del contenedor menos el margen */
-    box-sizing: border-box; /* Asegurar que el padding se tenga en cuenta en el ancho */
+    width: calc(50% - 20px); /* Ajusta el margen entre botones si es necesario */
+    margin-right: 10px; /* Asegúrate de añadir esto solo al botón 'apply-changes' */
+    margin-left: 10px; /* Añade esto solo al botón 'cancel' */
+    /* Resto de estilos */
 }
 
 .apply-changes {

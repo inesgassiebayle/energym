@@ -17,7 +17,7 @@ const SignUp = () => {
 
     const handleSignUp = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/user/student-signup', {
+            const response = await axios.post('http://localhost:3333/user/administrator-signup', {
                 firstName: firstName,
                 lastName: lastName,
                 username: username,
