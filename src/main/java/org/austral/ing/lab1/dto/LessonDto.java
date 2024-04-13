@@ -15,7 +15,7 @@ public class LessonDto {
 
 
 
-    public LessonDto(String name, String time, String startDate, String activity, String professor, String roomName) {
+    public LessonDto(String name, String time, String activity, String professor, String roomName, String startDate) {
         this.name = name;
         this.time = time;
         this.activity = activity;

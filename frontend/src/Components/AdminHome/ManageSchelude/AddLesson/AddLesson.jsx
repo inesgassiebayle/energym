@@ -1,38 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddLesson.css';
 import logo from "../../../Assets/Logo.png";
 import axios from "axios";
-
 
 const LessonAddition = () => {
     const [lessonName, setLessonName] = useState('');
     const [lessonTime, setLessonTime] = useState('');
     const [activityName, setActivityName] = useState('');
     const [professorName, setProfessorName] = useState('');
+    const [roomName, setRoomName] = useState('');  // Estado para el nombre de la sala
     const [lessonStartDate, setLessonStartDate] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [endDate, setEndDate] = useState('');
 
-
     let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Evitar el envío automático del formulario
-        try {
-            const response = await axios.post('http://localhost:3333/lesson/add', {
-                name: lessonName,
-                time: lessonTime,
-                activity: activityName,
-                professor: professorName,
-                startDate: lessonStartDate,
-                endDate: endDate, // Nuevo campo endDate
-                recurring: isRecurring
-            });
-            console.log(response.data);
-            navigate('/AdministratorHome');
-        } catch (error) {
-            console.error('Error al enviar solicitud:', error);
+        e.preventDefault();  // Evitar el envío automático del formulario
+
+        if(isRecurring){
+            try {
+                const response = await axios.post('http://localhost:3333/lesson/addConcurrent', {
+                    name: lessonName,
+                    time: lessonTime,
+                    activity: activityName,
+                    professor: professorName,
+                    roomName: roomName,
+                    startDate: lessonStartDate,
+                    endDate: endDate
+                });
+                console.log(response.data);
+                navigate('/AdministratorHome');
+            } catch (error) {
+                console.error('Error sending request:', error);
+            }
+        }
+        else {
+            try {
+                const response = await axios.post('http://localhost:3333/lesson/addSingle', {
+                    name: lessonName,
+                    time: lessonTime,
+                    activity: activityName,
+                    professor: professorName,
+                    roomName: roomName,
+                    startDate: lessonStartDate
+                });
+                console.log(response.data);
+                navigate('/AdministratorHome');
+            } catch (error) {
+                console.error('Error sending request:', error);
+            }
         }
     };
 
@@ -43,7 +61,7 @@ const LessonAddition = () => {
                     <div className="text">Add Lesson</div>
                 </div>
                 <div className="logo">
-                    <img src={logo} alt=""/>
+                    <img src={logo} alt="logo"/>
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
@@ -55,9 +73,10 @@ const LessonAddition = () => {
                        placeholder='Activity Name' required/>
                 <input type='text' value={professorName} onChange={(e) => setProfessorName(e.target.value)}
                        placeholder='Professor Name' required/>
+                <input type='text' value={roomName} onChange={(e) => setRoomName(e.target.value)}
+                       placeholder='Room Name' required/>
                 <input type='date' value={lessonStartDate} onChange={(e) => setLessonStartDate(e.target.value)}
                        placeholder='Lesson Start Date' required/>
-                {/* Nuevo campo para End Date, visible solo si isRecurring es verdadero */}
                 {isRecurring && (
                     <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)}
                            placeholder='End Date' required/>
@@ -76,3 +95,7 @@ const LessonAddition = () => {
 }
 
 export default LessonAddition;
+
+
+
+
