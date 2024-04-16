@@ -4,6 +4,8 @@ import org.austral.ing.lab1.model.Lesson;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Lessons {
@@ -13,25 +15,46 @@ public class Lessons {
         this.entityManager = entityManager;
     }
 
-    public Lessons findLessonById(Long id) {
-        return entityManager.find(Lessons.class, id);
+    public Lesson findLessonById(Long id) {
+        return entityManager.find(Lesson.class, id);
     }
 
-    public List<Lessons> findAllLessons(){
-        TypedQuery<Lessons> query = entityManager.createQuery("SELECT l FROM Lesson l", Lessons.class);
+    public List<Lesson> findAllLessons(){
+        TypedQuery<Lesson> query = entityManager.createQuery("SELECT l FROM Lesson l", Lesson.class);
         return query.getResultList();
     }
 
-    public Lessons findLessonByName(String name) {
-        TypedQuery<Lessons> query = entityManager.createQuery("SELECT l " +
-                "FROM Lesson l " +
-                "WHERE l.name LIKE :name", Lessons.class);
+    public Lesson findLessonByName(String name) {
+        TypedQuery<Lesson> query = entityManager.createQuery("SELECT l FROM Lesson l WHERE l.name = :name", Lesson.class);
         query.setParameter("name", name);
-        List<Lessons> lessons = query.getResultList();
-        if (lessons.isEmpty()) {
-            return null;
-        }
-        return lessons.get(0);
+        List<Lesson> lessons = query.getResultList();
+        return lessons.isEmpty() ? null : lessons.get(0);
+    }
+
+    public List<Lesson> findLessonsByProfessorAndTime(String professorUsername, LocalTime time, LocalDate date) {
+        TypedQuery<Lesson> query = entityManager.createQuery(
+                "SELECT l FROM Lesson l WHERE l.professor.user.username = :username AND l.time = :time AND l.startDate = :date", Lesson.class);
+        query.setParameter("username", professorUsername);
+        query.setParameter("time", time);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
+    public List<Lesson> findLessonsByRoomAndTime(String roomName, LocalTime time, LocalDate date) {
+        TypedQuery<Lesson> query = entityManager.createQuery(
+                "SELECT l FROM Lesson l WHERE l.room.name = :roomName AND l.time = :time AND l.startDate = :date", Lesson.class);
+        query.setParameter("roomName", roomName);
+        query.setParameter("time", time);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
+    public boolean isTimeSlotAvailable(LocalTime startTime, LocalDate date) {
+        TypedQuery<Long> query = entityManager.createQuery(
+                "SELECT COUNT(l) FROM Lesson l WHERE l.time = :time AND l.startDate = :date", Long.class);
+        query.setParameter("time", startTime);
+        query.setParameter("date", date);
+        return query.getSingleResult() == 0;  // true if no lessons at the same time and date
     }
 
     public void persist(Lesson lesson) {

@@ -12,7 +12,7 @@ import static spark.Spark.options;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
@@ -41,7 +41,7 @@ public class Application {
         Spark.post("/user/logout", authenticationController::deleteAuthentication);
         Spark.get("/user/verify", authenticationController::getCurrentUser);
         Spark.delete("/user/:username/delete", userController::deleteUser);
-        Spark.get("/professor/get", userController::getProfessors);
+//        Spark.get("/professor/get", userController::getProfessors);
 
 
         Spark.post("/activity/add", activityController::addActivity);
@@ -58,6 +58,8 @@ public class Application {
 
         Spark.post("/lesson/addSingle", lessonController:: addSingleLesson);
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
+        Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
+
 
 
     }

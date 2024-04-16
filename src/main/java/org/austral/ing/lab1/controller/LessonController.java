@@ -2,6 +2,7 @@ package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.ConcurrentLessonCreationDto;
 import org.austral.ing.lab1.dto.LessonCreationDto;
+import org.austral.ing.lab1.dto.LessonDeletionDto;
 import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Professor;
@@ -13,7 +14,9 @@ import spark.Response;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,6 +65,29 @@ public class LessonController {
         //get room
         Room room = rooms.findRoomByName(lessonDto.getRoomName());
 
+        //fijarme que la activity de pueda realizar en el room especificado
+        if (!room.getActivities().contains(activity)) {
+            res.status(409);
+            return "Activity not supported in the selected room";
+        }
+
+        //fijarme que el profesor no este ocupado en el horiario definido
+        if (!isProfessorAvailable(lessonDto.getProfessor(), lessonDto.getTime(), lessonDto.getStartDate())) {
+            res.status(409);
+            return "Professor is not available at the specified time";
+        }
+        //fijarme que el room no este en uso por otra actividad a la hora de la lesson
+        if (!isRoomAvailable(lessonDto.getRoomName(), lessonDto.getTime(), lessonDto.getStartDate())) {
+            res.status(409);
+            return "Room is not available at the specified time";
+        }
+        //fijarme que no se solapen horarios
+        if (!lessons.isTimeSlotAvailable(lessonDto.getTime(), lessonDto.getStartDate())) {
+            res.status(409);
+            return "Time slot is not available";
+        }
+
+
         if (room != null) {
             lesson.setRoom(room);
         } else {
@@ -101,12 +127,33 @@ public class LessonController {
             return "Room not found";
         }
 
+        if (!room.getActivities().contains(activity)) {
+            res.status(409);
+            return "Activity not supported in the selected room";
+        }
+
         // Create multiple lesson instances
         Set<Lesson> lessonsToAdd = new HashSet<>();
         LocalDate startDate = lessonDto.getStartDate();
         LocalDate endDate = lessonDto.getEndDate();
 
         while (!startDate.isAfter(endDate)) {
+
+            if (!isProfessorAvailable(lessonDto.getProfessor(), lessonDto.getTime(), startDate)) {
+                res.status(409);
+                return "Professor is not available at " + startDate.toString();
+            }
+            if (!isRoomAvailable(lessonDto.getRoomName(), lessonDto.getTime(), startDate)) {
+                res.status(409);
+                return "Room is not available at " + startDate.toString();
+            }
+
+            if (!lessons.isTimeSlotAvailable(lessonDto.getTime(), startDate)) {
+                res.status(409);
+                return "Time slot is not available";
+            }
+
+
             Lesson lesson = new Lesson(
                     lessonDto.getName(),
                     lessonDto.getTime(),
@@ -138,4 +185,33 @@ public class LessonController {
     private Professor getProfessorByUsername(String username) {
         return professors.findProfessorByUsername(username);
     }
+
+    public boolean isProfessorAvailable(String professorUsername, LocalTime time, LocalDate date) {
+        List<Lesson> conflictingLessons = lessons.findLessonsByProfessorAndTime(professorUsername, time, date);
+        return conflictingLessons.isEmpty();
+    }
+
+    public boolean isRoomAvailable(String roomName, LocalTime time, LocalDate date) {
+        List<Lesson> conflictingLessons = lessons.findLessonsByRoomAndTime(roomName, time, date);
+        return conflictingLessons.isEmpty();
+    }
+
+
+
+
+    public String deleteLesson(Request req, Response res) {
+        LessonDeletionDto deletionDto = gson.fromJson(req.body(), LessonDeletionDto.class);
+        String lessonName = deletionDto.getName();
+
+        Lesson lesson = lessons.findLessonByName(lessonName);
+        if (lesson == null) {
+            res.status(404);
+            return "Lesson not found";
+        }
+
+        lessons.delete(lesson);
+        res.type("application/json");
+        return gson.toJson("Deleted lesson with name: " + lessonName);
+    }
+
 }
