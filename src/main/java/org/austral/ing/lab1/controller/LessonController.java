@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class LessonController {
+public class LessonController{
     private final Lessons lessons;
     private final Activities activities;
     private final Professors professors;
