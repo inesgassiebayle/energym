@@ -16,6 +16,10 @@ public class Lesson {
     @Column()
     private String name;
 
+    public String getName(){
+        return name;
+    }
+
     @Column()
     private LocalDate startDate;
 
@@ -83,24 +87,15 @@ public class Lesson {
     @Column()
     private LocalDate endDate;
 
-
-
     public Lesson(String name, LocalTime time, LocalDate startDate) {
         this.name = name;
         this.time = time;
         this.startDate = startDate;
     }
 
-
-
-
     public Lesson() {
 
     }
-
-
-
-
 
     public String asJson() {
         Gson gson = new Gson();

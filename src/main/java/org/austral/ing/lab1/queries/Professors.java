@@ -60,5 +60,15 @@ public class Professors {
         return query.getResultList();
     }
 
+    public List<Lesson> getLessons(Professor professor) {
+        Long professorId = professor.getProfessorId();
+        TypedQuery<Lesson> query = entityManager.createQuery(
+                "SELECT l FROM Lesson l WHERE l.professor.professorId = :id", Lesson.class);
+        query.setParameter("id", professorId);
+        return query.getResultList();
+    }
+
+
+
 
 }

@@ -20,7 +20,9 @@ public class Professor {
     public void setUser(User user){
         this.user=user;
     }
-
+    public Long getProfessorId(){
+        return professorId;
+    }
     public Set<Lesson> getClasses() {
         return classes;
     }
