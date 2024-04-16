@@ -40,7 +40,7 @@ public class Application {
         Spark.post("/user/login", authenticationController::createAuthentication);
         Spark.post("/user/logout", authenticationController::deleteAuthentication);
         Spark.get("/user/verify", authenticationController::getCurrentUser);
-
+        Spark.delete("/user/:username/delete", userController::deleteUser);
 
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);
