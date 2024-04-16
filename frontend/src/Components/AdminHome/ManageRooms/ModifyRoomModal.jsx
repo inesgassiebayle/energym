@@ -14,6 +14,8 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     const [oldCapacity, setOldCapacity] = useState('');
     const [oldRoomActivities, setOldActivities] = useState('');
     const [username, setUsername] = useState('');
+    const [activityName, setActivityName] = useState(''); // Agregamos el estado para la actividad seleccionada
+
 
     // Function to verify token validity and user role
     const verifyToken = async () => {
@@ -119,13 +121,14 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                     <div className="modal-body">
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <input
-                                    type='text'
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder='Room Name'
-                                    required
-                                />
+                                {/*<input*/}
+                                {/*    type='text'*/}
+                                {/*    value={name}*/}
+                                {/*    onChange={(e) => setName(e.target.value)}*/}
+                                {/*    placeholder='Room Name'*/}
+                                {/*    required*/}
+                                {/*/>*/}
+
                                 <div className="select-activity-container">
                                     <div className="select-activity" onClick={() => setShowOptions(!showOptions)}>
                                         Select Activity
@@ -146,6 +149,8 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                                         </div>
                                     )}
                                 </div>
+
+
                                 <input
                                     type='number'
                                     value={capacity}
@@ -153,6 +158,7 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                                     placeholder='Capacity'
                                     required
                                 />
+
                             </div>
                             <button className="apply-changes">Save changes</button>
                         </form>

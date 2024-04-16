@@ -29,18 +29,20 @@
     margin-bottom: 20px;
 }
 
-
 .input-field,
-.select-activity-container, /* Contenedor del select */
-.capacity-input { /* Asegúrate de que esta clase se aplique al input de capacidad */
-    width: calc(100% - 20px); /* Cambia 42px a 20px si el padding es de 10px */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 10px; /* Espacio debajo de cada input */
-    box-sizing: border-box; /* El ancho incluye el padding y el borde */
-    display: block; /* Asegúrate de que cada elemento sea un bloque para tomar el ancho completo */
+.capacity-input {
+    width: calc(100% - 24px); /* Ajustar el ancho para que sea igual al campo de "select activity" */
+    padding: 12px; /* Ajustar el padding */
+    border-radius: 4px;
+    border: 1px solid #62a4d8;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px; /* Igualar el tamaño de la fuente al campo de "select activity" */
+    backdrop-filter: blur(4px);
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Ajustar el box-sizing para incluir el padding en el cálculo del ancho */
+
 }
 
 
@@ -50,12 +52,13 @@
 }
 
 .select-activity {
-    width: calc(100% - 42px);
+    width: calc(100% - 20px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
+    font-size: 18px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
 .activity-options {

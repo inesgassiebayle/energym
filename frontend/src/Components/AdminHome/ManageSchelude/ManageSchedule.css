@@ -11,7 +11,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
 .schedule-header {
     display: flex;
     flex-direction: row;
@@ -27,7 +26,13 @@
     flex-direction: column;
     align-items: center;
     margin-right: 30px;
+}
 
+.date-picker label {
+    color: #000; /* Cambia el color del texto */
+    font-size: 16px; /* Ajusta el tamaño de la fuente según sea necesario */
+    font-weight: bold; /* Opcional: ajusta el peso de la fuente según sea necesario */
+    margin-bottom: 5px; /* Ajusta el margen inferior según sea necesario */
 }
 
 .logo img {
@@ -35,7 +40,7 @@
     margin-right: 5px;
 }
 
-.logo{
+.logo {
     margin-right: 20px;
 }
 
@@ -46,7 +51,8 @@
     width: 100%;
 }
 
-.schedule-button, .back {
+.schedule-button,
+.back {
     padding: 15px 30px;
     border: none;
     border-radius: 30px;
@@ -69,10 +75,11 @@
     margin-bottom: 10px;
 }
 
-.schedule-button:hover, .back:hover {
+.schedule-button:hover,
+.back:hover {
     background-image: linear-gradient(145deg, #00d6d1, #00b2aa);
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .back {
@@ -86,3 +93,8 @@
 a {
     text-decoration: none;
 }
+
+.schedule-info {
+    margin-bottom: 20px; /* Agrega margen inferior al contenedor de las clases */
+}
+

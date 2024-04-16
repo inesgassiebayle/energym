@@ -1,69 +1,64 @@
-import {Link, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './ManageSchedule.css';
-import logo from "../../Assets/Logo.png";
-import axios from "axios"; // Asegúrate de tener el logo en la carpeta correspondiente
+import logo from '../../Assets/Logo.png';
+import axios from 'axios';
 
 const ManageSchedule = () => {
-    const [username, setUsername] = useState('');
-    let navigate = useNavigate();
+    const [selectedDate, setSelectedDate] = useState('');
+    const [classesForSelectedDate, setClassesForSelectedDate] = useState([]);
+    const navigate = useNavigate();
 
-
-    // Function to verify token validity and user role
-    const verifyToken = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log('No token found, redirecting to login.');
-            navigate('/Login');
-            return;
-        }
-
-        try {
-            const response = await axios.get('http://localhost:3333/user/verify', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            // Check if the user is an administrator
-            if (response.data.type !== 'ADMINISTRATOR') {
-                console.log('User is not an administrator, redirecting to login.');
-                navigate('/Login');
-                return;
-            }
-
-            setUsername(response.data.username);
-        } catch (error) {
-            console.error('Token validation failed:', error);
-            navigate('/Login');
-        }
+    const handleDateChange = (e) => {
+        const selectedDate = e.target.value;
+        setSelectedDate(selectedDate);
+        // Aquí deberías llamar a tu API para obtener las clases planificadas para la fecha seleccionada
+        // Por ahora, simplemente dejamos un array vacío
+        setClassesForSelectedDate([]);
     };
 
-    useEffect(() => {
-        verifyToken();
-    }, []);
     return (
-        <div className='manage-schedule-container'>
+        <div className="manage-schedule-container">
             <div className="schedule-header">
                 <div className="schedule-title">
                     <div className="text">Manage Schedule</div>
                 </div>
                 <div className="logo">
-                    <img src={logo} alt=""/>
+                    <img src={logo} alt="" />
                 </div>
             </div>
-            <div className='schedule-actions'>
+            <div className="date-picker">
+                <label htmlFor="date">Select a date:</label>
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                />
+            </div>
+            {selectedDate && (
+                <div className="schedule-info">
+                    <h3>Classes for {selectedDate}:</h3>
+                    {classesForSelectedDate.length > 0 ? (
+                        <ul>
+                            {classesForSelectedDate.map((classInfo, index) => (
+                                <li key={index}>{classInfo}</li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No hay clases planeadas para el día seleccionado.</p>
+                    )}
+                </div>
+            )}
+            <div className="schedule-actions">
                 <Link to="/AdministratorHome/ManageSchedule/AddLesson">
-                    {/*agregue esto*/}
-                 <button className='schedule-button'>Add Lesson</button>
-                </Link>
-                <button className='schedule-button'>Delete Lesson</button>
-                <Link to={"/AdministratorHome"}>
-                    <button className='schedule-button back'>Home</button>
+                    <button className="schedule-button">Add Lesson</button>
+                    <button className="schedule-button back">Home</button>
                 </Link>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ManageSchedule;
