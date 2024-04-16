@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class LessonDto {
+public class LessonCreationDto {
     private String name;
     private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
     private String activity;
@@ -15,7 +15,7 @@ public class LessonDto {
 
 
 
-    public LessonDto(String name, String time, String activity, String professor, String roomName, String startDate) {
+    public LessonCreationDto(String name, String time, String activity, String professor, String roomName, String startDate) {
         this.name = name;
         this.time = time;
         this.activity = activity;

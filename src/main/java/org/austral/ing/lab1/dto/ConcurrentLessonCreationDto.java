@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class ConcurrentLessonDto {
+public class ConcurrentLessonCreationDto {
     private String name;
     private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
     private String activity;
@@ -13,9 +13,9 @@ public class ConcurrentLessonDto {
     private String startDate; // Should match the ISO_LOCAL_DATE format (yyyy-MM-dd)
     private String endDate;   // Should be provided if weeklyRepeat is true
 
-    public ConcurrentLessonDto() {}
+    public ConcurrentLessonCreationDto() {}
 
-    public ConcurrentLessonDto(String name, String time, String activity, String professor, String roomName , String startDate, String endDate) {
+    public ConcurrentLessonCreationDto(String name, String time, String activity, String professor, String roomName , String startDate, String endDate) {
         this.name = name;
         this.time = time;
         this.activity = activity;

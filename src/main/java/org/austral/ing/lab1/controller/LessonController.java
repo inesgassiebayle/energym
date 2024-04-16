@@ -1,7 +1,7 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
-import org.austral.ing.lab1.dto.ConcurrentLessonDto;
-import org.austral.ing.lab1.dto.LessonDto;
+import org.austral.ing.lab1.dto.ConcurrentLessonCreationDto;
+import org.austral.ing.lab1.dto.LessonCreationDto;
 import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Professor;
@@ -31,7 +31,7 @@ public class LessonController {
         this.rooms = new Rooms(entityManager);
     }
     public String addSingleLesson(Request req, Response res) {
-        LessonDto lessonDto = gson.fromJson(req.body(), LessonDto.class);
+        LessonCreationDto lessonDto = gson.fromJson(req.body(), LessonCreationDto.class);
 
         Lesson lesson = new Lesson(
                 lessonDto.getName(),
@@ -78,7 +78,7 @@ public class LessonController {
 
     public String addConcurrentLessons(Request req, Response res) {
         // Parse the JSON body to the ConcurrentLessonDto
-        ConcurrentLessonDto lessonDto = gson.fromJson(req.body(), ConcurrentLessonDto.class);
+        ConcurrentLessonCreationDto lessonDto = gson.fromJson(req.body(), ConcurrentLessonCreationDto.class);
 
         // Fetch and set Activity
         Activity activity = getActivityByName(lessonDto.getActivity());
