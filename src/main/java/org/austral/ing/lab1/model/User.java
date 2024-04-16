@@ -32,6 +32,21 @@ public class User{
     }
 
     @Column()
+    private boolean state;
+
+    public void activate(){
+        this.state = true;
+    }
+
+    public void deactivate(){
+        this.state = false;
+    }
+
+    public boolean state(){
+        return state;
+    }
+
+    @Column()
     private String lastName;
 
     public String getLastName() {
@@ -93,6 +108,7 @@ public class User{
         setFirstName(firstName);
         setEmail(email);
         setPassword(password);
+        activate();
     }
 
     public User(){
