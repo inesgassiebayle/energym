@@ -1,9 +1,6 @@
 package org.austral.ing.lab1.queries;
 
-import org.austral.ing.lab1.model.Professor;
-import org.austral.ing.lab1.model.Student;
-import org.austral.ing.lab1.model.User;
-import org.austral.ing.lab1.model.UserType;
+import org.austral.ing.lab1.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -56,6 +53,11 @@ public class Professors {
         entityManager.getTransaction().begin();
         entityManager.remove(professor);
         entityManager.getTransaction().commit();
+    }
+
+    public List<Professor> findAllProfessors() {
+        TypedQuery<Professor> query = entityManager.createQuery("SELECT p FROM Professor p", Professor.class);
+        return query.getResultList();
     }
 
 

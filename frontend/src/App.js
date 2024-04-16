@@ -4,7 +4,7 @@ import SignUp from "./Components/GetStarted/SignUp/SignUp";
 import ForgotPassword from "./Components/GetStarted/Login/ForgotPassword/ForgotPassword";
 import GetStarted from "./Components/GetStarted/GetStarted";
 import Login from "./Components/GetStarted/Login/Login";
-import TrainerSignup from "./Components/GetStarted/SignUp/TrainerSignup/TrainerSignup";
+import TrainerSignup from "./Components/GetStarted/TrainerSignup/TrainerSignup";
 import {useNavigate, Route, Routes} from "react-router-dom";
 import ChangePassword from "./Components/GetStarted/Login/ForgotPassword/ChangePassword/ChangePassword";
 import AdminHome from "./Components/AdminHome/AdminHome";
@@ -26,10 +26,10 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<GetStarted/>}/>
-            <Route path="/Login" element={<Login/>}/>
-            <Route path="/Signup" element={<SignUp/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/signup" element={<SignUp/>}/>
             <Route path="/Login/RestorePassword" element={<ForgotPassword/>}/>
-            <Route path="/SignUp/TrainerSignUp" element={<TrainerSignup/>}/>
+            <Route path="/signup-trainer" element={<TrainerSignup/>}/>
             <Route path="/Login/RestorePassword/ChangePassword" element={<ChangePassword/>}/>
             <Route path="/AdministratorHome" element={<AdminHome/>}/>
             <Route path="/AdministratorHome/ManageSchedule" element={<ManageSchedule/>}/>

@@ -7,8 +7,8 @@ import axios from "axios";
 
 const ManageStaff = () => {
     let navigate = useNavigate();
-    const [userName, setUserName] = useState('');
     const [username, setUsername] = useState('');
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
     // Function to verify token validity and user role
     const verifyToken = async () => {
@@ -45,14 +45,32 @@ const ManageStaff = () => {
     }, []);
 
     const handleGenerateId = () => {
-        // Lógica para generar un ID de usuario
-        console.log('Generating ID for user:', userName);
+        console.log('Generating ID for user:', username);
     };
 
     const handleDeleteUser = () => {
-        // Lógica para eliminar un usuario
-        console.log('Deleting user:', userName);
-        setUserName(''); // Limpiar el campo de entrada después de eliminar el usuario
+        console.log('Deleting user:', username);
+        setUsername('');
+    };
+
+    const ConfirmationDialog = () => (
+        <div className="confirmation-dialog">
+            <div className="confirmation-content">
+                <h2>Confirm Delete</h2>
+                <p>Are you sure you want to delete {username}?</p>
+                <button onClick={confirmDeleteHandler}>Confirm</button>
+                <button onClick={() => setShowConfirmDialog(false)}>Cancel</button>
+            </div>
+        </div>
+    );
+
+    const confirmDeleteHandler = async () => {
+        try {
+            await axios.delete(`http://localhost:3333/user/${username}/delete`);
+            navigate('/AdministratorHome');
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
     };
 
     return (
@@ -68,15 +86,15 @@ const ManageStaff = () => {
             <div className='staff-actions'>
                 <div className='user-input'>
                     <img src={person_icon} alt=""/>
-                    <input type='text' value={userName} onChange={(e) => setUserName(e.target.value)}
+                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)}
                            placeholder='Enter username'/>
                 </div>
-                <button className='staff-button' onClick={handleGenerateId}>Generate ID</button>
-                <button className='staff-button' onClick={handleDeleteUser}>Delete User</button>
+                <button className='staff-button' onClick={() => handleDeleteUser(username)}>Delete User</button>
                 <Link to={'/AdministratorHome'}>
                     <button className='staff-button back'>Home</button>
                 </Link>
             </div>
+            {showConfirmDialog && <ConfirmationDialog />}
         </div>
     );
 };

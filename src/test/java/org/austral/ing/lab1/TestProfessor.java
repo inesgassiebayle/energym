@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class TestProfessor {
-    final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
+    final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
     final EntityManager entityManager = factory.createEntityManager();
     final Professors professors = new Professors(entityManager);
     final Users users = new Users(entityManager);
@@ -46,5 +46,17 @@ public class TestProfessor {
 
         // Comprobar que el profesor fue encontrado
         assertEquals("John", foundProfessor.getUser().getFirstName());
+
+        User user2 = users.findUserByUsername("johndoe");
+
+        assertEquals("John", user2.getFirstName());
+        assertEquals("Doe", user2.getLastName());
+
+        professors.delete(professor);
+
+        User user3 = users.findUserByUsername("johndoe");
+        assertNull(user3);
+        Professor professor1 = professors.findProfessorByUsername("johndoe");
+        assertNull(professor1);
     }
 }

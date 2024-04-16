@@ -1,13 +1,13 @@
 import React, { useState} from 'react';
 import axios from 'axios';
-import './SignUp.css';
+import './TrainerSignup.css';
 import email_icon from '../../Assets/email.png';
 import password_icon from '../../Assets/password.png';
 import person_icon from '../../Assets/person.png';
 import logo from '../../Assets/Logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const TrainerSignup = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
@@ -17,7 +17,7 @@ const SignUp = () => {
 
     const handleSignUp = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/user/administrator-signup', {
+            const response = await axios.post('http://localhost:3333/user/professor-signup', {
                 firstName: firstName,
                 lastName: lastName,
                 username: username,
@@ -25,7 +25,7 @@ const SignUp = () => {
                 password: password
             });
             console.log(response.data);
-            navigate('/login');
+            navigate('/Login');
         } catch (error) {
             console.error('Error al enviar solicitud:', error);
         }
@@ -68,4 +68,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default TrainerSignup;
