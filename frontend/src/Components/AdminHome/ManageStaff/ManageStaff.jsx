@@ -8,7 +8,9 @@ import axios from "axios";
 const ManageStaff = () => {
     let navigate = useNavigate();
     const [username, setUsername] = useState('');
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [trainerNames, setTrainerNames] = useState([]);
+    const [selectedTrainer, setSelectedTrainer] = useState('');
+    const [confirmDelete, setConfirmDelete] = useState(false);
 
     // Function to verify token validity and user role
     const verifyToken = async () => {
@@ -42,35 +44,34 @@ const ManageStaff = () => {
 
     useEffect(() => {
         verifyToken();
+        const fetchTrainerNames = async () => {
+            try {
+                const response = await axios.get('http://localhost:3333/professor/get');
+                setTrainerNames(response.data);
+            } catch (error) {
+                console.error('Error fetching trainer names:', error);
+            }
+        };
+        fetchTrainerNames();
     }, []);
-
-    const handleGenerateId = () => {
-        console.log('Generating ID for user:', username);
-    };
-
-    const handleDeleteUser = () => {
-        console.log('Deleting user:', username);
-        setUsername('');
-    };
-
-    const ConfirmationDialog = () => (
-        <div className="confirmation-dialog">
-            <div className="confirmation-content">
-                <h2>Confirm Delete</h2>
-                <p>Are you sure you want to delete {username}?</p>
-                <button onClick={confirmDeleteHandler}>Confirm</button>
-                <button onClick={() => setShowConfirmDialog(false)}>Cancel</button>
-            </div>
-        </div>
-    );
 
     const confirmDeleteHandler = async () => {
         try {
-            await axios.delete(`http://localhost:3333/user/${username}/delete`);
+            await axios.delete(`http://localhost:3333/user/${selectedTrainer}/delete`);
             navigate('/AdministratorHome');
         } catch (error) {
-            console.error('Error deleting user:', error);
+            console.error('Error deleting trainer:', error);
         }
+    };
+
+    const handleDelete = async (username) => {
+        setSelectedTrainer(username);
+        setConfirmDelete(true);
+    };
+
+    const handleView = async (username) => {
+        setSelectedTrainer(username);
+        navigate(`/AdministratorHome/staff/${username}`);
     };
 
     return (
@@ -84,17 +85,28 @@ const ManageStaff = () => {
                 </div>
             </div>
             <div className='staff-actions'>
-                <div className='user-input'>
-                    <img src={person_icon} alt=""/>
-                    <input type='text' value={username} onChange={(e) => setUsername(e.target.value)}
-                           placeholder='Enter username'/>
+                <div className='room-list'>
+                    {trainerNames.map((trainer, index) => (
+                        <div key={index} className='staff-item'>
+                            <span>{trainer}</span>
+                            <button className='modification-button' onClick={() => handleDelete(trainer)}>Delete</button>
+                            <button className='modification-button' onClick={() => handleView(trainer)}>View</button>
+                        </div>
+                    ))}
                 </div>
-                <button className='staff-button' onClick={() => handleDeleteUser(username)}>Delete User</button>
-                <Link to={'/AdministratorHome'}>
+                <Link to={"/AdministratorHome"}>
                     <button className='staff-button back'>Home</button>
                 </Link>
             </div>
-            {showConfirmDialog && <ConfirmationDialog />}
+            {confirmDelete && (
+                <div className='confirmation-message'>
+                    <p>Are you sure you want to delete the trainer "{selectedTrainer}"?</p>
+                    <div className='confirmation-actions'>
+                        <button onClick={confirmDeleteHandler}>Yes</button>
+                        <button onClick={() => setConfirmDelete(false)} className='cancel'>No</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

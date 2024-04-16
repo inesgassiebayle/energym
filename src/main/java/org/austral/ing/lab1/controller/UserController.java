@@ -172,19 +172,21 @@ public class UserController {
             return "User does not exist";
         }
 
-        //user.changeState();
-
-        //users.delete(user);
+        user.deactivate();
+        users.persist(user);
 
         res.type("application/json");
         return user.asJson();
     }
 
-    public String getProfessor(Request req, Response res){
+    public String getProfessors(Request req, Response res){
         List<Professor> professors1 = professsors.findAllProfessors();
         List<String> names = new ArrayList<>();
         for(Professor professor: professors1){
-            names.add(professor.getUser().getUsername());
+            User user = professor.getUser();
+            if(user.state()){
+                names.add(user.getUsername());
+            }
         }
         res.type("application/json");
         return gson.toJson(names);
