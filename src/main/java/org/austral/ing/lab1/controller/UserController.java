@@ -10,7 +10,9 @@ import org.austral.ing.lab1.queries.Users;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class UserController {
@@ -155,6 +157,37 @@ public class UserController {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pat = Pattern.compile(emailRegex);
         return pat.matcher(email).matches();
+    }
+
+    public String deleteUser(Request req, Response res){
+        String username = req.params(":username");
+
+        if(username == null || username.isBlank()){
+            return "Invalid input";
+        }
+
+        User user = users.findUserByUsername(username);
+
+        if(user == null) {
+            return "User does not exist";
+        }
+
+        //user.changeState();
+
+        //users.delete(user);
+
+        res.type("application/json");
+        return user.asJson();
+    }
+
+    public String getProfessor(Request req, Response res){
+        List<Professor> professors1 = professsors.findAllProfessors();
+        List<String> names = new ArrayList<>();
+        for(Professor professor: professors1){
+            names.add(professor.getUser().getUsername());
+        }
+        res.type("application/json");
+        return gson.toJson(names);
     }
 
 }
