@@ -57,6 +57,14 @@ public class Lessons {
         return query.getSingleResult() == 0;  // true if no lessons at the same time and date
     }
 
+    public Lesson findLessonByNameAndDate(String lessonName, LocalDate lessonDate){
+        TypedQuery<Lesson> query = entityManager.createQuery("SELECT l FROM Lesson l WHERE l.name = : lessonName AND l.startDate = : lessonDate", Lesson.class);
+        query.setParameter("lessonName" , lessonName);
+        query.setParameter("lessonDate",lessonDate );
+        List<Lesson> lessons = query.getResultList();
+        return lessons.isEmpty() ? null : lessons.get(0);
+    }
+
     public void persist(Lesson lesson) {
         entityManager.getTransaction().begin();
         entityManager.persist(lesson);

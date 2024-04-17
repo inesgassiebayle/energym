@@ -197,21 +197,22 @@ public class LessonController{
     }
 
 
-
-
     public String deleteLesson(Request req, Response res) {
         LessonDeletionDto deletionDto = gson.fromJson(req.body(), LessonDeletionDto.class);
         String lessonName = deletionDto.getName();
+        LocalDate lessonDate = deletionDto.getDate();
 
-        Lesson lesson = lessons.findLessonByName(lessonName);
+        Lesson lesson = lessons.findLessonByNameAndDate(lessonName, lessonDate);
         if (lesson == null) {
             res.status(404);
             return "Lesson not found";
         }
 
-        lessons.delete(lesson);
+        lesson.deactivate();
+        this.lessons.persist(lesson);
+
         res.type("application/json");
-        return gson.toJson("Deleted lesson with name: " + lessonName);
+        return gson.toJson("Deactivated lesson(s) with name: " + lessonName + " and date: " + lessonDate);
     }
 
 }

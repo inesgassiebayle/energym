@@ -87,10 +87,27 @@ public class Lesson {
     @Column()
     private LocalDate endDate;
 
+    @Column()
+    private boolean state;
+
+    public boolean getState(){
+        return state;
+    }
+
+    public void activate(){
+        this.state = true;
+    }
+
+    public void deactivate(){
+        this.state = false;
+    }
+
+
     public Lesson(String name, LocalTime time, LocalDate startDate) {
         this.name = name;
         this.time = time;
         this.startDate = startDate;
+        activate();
     }
 
     public Lesson() {

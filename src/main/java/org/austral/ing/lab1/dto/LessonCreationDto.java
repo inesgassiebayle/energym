@@ -9,7 +9,7 @@ public class LessonCreationDto {
     private String activity;
 
     private String professor;
-    private String startDate; // Should match the ISO_LOCAL_DATE format (yyyy-MM-dd)
+    private String startDate; //actua como date a pesar de llamarse startdate que es para facilitar la concurrencia
 
     private String roomName;
 
