@@ -54,11 +54,13 @@ const ManageSchedule = () => {
             <div className="schedule-actions">
                 <Link to="/AdministratorHome/ManageSchedule/AddLesson">
                     <button className="schedule-button">Add Lesson</button>
+                </Link>
+                <Link to="/AdministratorHome">
                     <button className="schedule-button back">Home</button>
                 </Link>
             </div>
         </div>
-    );
+);
 };
 
 export default ManageSchedule;
