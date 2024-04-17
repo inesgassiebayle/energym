@@ -23,8 +23,10 @@ public class Lesson {
     @Column()
     private LocalDate startDate;
 
+    public LocalDate getStartDate(){return startDate;}
     @Column()
     private LocalTime time;
+    public LocalTime getTime(){return time;}
 
     @ManyToOne
     @JoinColumn(name = "activityId")
