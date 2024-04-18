@@ -58,6 +58,9 @@ public class Application {
         Spark.post("/lesson/addSingle", lessonController:: addSingleLesson);
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
+        Spark.get("/lesson/:date/getLessons", lessonController::getLessonsByDate);
+
+
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);

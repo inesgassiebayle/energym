@@ -65,6 +65,14 @@ public class Lessons {
         return lessons.isEmpty() ? null : lessons.get(0);
     }
 
+    public List<Lesson> findLessonsByDate(LocalDate lessonDate){
+        TypedQuery<Lesson> query = entityManager.createQuery("SELECT l FROM Lesson l WHERE l.startDate = :lessonDate", Lesson.class);
+        query.setParameter("lessonDate", lessonDate);
+        return query.getResultList();
+    }
+
+
+
     public void persist(Lesson lesson) {
         entityManager.getTransaction().begin();
         entityManager.persist(lesson);

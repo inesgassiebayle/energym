@@ -3,18 +3,18 @@ import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.ConcurrentLessonCreationDto;
 import org.austral.ing.lab1.dto.LessonCreationDto;
 import org.austral.ing.lab1.dto.LessonDeletionDto;
-import org.austral.ing.lab1.model.Lesson;
-import org.austral.ing.lab1.model.Activity;
-import org.austral.ing.lab1.model.Professor;
-import org.austral.ing.lab1.model.Room;
+import org.austral.ing.lab1.dto.LessonNameTimeDto;
+import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 
 import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -213,6 +213,19 @@ public class LessonController{
 
         res.type("application/json");
         return gson.toJson("Deactivated lesson(s) with name: " + lessonName + " and date: " + lessonDate);
+    }
+
+
+    public String getLessonsByDate(Request req, Response res) {
+        String dateString = req.params(":date");
+        LocalDate lessonDate = LocalDate.parse(dateString);
+        List<Lesson> lessons1 = lessons.findLessonsByDate(lessonDate);
+        List<LessonNameTimeDto> lessonInfo = new ArrayList<>();
+        for (Lesson lesson: lessons1){
+            lessonInfo.add(new LessonNameTimeDto(lesson.getName(), lesson.getTime().toString()));
+            }
+        res.type("application/json");
+        return gson.toJson(lessonInfo);
     }
 
 }

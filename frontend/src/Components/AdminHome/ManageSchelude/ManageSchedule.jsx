@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
@@ -7,14 +8,31 @@ import axios from 'axios';
 const ManageSchedule = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [classesForSelectedDate, setClassesForSelectedDate] = useState([]);
-    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchClassesForSelectedDate = async () => {
+            try{
+                const response = await axios.get('http://localhost:3333/lesson/:date/getLessons');
+                setClassesForSelectedDate(response.data);
+            } catch (error) {
+                console.error('Error fetching classes:', error);
+            }
+        }
+        fetchClassesForSelectedDate();
+    }, [selectedDate]);
+
+    const fetchClassesForSelectedDate = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3333/lessons/${selectedDate}`);
+            setClassesForSelectedDate(response.data);
+            setError(null); // Limpiar el error si la solicitud tiene éxito
+        } catch (error) {
+        }
+    };
 
     const handleDateChange = (e) => {
-        const selectedDate = e.target.value;
-        setSelectedDate(selectedDate);
-        // Aquí deberías llamar a tu API para obtener las clases planificadas para la fecha seleccionada
-        // Por ahora, simplemente dejamos un array vacío
-        setClassesForSelectedDate([]);
+        setSelectedDate(e.target.value);
     };
 
     return (
@@ -37,13 +55,15 @@ const ManageSchedule = () => {
                     onChange={handleDateChange}
                 />
             </div>
+            {error && <p className="error-message">{error}</p>} {/* Mostrar el mensaje de error si existe */}
             {selectedDate && (
                 <div className="schedule-info">
                     <h3>Classes for {selectedDate}:</h3>
                     {classesForSelectedDate.length > 0 ? (
                         <ul>
                             {classesForSelectedDate.map((classInfo, index) => (
-                                <li key={index}>{classInfo}</li>
+                                <li key={index}>{classInfo.name}</li>
+                                // Reemplaza classInfo.name con la propiedad correcta de la clase
                             ))}
                         </ul>
                     ) : (
@@ -60,7 +80,7 @@ const ManageSchedule = () => {
                 </Link>
             </div>
         </div>
-);
+    );
 };
 
 export default ManageSchedule;
