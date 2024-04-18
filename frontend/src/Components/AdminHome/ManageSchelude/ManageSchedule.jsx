@@ -1,35 +1,62 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
 
 const ManageSchedule = () => {
+    const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState('');
     const [classesForSelectedDate, setClassesForSelectedDate] = useState([]);
+    // const [selectedLesson, setSelectedLesson] = useState('');
+    // const [confirmDelete, setConfirmDelete] = useState(false);
     const [error, setError] = useState(null);
 
+    // Authentication check
     useEffect(() => {
-        const fetchClassesForSelectedDate = async () => {
-            try{
-                const response = await axios.get('http://localhost:3333/lesson/:date/getLessons');
-                setClassesForSelectedDate(response.data);
-            } catch (error) {
-                console.error('Error fetching classes:', error);
+        const verifyToken = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No token found, redirecting to login.');
+                navigate('/Login');
+                return;
             }
-        }
-        fetchClassesForSelectedDate();
-    }, [selectedDate]);
 
-    const fetchClassesForSelectedDate = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3333/lessons/${selectedDate}`);
-            setClassesForSelectedDate(response.data);
-            setError(null); // Limpiar el error si la solicitud tiene éxito
-        } catch (error) {
+            try {
+                const response = await axios.get('http://localhost:3333/user/verify', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.data.type !== 'ADMINISTRATOR') {
+                    console.log('User is not an administrator, redirecting to login.');
+                    navigate('/Login');
+                    return;
+                }
+            } catch (error) {
+                console.error('Token validation failed:', error);
+                navigate('/Login');
+            }
+        };
+
+        verifyToken();
+    }, [navigate]);
+
+    useEffect(() => {
+        if (selectedDate) {
+            const fetchClassesForSelectedDate = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:3333/lesson/${selectedDate}/getLessons`);
+                    setClassesForSelectedDate(response.data);
+                } catch (error) {
+                    console.error('Error fetching classes:', error);
+                    setError('Failed to fetch classes.');
+                }
+            };
+            fetchClassesForSelectedDate();
         }
-    };
+    }, [selectedDate]);
 
     const handleDateChange = (e) => {
         setSelectedDate(e.target.value);
@@ -42,7 +69,7 @@ const ManageSchedule = () => {
                     <div className="text">Manage Schedule</div>
                 </div>
                 <div className="logo">
-                    <img src={logo} alt="" />
+                    <img src={logo} alt="Logo" />
                 </div>
             </div>
             <div className="date-picker">
@@ -55,19 +82,26 @@ const ManageSchedule = () => {
                     onChange={handleDateChange}
                 />
             </div>
-            {error && <p className="error-message">{error}</p>} {/* Mostrar el mensaje de error si existe */}
+            {error && <p className="error-message">{error}</p>}
             {selectedDate && (
                 <div className="schedule-info">
                     <h3>Classes for {selectedDate}:</h3>
                     {classesForSelectedDate.length > 0 ? (
                         <ul>
                             {classesForSelectedDate.map((classInfo, index) => (
-                                <li key={index}>{classInfo.name}</li>
-                                // Reemplaza classInfo.name con la propiedad correcta de la clase
+                                <div key={index} className='staff-item'>
+                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    {/*<button className='modification-button'*/}
+                                    {/*        onClick={() => handleDelete()}>Delete*/}
+                                    {/*</button>*/}
+                                    {/*<button className='modification-button' onClick={() => handleView()}>View*/}
+                                    {/*</button>*/}
+
+                                </div>
                             ))}
                         </ul>
                     ) : (
-                        <p>No hay clases planeadas para el día seleccionado.</p>
+                        <p>No classes planned for the selected day.</p>
                     )}
                 </div>
             )}
@@ -84,3 +118,8 @@ const ManageSchedule = () => {
 };
 
 export default ManageSchedule;
+
+
+
+
+

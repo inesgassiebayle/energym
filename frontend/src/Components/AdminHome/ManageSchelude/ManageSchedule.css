@@ -98,3 +98,24 @@ a {
     margin-bottom: 20px; /* Agrega margen inferior al contenedor de las clases */
 }
 
+.staff-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.modification-button {
+    padding: 8px 16px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
