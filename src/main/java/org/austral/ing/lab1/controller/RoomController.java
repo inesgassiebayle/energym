@@ -42,6 +42,10 @@ public class RoomController {
             return "Invalid capacity";
         }
 
+        if(activities1.length == 0){
+            return "No activities selected";
+        }
+
         Room room = new Room(name, capacity);
 
         for(String activity: activities1){

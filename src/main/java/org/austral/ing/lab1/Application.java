@@ -12,7 +12,7 @@ import static spark.Spark.options;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
         final EntityManager entityManager = factory.createEntityManager();
         final UserController userController = new UserController(entityManager);
         final ActivityController activityController = new ActivityController(entityManager);
@@ -20,6 +20,7 @@ public class Application {
         final LessonController lessonController = new LessonController(entityManager);
         final ProfessorController professorController = new ProfessorController(entityManager);
         final AuthenticationController authenticationController = new AuthenticationController(entityManager);
+        final ReviewController reviewController = new ReviewController(entityManager);
 
         Spark.port(3333);
 
@@ -60,7 +61,10 @@ public class Application {
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);
+        Spark.get("/professor/:username/fullname", professorController::getFullname);
+        Spark.get("/lesson/reviews", professorController::getLessonReviews);
 
+        Spark.post("/review/create", reviewController::createReview);
 
     }
 }

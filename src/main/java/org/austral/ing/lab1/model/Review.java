@@ -1,5 +1,8 @@
 package org.austral.ing.lab1.model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -9,15 +12,23 @@ import javax.validation.constraints.Min;
 public class Review {
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
-    private Long userId;
+    private Long reviewId;
 
     @Column()
     private String comment;
+
+    public String getComment(){
+        return comment;
+    }
 
     @Column()
     @Min(0)
     @Max(5)
     private Integer rating;
+
+    public Integer getRating(){
+        return rating;
+    }
 
     @ManyToOne
     @JoinColumn(name = "studentId")
@@ -43,9 +54,11 @@ public class Review {
         this.lesson = lesson;
     }
 
-    public Review(String comment, Integer rating){
+    public Review(String comment, Integer rating, Student student, Lesson lesson){
         this.comment = comment;
         this.rating = rating;
+        this.student = student;
+        this.lesson = lesson;
     }
 
     public Review(Integer rating){
@@ -54,6 +67,16 @@ public class Review {
 
     public Review(){
 
+    }
+
+    public String asJson(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("reviewId", this.reviewId);
+        jsonObject.addProperty("comment", this.comment);
+        jsonObject.addProperty("rating", this.rating.toString());
+        jsonObject.addProperty("student", this.student.getUser().getUsername());
+        jsonObject.addProperty("lesson", this.lesson.getName());
+        return jsonObject.toString();
     }
 
 }

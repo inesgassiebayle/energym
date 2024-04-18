@@ -9,6 +9,8 @@ const ProfessorView = () => {
     let navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [lessons, setLessons] = useState([]);
+    const [fullname, setFullname] = useState({firstName: '', lastName: ''}); // New state for fullname
+
 
     // Function to verify token validity and user role
     const verifyToken = async () => {
@@ -49,9 +51,19 @@ const ProfessorView = () => {
         }
     };
 
+    const trainerFullname = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3333/professor/${trainer}/fullname`);
+            setFullname(response.data); // Save the fullname in the state
+        } catch (error){
+            console.error('Failed to fetch fullname:', error);
+        }
+    }
+
     useEffect(() => {
         verifyToken();
         trainerLessons();
+        trainerFullname();
         console.log('Viewing details for trainer:', trainer);
     }, [trainer]);
 
@@ -59,19 +71,24 @@ const ProfessorView = () => {
         <div className='manage-staff-container'>
             <div className="manage-staff-header">
                 <div className="manage-staff-title">
-                    <div className="text">Trainer: {trainer}</div>
+                    <div className="text">Trainer: {fullname.firstName} {fullname.lastName}</div>
                 </div>
                 <div className="logo">
                     <img src={logo} alt=""/>
                 </div>
             </div>
             <div className='staff-actions'>
-                {lessons.map((lesson, index) => (
-                    <div key={index}>
-                        <h2>{lesson.name}</h2>
-                        <p>{lesson.date}</p>
-                    </div>
-                ))}
+                <div className='lessons'>
+                    {lessons.map((lesson, index) => (
+                        <div key={index}>
+                            <h2>{lesson.name}</h2>
+                            <p>{lesson.startDate}</p>
+                        </div>
+                    ))}
+                </div>
+                <div className=''>
+
+                </div>
                 <Link to={"/AdministratorHome"}>
                     <button className='staff-button back'>Home</button>
                 </Link>

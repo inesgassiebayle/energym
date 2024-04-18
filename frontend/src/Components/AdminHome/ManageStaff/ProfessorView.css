@@ -1,0 +1,72 @@
+.manage-staff-container {
+    background: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.manage-staff-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.manage-staff-title .text {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+.logo img {
+    width: 120px; /* Adjust as per your logo's aspect ratio */
+}
+
+.staff-actions {
+    padding: 20px;
+}
+
+.lessons {
+    margin-bottom: 20px;
+}
+
+.lessons > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.lessons h2 {
+    margin: 0;
+    margin-right: 1em; /* Espacio agregado aquí */
+    font-size: 20px;
+    color: #333;
+    white-space: nowrap; /* Esto asegura que el nombre no se rompa en varias líneas */
+}
+
+.lessons p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.staff-button.back {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    text-align: center;
+    background-color: #d0d0d0;
+    color: #333;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.staff-button.back:hover {
+    background-color: #c0c0c0;
+}

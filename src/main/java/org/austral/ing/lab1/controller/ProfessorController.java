@@ -1,30 +1,31 @@
 package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
+import org.austral.ing.lab1.dto.FullnameDto;
 import org.austral.ing.lab1.dto.LessonDeletionDto;
-import org.austral.ing.lab1.model.Lesson;
-import org.austral.ing.lab1.model.Professor;
-import org.austral.ing.lab1.model.User;
-import org.austral.ing.lab1.queries.Administrators;
-import org.austral.ing.lab1.queries.Professors;
-import org.austral.ing.lab1.queries.Students;
-import org.austral.ing.lab1.queries.Users;
+import org.austral.ing.lab1.dto.ReviewDto;
+import org.austral.ing.lab1.dto.SignUpDto;
+import org.austral.ing.lab1.model.*;
+import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ProfessorController {
     private final Users users;
     private final Professors professors;
-
+    private final Lessons lessons;
     private final Gson gson = new Gson();
 
     public ProfessorController(EntityManager entityManager) {
         this.users = new Users(entityManager);
         this.professors = new Professors(entityManager);
+        this.lessons = new Lessons(entityManager);
     }
 
 
@@ -57,6 +58,67 @@ public class ProfessorController {
         }
         res.type("application/json");
         return gson.toJson(lessonsInfo);
+    }
+
+    public String getFullname(Request req, Response res){
+        String username = req.params(":username");
+
+        if(username == null || username.isBlank()){
+            return "Invalid input";
+        }
+
+        Professor professor = professors.findProfessorByUsername(username);
+
+        if(professor == null){
+            return "Professor not found";
+        }
+
+        User user = professor.getUser();
+
+        FullnameDto dto = new FullnameDto(user.getFirstName(), user.getLastName());
+
+        res.type("application/json");
+        return gson.toJson(dto);
+    }
+
+    public String getLessonReviews(Request req, Response res){
+         LessonDeletionDto dto = gson.fromJson(req.body(), LessonDeletionDto.class);
+         String name = dto.getName();
+         LocalDate date = dto.getDate();
+
+         if(name == null){
+             return "Invalid lesson name";
+         }
+
+         Lesson lesson = lessons.findLessonByNameAndDate(name, date);
+
+         if(lesson == null){
+             return "Lesson does not exist";
+         }
+
+         Set<Review> reviews = lesson.getReviews();
+
+         List<ReviewDto> reviewDtos = new ArrayList<>();
+
+         for(Review review: reviews){
+             Student student = review.getStudent();
+
+             if(student==null){
+                 return "Student does not exist";
+             }
+
+             User user = student.getUser();
+
+             if(user == null){
+                 return "User does not exist";
+             }
+
+
+             reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+         }
+
+        res.type("application/json");
+        return gson.toJson(reviewDtos);
     }
 
 }

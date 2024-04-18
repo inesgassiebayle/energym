@@ -36,6 +36,7 @@ public class Student{
     public void setUser(User user){
         this.user=user;
     }
+    public User getUser(){return user;}
 
     public Set<Review> getReviews() {
         return reviews;
