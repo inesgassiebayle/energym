@@ -20,7 +20,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public class AuthenticationController {
     private final Gson gson = new Gson();
     private final Users users;
-    private final Cache<String, String> usernameByToken = CacheBuilder.newBuilder().expireAfterAccess(30, MINUTES).build();
+    private final Cache<String, String> usernameByToken = CacheBuilder.newBuilder().expireAfterWrite(30, MINUTES).build();
 
     public AuthenticationController(EntityManager entityManager) {
         this.users = new Users(entityManager);
