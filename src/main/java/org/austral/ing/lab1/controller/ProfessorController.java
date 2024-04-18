@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
+import org.austral.ing.lab1.dto.LessonDeletionDto;
 import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Professor;
 import org.austral.ing.lab1.model.User;
@@ -26,6 +27,7 @@ public class ProfessorController {
         this.professors = new Professors(entityManager);
     }
 
+
     public String getProfessors(Request req, Response res){
         List<Professor> professors1 = professors.findAllProfessors();
         List<String> names = new ArrayList<>();
@@ -49,12 +51,12 @@ public class ProfessorController {
         Professor professor = professors.findProfessorByUsername(username);
 
         List<Lesson> lessons = professors.getLessons(professor);
-        List<String> lessonsNames = new ArrayList<>();
+        List<LessonDeletionDto> lessonsInfo = new ArrayList<>();
         for(Lesson lesson: lessons){
-            lessonsNames.add(lesson.getName());
+            lessonsInfo.add(new LessonDeletionDto(lesson.getName(), lesson.getStartDate().toString()));
         }
         res.type("application/json");
-        return gson.toJson(lessonsNames);
+        return gson.toJson(lessonsInfo);
     }
 
 }

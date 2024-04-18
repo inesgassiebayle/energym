@@ -179,17 +179,4 @@ public class UserController {
         return user.asJson();
     }
 
-    public String getProfessors(Request req, Response res){
-        List<Professor> professors1 = professsors.findAllProfessors();
-        List<String> names = new ArrayList<>();
-        for(Professor professor: professors1){
-            User user = professor.getUser();
-            if(user.state()){
-                names.add(user.getUsername());
-            }
-        }
-        res.type("application/json");
-        return gson.toJson(names);
-    }
-
 }

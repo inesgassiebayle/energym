@@ -21,7 +21,6 @@ public class Application {
         final ProfessorController professorController = new ProfessorController(entityManager);
         final AuthenticationController authenticationController = new AuthenticationController(entityManager);
 
-
         Spark.port(3333);
 
         before((req, resp) -> {
@@ -42,8 +41,6 @@ public class Application {
         Spark.post("/user/logout", authenticationController::deleteAuthentication);
         Spark.get("/user/verify", authenticationController::getCurrentUser);
         Spark.delete("/user/:username/delete", userController::deleteUser);
-//      Spark.get("/professor/get", userController::getProfessors);
-
 
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);
@@ -61,7 +58,9 @@ public class Application {
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
 
+        Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);
+
 
     }
 }
