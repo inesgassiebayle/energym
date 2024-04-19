@@ -62,7 +62,7 @@ public class Application {
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
         Spark.get("/lesson/:date/getLessons", lessonController::getLessonsByDate);
-        Spark.delete("/lesson/:name/delete", lessonController::deleteLesson);
+        Spark.delete("/lesson/delete", lessonController::deleteLesson);
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);

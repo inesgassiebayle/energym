@@ -209,19 +209,22 @@ const ManageSchedule = () => {
     };
 
     const confirmDeleteHandler = async () => {
+
+        const lessonData ={
+            name: selectedLesson.name,
+            date: selectedLesson.date,
+            time: selectedLesson.time,
+        }
+
         try {
-            await axios.delete(`http://localhost:3333/lesson/delete`, {
-                data: {
-                    name: selectedLesson.name,
-                    startDate: selectedLesson.startDate,
-                }
-            });
-            navigate('/AdministratorHome/ManageSchedule');
+            const endpoint = 'http://localhost:3333/lesson/delete';
+            const response = await axios.post(endpoint, lessonData);
+            console.log(response.data);
+            navigate('/AdministratorHome');
         } catch (error) {
-            console.error('Error deleting lesson:', error);
+            console.error(error.response.data, error);
         }
     };
-
 
 
     return (
