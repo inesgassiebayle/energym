@@ -14,7 +14,7 @@ import static spark.Spark.*;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
         setFactory(factory);
         final UserController userController = new UserController();
         final ActivityController activityController = new ActivityController();
@@ -23,6 +23,7 @@ public class Application {
         final ProfessorController professorController = new ProfessorController();
         final AuthenticationController authenticationController = new AuthenticationController();
         final ReviewController reviewController = new ReviewController();
+        final LessonController2 lessonController2 = new LessonController2();
 
         Spark.port(3333);
 
@@ -67,7 +68,9 @@ public class Application {
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);
         Spark.get("/professor/:username/fullname", professorController::getFullname);
-        Spark.get("/lesson/reviews", professorController::getLessonReviews);
+        Spark.post("/lesson/reviews", professorController::getLessonReviews);
+
+        Spark.post("/lesson/get", lessonController2::getLesson);
 
         Spark.post("/review/create", reviewController::createReview);
 
