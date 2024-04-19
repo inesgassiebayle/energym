@@ -56,7 +56,7 @@ const LessonAddition = () => {
             console.log(response.data);
             navigate('/AdministratorHome');
         } catch (error) {
-            console.error('Error sending request:', error);
+            console.error(error.response.data, error);
         }
     };
 

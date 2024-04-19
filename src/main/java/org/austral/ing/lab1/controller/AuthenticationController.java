@@ -22,8 +22,8 @@ public class AuthenticationController {
     private final Users users;
     private final Cache<String, String> usernameByToken = CacheBuilder.newBuilder().expireAfterWrite(30, MINUTES).build();
 
-    public AuthenticationController(EntityManager entityManager) {
-        this.users = new Users(entityManager);
+    public AuthenticationController() {
+        this.users = new Users();
     }
 
     public String createAuthentication(Request req, Response res) {
@@ -95,7 +95,7 @@ public class AuthenticationController {
 
         if (!tokenOpt.isPresent()) {
             res.status(401); // Unauthorized
-            return gson.toJson("Not signed in");
+            return "Not signed in";
         }
 
         String token = tokenOpt.get();
@@ -103,13 +103,13 @@ public class AuthenticationController {
 
         if (username == null) {
             res.status(403);
-            return gson.toJson("Invalid token");
+            return "Invalid token";
         }
 
         User user = users.findUserByUsername(username);
         if (user == null) {
             res.status(404);
-            return gson.toJson("User not found");
+            return "User not found";
         }
 
         res.type("application/json");

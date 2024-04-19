@@ -19,9 +19,9 @@ public class ActivityController {
 
     private final Gson gson = new Gson();
 
-    public ActivityController(EntityManager entityManager) {
-        this.activities = new Activities(entityManager);
-        this.rooms = new Rooms(entityManager);
+    public ActivityController() {
+        this.activities = new Activities();
+        this.rooms = new Rooms();
     }
 
     public String addActivity(Request req, Response res){
@@ -49,13 +49,12 @@ public class ActivityController {
         for(Room room: roomsWithActivity){
             room.removeActivity(activity);
             if(room.getActivities().isEmpty()){
-                rooms.delete(room);
+                room.deactivate();
             }
-            else{
-                rooms.persist(room);
-            }
+            rooms.persist(room);
         }
-        activities.delete(activity);
+        activity.deactivate();
+        activities.persist(activity);
 
         res.type("application/json");
         return activity.asJson();
@@ -65,7 +64,9 @@ public class ActivityController {
         List<Activity> activities1 = activities.findAllActivities();
         List<String> names = new ArrayList<>();
         for(Activity activity: activities1){
-            names.add(activity.getName());
+            if(activity.state()) {
+                names.add(activity.getName());
+            }
         }
         res.type("application/json");
         return gson.toJson(names);

@@ -44,13 +44,19 @@ public class Activity {
         return classes;
     }
 
+    @Column
+    private boolean state;
+    public boolean state(){return state;}
+    public void deactivate(){this.state=false;}
     public Activity(String name){
         this.name = name;
         this.rooms = new HashSet<>();
+        this.state=true;
     }
 
     public Activity(){
         this.rooms= new HashSet<>();
+        this.state = true;
     }
 
     public String asJson(){

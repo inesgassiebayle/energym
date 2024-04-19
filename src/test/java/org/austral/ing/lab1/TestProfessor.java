@@ -18,8 +18,8 @@ import static org.junit.Assert.assertNull;
 public class TestProfessor {
     final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
     final EntityManager entityManager = factory.createEntityManager();
-    final Professors professors = new Professors(entityManager);
-    final Users users = new Users(entityManager);
+    final Professors professors = new Professors();
+    final Users users = new Users();
 
     @Test
     public void testFindProfessorByUsername_NonExistingUser() {

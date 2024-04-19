@@ -21,12 +21,12 @@ public class ReviewController {
     private final Students students;
     private final Reviews reviews;
     private final Gson gson = new Gson();
-    public ReviewController(EntityManager entityManager) {
-        this.users = new Users(entityManager);
-        this.lessons = new Lessons(entityManager);
-        this.professors = new Professors(entityManager);
-        this.students = new Students(entityManager);
-        this.reviews = new Reviews(entityManager);
+    public ReviewController() {
+        this.users = new Users();
+        this.lessons = new Lessons();
+        this.professors = new Professors();
+        this.students = new Students();
+        this.reviews = new Reviews();
     }
 
     public String createReview(Request req, Response res){
@@ -69,7 +69,10 @@ public class ReviewController {
 
         Review review = new Review(comment, rating, student, lesson);
 
+
         reviews.persist(review);
+        lesson.addReview(review);
+        lessons.persist(lesson);
 
         res.type("application/json");
         return review.asJson();

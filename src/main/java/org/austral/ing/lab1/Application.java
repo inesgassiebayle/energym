@@ -6,21 +6,23 @@ import spark.Spark;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import static spark.Spark.before;
-import static spark.Spark.options;
+
+import static org.austral.ing.lab1.EntityManagerController.closeEntityManager;
+import static org.austral.ing.lab1.EntityManagerController.setFactory;
+import static spark.Spark.*;
 
 public class Application {
     public static void main(String[] args) {
 
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
-        final EntityManager entityManager = factory.createEntityManager();
-        final UserController userController = new UserController(entityManager);
-        final ActivityController activityController = new ActivityController(entityManager);
-        final RoomController roomController = new RoomController(entityManager);
-        final LessonController lessonController = new LessonController(entityManager);
-        final ProfessorController professorController = new ProfessorController(entityManager);
-        final AuthenticationController authenticationController = new AuthenticationController(entityManager);
-        final ReviewController reviewController = new ReviewController(entityManager);
+        setFactory(factory);
+        final UserController userController = new UserController();
+        final ActivityController activityController = new ActivityController();
+        final RoomController roomController = new RoomController();
+        final LessonController lessonController = new LessonController();
+        final ProfessorController professorController = new ProfessorController();
+        final AuthenticationController authenticationController = new AuthenticationController();
+        final ReviewController reviewController = new ReviewController();
 
         Spark.port(3333);
 
@@ -68,6 +70,8 @@ public class Application {
         Spark.get("/lesson/reviews", professorController::getLessonReviews);
 
         Spark.post("/review/create", reviewController::createReview);
+
+        after((request, response) -> closeEntityManager());
 
     }
 }

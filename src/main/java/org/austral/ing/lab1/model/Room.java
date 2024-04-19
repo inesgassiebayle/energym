@@ -39,6 +39,11 @@ public class Room {
         this.capacity = capacity;
     }
 
+    @Column
+    private boolean state;
+    public boolean state(){return state;}
+    public void deactivate(){this.state=false;}
+
     @ManyToMany
     @JoinTable(
             name = "activityRoom",
@@ -83,10 +88,12 @@ public class Room {
         this.name = name;
         this.capacity = capacity;
         this.activities = new HashSet<>();
+        this.state = true;
     }
 
     public Room(){
         this.activities = new HashSet<>();
+        this.state = true;
     }
 
     public String asJson(){

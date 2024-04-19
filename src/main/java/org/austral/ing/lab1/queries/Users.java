@@ -6,24 +6,25 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class Users {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Users(EntityManager entityManager) {
-        this.entityManager = entityManager;
+public class Users {
+
+    public Users() {
+
     }
 
     public User findUserById(Long id) {
-        return entityManager.find(User.class, id);
+        return entityManager().find(User.class, id);
     }
 
     public List<User> findAllUsers() {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
+        TypedQuery<User> query = entityManager().createQuery("SELECT u FROM User u", User.class);
         return query.getResultList();
     }
 
     public User login(String username, String password) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+        TypedQuery<User> query = entityManager().createQuery("SELECT u " +
                 "FROM User u " +
                 "WHERE u.password LIKE :password AND u.username LIKE: username", User.class);
         query.setParameter("username", username);
@@ -33,10 +34,14 @@ public class Users {
 
 
     public User findUserByUsername(String username) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+        if (!entityManager().getTransaction().isActive()) {
+            entityManager().getTransaction().begin();
+        }
+        TypedQuery<User> query = entityManager().createQuery("SELECT u " +
                 "FROM User u " +
                 "WHERE u.username LIKE :username", User.class);
         query.setParameter("username", username);
+        entityManager().getTransaction().commit();
         List<User> users = query.getResultList();
         if (users.isEmpty()) {
             return null;
@@ -45,7 +50,7 @@ public class Users {
     }
 
     public User findUserByUsernameOrEmail(String username, String email) {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u " +
+        TypedQuery<User> query = entityManager().createQuery("SELECT u " +
                 "FROM User u " +
                 "WHERE u.username LIKE :username OR u.email LIKE :email", User.class);
         query.setParameter("username", username);
@@ -58,14 +63,14 @@ public class Users {
     }
 
     public void persist(User user) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(user);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(user);
+        entityManager().getTransaction().commit();
     }
 
     public void delete(User user){
-        entityManager.getTransaction().begin();
-        entityManager.remove(user);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(user);
+        entityManager().getTransaction().commit();
     }
 }

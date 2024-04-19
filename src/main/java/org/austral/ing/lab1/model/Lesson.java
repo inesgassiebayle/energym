@@ -85,6 +85,9 @@ public class Lesson {
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
+    public void addReview(Review review){
+        reviews.add(review);
+    }
 
     @Column()
     private LocalDate endDate;
@@ -109,6 +112,7 @@ public class Lesson {
         this.name = name;
         this.time = time;
         this.startDate = startDate;
+        this.reviews = new HashSet<>();
         activate();
     }
 

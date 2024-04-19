@@ -13,8 +13,8 @@ import javax.persistence.Persistence;
 public class TestRoomActivity {
     final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
     final EntityManager entityManager = factory.createEntityManager();
-    final Activities activities = new Activities(entityManager);
-    final Rooms rooms = new Rooms(entityManager);
+    final Activities activities = new Activities();
+    final Rooms rooms = new Rooms();
 
     @Test
     public void testRoomActivity(){

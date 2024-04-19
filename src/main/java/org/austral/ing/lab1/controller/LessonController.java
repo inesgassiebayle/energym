@@ -27,11 +27,11 @@ public class LessonController{
     private final Rooms rooms;
     private final Gson gson = new Gson();
 
-    public LessonController(EntityManager entityManager) {
-        this.lessons = new Lessons(entityManager);
-        this.activities = new Activities(entityManager);
-        this.professors = new Professors(entityManager);
-        this.rooms = new Rooms(entityManager);
+    public LessonController() {
+        this.lessons = new Lessons();
+        this.activities = new Activities();
+        this.professors = new Professors();
+        this.rooms = new Rooms();
     }
     public String addSingleLesson(Request req, Response res) {
         LessonCreationDto lessonDto = gson.fromJson(req.body(), LessonCreationDto.class);

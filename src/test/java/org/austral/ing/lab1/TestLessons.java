@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNull;
 public class TestLessons {
     final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
     final EntityManager entityManager = factory.createEntityManager();
-    final Lessons lessons = new Lessons(entityManager);
+    final Lessons lessons = new Lessons();
 
     @Test
     public void findLessonbyNameAndDate(){

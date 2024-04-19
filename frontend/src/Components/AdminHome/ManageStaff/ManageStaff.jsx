@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import logo from '../../Assets/Logo.png';
 import person_icon from "../../Assets/person.png";
 import axios from "axios";
+import authentication from "../Hoc/Hoc";
 
 const ManageStaff = () => {
     let navigate = useNavigate();
@@ -86,13 +87,15 @@ const ManageStaff = () => {
             </div>
             <div className='staff-actions'>
                 <div className='room-list'>
-                    {trainerNames.map((trainer, index) => (
-                        <div key={index} className='staff-item'>
-                            <span>{trainer}</span>
-                            <button className='modification-button' onClick={() => handleDelete(trainer)}>Delete</button>
-                            <button className='modification-button' onClick={() => handleView(trainer)}>View</button>
-                        </div>
-                    ))}
+                    {trainerNames && trainerNames.length > 0 &&
+                        trainerNames.map((trainer, index) => (
+                            <div key={index} className='staff-item'>
+                                <span>{trainer}</span>
+                                <button className='modification-button' onClick={() => handleDelete(trainer)}>Delete</button>
+                                <button className='modification-button' onClick={() => handleView(trainer)}>View</button>
+                            </div>
+                        ))
+                    }
                 </div>
                 <Link to={"/AdministratorHome"}>
                     <button className='staff-button back'>Home</button>
@@ -111,4 +114,4 @@ const ManageStaff = () => {
     );
 };
 
-export default ManageStaff;
+export default authentication(ManageStaff);

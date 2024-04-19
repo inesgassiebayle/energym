@@ -8,37 +8,35 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class Students {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Students(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+public class Students {
+    public Students(){}
 
     public Student findStudentById(Long id) {
-        return entityManager.find(Student.class, id);
+        return entityManager().find(Student.class, id);
     }
 
     public List<Student> findAllStudents() {
-        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s", Student.class);
+        TypedQuery<Student> query = entityManager().createQuery("SELECT s FROM Student s", Student.class);
         return query.getResultList();
     }
 
 
     public void persist(Student student) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(student);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(student);
+        entityManager().getTransaction().commit();
     }
 
     public void delete(Student student){
-        entityManager.getTransaction().begin();
-        entityManager.remove(student);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(student);
+        entityManager().getTransaction().commit();
     }
 
     public Student findStudentByUsername(String username) {
-        Users users = new Users(entityManager);
+        Users users = new Users();
 
         User user = users.findUserByUsername(username);
 
@@ -51,7 +49,7 @@ public class Students {
             return null;
         }
 
-        TypedQuery<Student> query = entityManager.createQuery(
+        TypedQuery<Student> query = entityManager().createQuery(
                 "SELECT s FROM Student s WHERE s.user.id = :userId", Student.class);
         query.setParameter("userId", user.getId());
 

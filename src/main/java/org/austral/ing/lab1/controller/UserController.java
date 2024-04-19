@@ -23,11 +23,11 @@ public class UserController {
 
     private final Gson gson = new Gson();
 
-    public UserController(EntityManager entityManager) {
-        this.users = new Users(entityManager);
-        this.students = new Students(entityManager);
-        this.professsors = new Professors(entityManager);
-        this.administrators = new Administrators(entityManager);
+    public UserController() {
+        this.users = new Users();
+        this.students = new Students();
+        this.professsors = new Professors();
+        this.administrators = new Administrators();
     }
 
     public String studentSignup(Request req, Response res) {

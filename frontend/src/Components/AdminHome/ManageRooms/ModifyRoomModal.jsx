@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import './ModifyRoomModal.css';
 import {useNavigate} from "react-router-dom";
+import authentication from "../Hoc/Hoc";
 
 const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     let navigate = useNavigate();
@@ -15,41 +16,6 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     const [oldRoomActivities, setOldActivities] = useState('');
     const [username, setUsername] = useState('');
     const [activityName, setActivityName] = useState(''); // Agregamos el estado para la actividad seleccionada
-
-
-    // Function to verify token validity and user role
-    const verifyToken = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log('No token found, redirecting to login.');
-            navigate('/Login');
-            return;
-        }
-
-        try {
-            const response = await axios.get('http://localhost:3333/user/verify', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            // Check if the user is an administrator
-            if (response.data.type !== 'ADMINISTRATOR') {
-                console.log('User is not an administrator, redirecting to login.');
-                navigate('/Login');
-                return;
-            }
-
-            setUsername(response.data.username);
-        } catch (error) {
-            console.error('Token validation failed:', error);
-            navigate('/Login');
-        }
-    };
-
-    useEffect(() => {
-
-    }, []);
 
 
     useEffect(() => {
@@ -78,7 +44,6 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
             }
         };
 
-        verifyToken();
         fetchRoomDetails();
     }, [isOpen, roomName]);
 
@@ -172,4 +137,5 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     );
 };
 
-export default ModifyRoomModal;
+
+export default authentication(ModifyRoomModal);

@@ -6,24 +6,25 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class Activities {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Activities(EntityManager entityManager) {
-        this.entityManager = entityManager;
+public class Activities {
+
+    public Activities() {
+
     }
 
     public Activity findActivityById(Long id) {
-        return entityManager.find(Activity.class, id);
+        return entityManager().find(Activity.class, id);
     }
 
     public List<Activity> findAllActivities() {
-        TypedQuery<Activity> query = entityManager.createQuery("SELECT a FROM Activity a", Activity.class);
+        TypedQuery<Activity> query = entityManager().createQuery("SELECT a FROM Activity a", Activity.class);
         return query.getResultList();
     }
 
     public Activity findActivityByName(String name) {
-        TypedQuery<Activity> query = entityManager.createQuery("SELECT a " +
+        TypedQuery<Activity> query = entityManager().createQuery("SELECT a " +
                 "FROM Activity a " +
                 "WHERE a.name LIKE :name", Activity.class);
         query.setParameter("name", name);
@@ -35,14 +36,14 @@ public class Activities {
     }
 
     public void persist(Activity activity) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(activity);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(activity);
+        entityManager().getTransaction().commit();
     }
 
     public void delete(Activity activity){
-        entityManager.getTransaction().begin();
-        entityManager.remove(activity);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(activity);
+        entityManager().getTransaction().commit();
     }
 }

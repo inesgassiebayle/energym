@@ -5,24 +5,24 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class Rooms {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Rooms(EntityManager entityManager) {
-        this.entityManager = entityManager;
+public class Rooms {
+
+    public Rooms() {
     }
 
     public Room findRoomById(Long id) {
-        return entityManager.find(Room.class, id);
+        return entityManager().find(Room.class, id);
     }
 
     public List<Room> findAllRooms() {
-        TypedQuery<Room> query = entityManager.createQuery("SELECT r FROM Room r", Room.class);
+        TypedQuery<Room> query = entityManager().createQuery("SELECT r FROM Room r", Room.class);
         return query.getResultList();
     }
 
     public Room findRoomByName(String name) {
-        TypedQuery<Room> query = entityManager.createQuery("SELECT r " +
+        TypedQuery<Room> query = entityManager().createQuery("SELECT r " +
                 "FROM Room r " +
                 "WHERE r.name LIKE :name", Room.class);
         query.setParameter("name", name);
@@ -34,7 +34,7 @@ public class Rooms {
     }
 
     public List<Room> findRoomsByActivity(String activityName) {
-        TypedQuery<Room> query = entityManager.createQuery(
+        TypedQuery<Room> query = entityManager().createQuery(
                 "SELECT r " +
                         "FROM Room r " +
                         "JOIN r.activities a " +  // Realizar un join con la relación de actividades
@@ -46,14 +46,14 @@ public class Rooms {
 
 
     public void persist(Room room) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(room);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(room);
+        entityManager().getTransaction().commit();
     }
 
     public void delete(Room room){
-        entityManager.getTransaction().begin();
-        entityManager.remove(room);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(room);
+        entityManager().getTransaction().commit();
     }
 }

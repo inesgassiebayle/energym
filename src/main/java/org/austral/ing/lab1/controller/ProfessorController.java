@@ -22,10 +22,10 @@ public class ProfessorController {
     private final Lessons lessons;
     private final Gson gson = new Gson();
 
-    public ProfessorController(EntityManager entityManager) {
-        this.users = new Users(entityManager);
-        this.professors = new Professors(entityManager);
-        this.lessons = new Lessons(entityManager);
+    public ProfessorController() {
+        this.users = new Users();
+        this.professors = new Professors();
+        this.lessons = new Lessons();
     }
 
 

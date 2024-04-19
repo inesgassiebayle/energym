@@ -21,7 +21,7 @@ public class TestRoom {
     public void setUp() {
         factory = Persistence.createEntityManagerFactory("energymdb");
         entityManager = factory.createEntityManager();
-        rooms = new Rooms(entityManager);
+        rooms = new Rooms();
     }
 
     @Test

@@ -19,9 +19,9 @@ public class RoomController {
     private final Rooms rooms;
     private final Activities activities;
     private final Gson gson = new Gson();
-    public RoomController(EntityManager entityManager) {
-        this.rooms = new Rooms(entityManager);
-        this.activities = new Activities(entityManager);
+    public RoomController() {
+        this.rooms = new Rooms();
+        this.activities = new Activities();
     }
 
     public String addRoom(Request req, Response res){
@@ -73,7 +73,9 @@ public class RoomController {
             return "Room does not exist";
         }
 
-        rooms.delete(room);
+        room.deactivate();
+        rooms.persist(room);
+
         res.type("application/json");
 
         return room.asJson();
@@ -84,7 +86,9 @@ public class RoomController {
         List<Room> rooms1 = rooms.findAllRooms();
         List<String> names = new ArrayList<>();
         for(Room room: rooms1){
-            names.add(room.getName());
+            if(room.state()){
+                names.add(room.getName());
+            }
         }
         res.type("application/json");
         return gson.toJson(names);

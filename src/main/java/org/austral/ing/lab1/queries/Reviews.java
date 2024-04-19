@@ -6,64 +6,65 @@ import org.austral.ing.lab1.model.User;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class Reviews {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Reviews(EntityManager entityManager) {
-        this.entityManager = entityManager;
+public class Reviews {
+
+    public Reviews() {
+
     }
 
     public void createReview(Review review) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(review);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(review);
+        entityManager().getTransaction().commit();
     }
 
     public Review getReviewById(Long reviewId) {
-        return entityManager.find(Review.class, reviewId);
+        return entityManager().find(Review.class, reviewId);
     }
 
     public void updateReview(Review review) {
-        entityManager.getTransaction().begin();
-        entityManager.merge(review);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().merge(review);
+        entityManager().getTransaction().commit();
     }
 
     public void deleteReview(Long reviewId) {
         Review review = getReviewById(reviewId);
         if (review != null) {
-            entityManager.getTransaction().begin();
-            entityManager.remove(review);
-            entityManager.getTransaction().commit();
+            entityManager().getTransaction().begin();
+            entityManager().remove(review);
+            entityManager().getTransaction().commit();
         }
     }
 
     public List<Review> getAllReviews() {
-        return entityManager.createQuery("SELECT r FROM Review r", Review.class).getResultList();
+        return entityManager().createQuery("SELECT r FROM Review r", Review.class).getResultList();
     }
 
     public List<Review> getReviewsByStudent(Long studentId) {
-        return entityManager.createQuery("SELECT r FROM Review r WHERE r.student.studentId = :studentId", Review.class)
+        return entityManager().createQuery("SELECT r FROM Review r WHERE r.student.studentId = :studentId", Review.class)
                 .setParameter("studentId", studentId)
                 .getResultList();
     }
 
     public List<Review> getReviewsByLesson(Long classId) {
-        return entityManager.createQuery("SELECT r FROM Review r WHERE r.lesson.classId = :classId", Review.class)
+        return entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson.classId = :classId", Review.class)
                 .setParameter("classId", classId)
                 .getResultList();
     }
 
     public void persist(Review review) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(review);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(review);
+        entityManager().getTransaction().commit();
     }
 
     public void delete(Review review){
-        entityManager.getTransaction().begin();
-        entityManager.remove(review);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(review);
+        entityManager().getTransaction().commit();
     }
 
 }

@@ -5,21 +5,22 @@ import org.austral.ing.lab1.model.*;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-public class Administrators {
-    private final EntityManager entityManager;
+import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
-    public Administrators(EntityManager entityManager) {
-        this.entityManager = entityManager;
+public class Administrators {
+
+    public Administrators() {
+
     }
 
     public void persist(Administrator administrator) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(administrator);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().persist(administrator);
+        entityManager().getTransaction().commit();
     }
 
     public Administrator findAdministratorByUsername(String username) {
-        Users users = new Users(entityManager);
+        Users users = new Users();
 
         User user = users.findUserByUsername(username);
 
@@ -32,7 +33,7 @@ public class Administrators {
             return null;
         }
 
-        TypedQuery<Administrator> query = entityManager.createQuery(
+        TypedQuery<Administrator> query = entityManager().createQuery(
                 "SELECT a FROM Administrator a WHERE a.user.id = :userId", Administrator.class);
         query.setParameter("userId", user.getId());
 
@@ -44,9 +45,9 @@ public class Administrators {
     }
 
     public void delete(Administrator administrator){
-        entityManager.getTransaction().begin();
-        entityManager.remove(administrator);
-        entityManager.getTransaction().commit();
+        entityManager().getTransaction().begin();
+        entityManager().remove(administrator);
+        entityManager().getTransaction().commit();
     }
 
 
