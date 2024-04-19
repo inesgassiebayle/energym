@@ -44,6 +44,7 @@ public class Application {
         Spark.post("/user/logout", authenticationController::deleteAuthentication);
         Spark.get("/user/verify", authenticationController::getCurrentUser);
         Spark.delete("/user/:username/delete", userController::deleteUser);
+        Spark.delete("/user/delete", authenticationController::deleteAccount);
 
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);
@@ -62,8 +63,6 @@ public class Application {
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
         Spark.get("/lesson/:date/getLessons", lessonController::getLessonsByDate);
         Spark.delete("/lesson/:name/delete", lessonController::deleteLesson);
-
-
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/:username/lessons", professorController::getLessons);

@@ -57,7 +57,6 @@ public class UserController {
 
         res.type("application/json");
 
-
         return user.asJson();
     }
 
@@ -118,7 +117,6 @@ public class UserController {
         administrators.persist(administrator);
 
         res.type("application/json");
-
 
         return user.asJson();
     }

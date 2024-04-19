@@ -13,6 +13,7 @@ const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
@@ -25,11 +26,17 @@ const SignUp = () => {
                 password: password
             });
             console.log(response.data);
-            navigate('/login');
+            navigate('/Login');
         } catch (error) {
-            console.error('Error al enviar solicitud:', error);
+            console.error('Error while sending request:', error.response.data);
+            if (error.response && error.response.data.includes("Invalid email")) {
+                setError('Please enter a valid email address.');
+            } else {
+                setError('An unexpected error occurred.');
+            }
         }
     };
+
 
     return (
         <div className="signup-container">
@@ -55,12 +62,17 @@ const SignUp = () => {
                     <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
                 </div>
                 <div className="signup-input">
-                    <img src={email_icon} alt="" />
-                    <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+                    <img src={email_icon} alt=""/>
+                    <input type="email" name="email" value={email} onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError('');
+                    }} placeholder="Email"/>
+                    {error && <div className="error-message">{error}</div>}
                 </div>
                 <div className="signup-input">
-                    <img src={password_icon} alt="" />
-                    <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                    <img src={password_icon} alt=""/>
+                    <input type="password" name="password" value={password}
+                           onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
                 </div>
             </div>
             <button className="signup-button" onClick={handleSignUp}>Sign Up</button>
