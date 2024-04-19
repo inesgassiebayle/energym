@@ -140,6 +140,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
+import ModifyLessonModal from './ModifyLessonModal';
 
 const ManageSchedule = () => {
     const navigate = useNavigate();
@@ -147,7 +148,8 @@ const ManageSchedule = () => {
     const [classesForSelectedDate, setClassesForSelectedDate] = useState([]);
     const [error, setError] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(false);
-    const [selectedLesson, setSelectedLesson] = useState(null);
+    const [selectedLesson, setSelectedLesson] = useState('');
+    const [showModifyModal, setShowModifyModal] = useState(false);
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -194,35 +196,43 @@ const ManageSchedule = () => {
         }
     }, [selectedDate]);
 
-    const handleDateChange = (e) => {
-        setSelectedDate(e.target.value);
+    // const handleView = (lesson) => {
+    //     setSelectedLesson(lesson);
+    //     setShowModifyModal(true);
+    // };
+    //
+    // const closeModal = () => {
+    //     setShowModifyModal(false);
+    //     setSelectedLesson(null); // Optional: Clear the current lesson selection
+    // };
+
+    const reloadClasses = () => {
+        fetchClassesForSelectedDate();
     };
 
-    const handleView = async (lesson) => {
-        setSelectedLesson(lesson);
-        // Aquí puedes agregar la lógica para visualizar la lección si es necesario
-    };
 
     const handleDeleteLesson = async (lesson) => {
-        setSelectedLesson(lesson);
+        setSelectedLesson(lesson.name);
         setConfirmDelete(true);
     };
 
     const confirmDeleteHandler = async () => {
-
-        const lessonData ={
-            name: selectedLesson.name,
-            date: selectedLesson.date,
-            time: selectedLesson.time,
-        }
+        const lessonData = {
+            name: selectedLesson,
+            startDate: selectedDate
+        };
 
         try {
             const endpoint = 'http://localhost:3333/lesson/delete';
-            const response = await axios.post(endpoint, lessonData);
+            const response = await axios({
+                method: 'delete',
+                url: endpoint,
+                data: lessonData
+            });
             console.log(response.data);
             navigate('/AdministratorHome');
         } catch (error) {
-            console.error(error.response.data, error);
+            console.error('Error:', error.response.data);
         }
     };
 
@@ -257,7 +267,7 @@ const ManageSchedule = () => {
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
                                     <button className="modification-button delete" onClick={() => handleDeleteLesson(classInfo)}> Delete </button>
-                                    <button className='modification-button' onClick={() => handleView()}>View</button>
+                                    <button className='modification-button' onClick={() => handleView(classInfo)}>View</button>
                                 </div>
                             ))}
 
@@ -278,13 +288,25 @@ const ManageSchedule = () => {
             </div>
             {confirmDelete && (
                 <div className="confirmation-message">
-                    <p>Are you sure you want to delete the lesson "{selectedLesson.name}"?</p>
-                    <p>Lesson Time: {selectedLesson.time}</p>
+                    <p>Are you sure you want to delete the lesson "{selectedLesson}"?</p>
+
                     <div className="confirmation-actions">
                         <button onClick={confirmDeleteHandler}>Yes</button>
                         <button onClick={() => setConfirmDelete(false)} className="cancel">No</button>
                     </div>
                 </div>
+            )}
+            {/* Modal for modifying a lesson */}
+            {showModifyModal && (
+                <ModifyLessonModal
+                    isOpen={showModifyModal}
+                    onClose={closeModal}
+                    lesson={selectedLesson}
+                    onSave={() => {
+                        closeModal();
+                        fetchClassesForSelectedDate();
+                    }}
+                />
             )}
         </div>
     );
