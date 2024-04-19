@@ -174,7 +174,7 @@ public class LessonController{
         lessonsToAdd.forEach(lesson -> lessons.persist(lesson));
 
         res.type("application/json");
-        return gson.toJson(lessonsToAdd.stream().map(Lesson::asJson).collect(Collectors.toList()));
+        return "";
     }
 
 
@@ -188,11 +188,13 @@ public class LessonController{
 
     public boolean isProfessorAvailable(String professorUsername, LocalTime time, LocalDate date) {
         List<Lesson> conflictingLessons = lessons.findLessonsByProfessorAndTime(professorUsername, time, date);
+        if(conflictingLessons == null) return true;
         return conflictingLessons.isEmpty();
     }
 
     public boolean isRoomAvailable(String roomName, LocalTime time, LocalDate date) {
         List<Lesson> conflictingLessons = lessons.findLessonsByRoomAndTime(roomName, time, date);
+        if(conflictingLessons == null) return true;
         return conflictingLessons.isEmpty();
     }
 

@@ -14,7 +14,7 @@ import static spark.Spark.*;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
         setFactory(factory);
         final UserController userController = new UserController();
         final ActivityController activityController = new ActivityController();
