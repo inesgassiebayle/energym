@@ -203,19 +203,25 @@ const ManageSchedule = () => {
         // Aquí puedes agregar la lógica para visualizar la lección si es necesario
     };
 
-    const handleDelete = async (lesson) => {
+    const handleDeleteLesson = async (lesson) => {
         setSelectedLesson(lesson);
         setConfirmDelete(true);
     };
 
     const confirmDeleteHandler = async () => {
         try {
-            // Aquí puedes agregar la lógica para eliminar la lección
-            setConfirmDelete(false);
+            await axios.delete(`http://localhost:3333/lesson/delete`, {
+                data: {
+                    name: selectedLesson.name,
+                    startDate: selectedLesson.startDate,
+                }
+            });
+            navigate('/AdministratorHome/ManageSchedule');
         } catch (error) {
             console.error('Error deleting lesson:', error);
         }
     };
+
 
 
     return (
@@ -247,7 +253,7 @@ const ManageSchedule = () => {
                             {classesForSelectedDate.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className="modification-button delete" onClick={() => handleDelete(classInfo.name)}> Delete </button>
+                                    <button className="modification-button delete" onClick={() => handleDeleteLesson(classInfo)}> Delete </button>
                                     <button className='modification-button' onClick={() => handleView()}>View</button>
                                 </div>
                             ))}
@@ -270,6 +276,7 @@ const ManageSchedule = () => {
             {confirmDelete && (
                 <div className="confirmation-message">
                     <p>Are you sure you want to delete the lesson "{selectedLesson.name}"?</p>
+                    <p>Lesson Time: {selectedLesson.time}</p>
                     <div className="confirmation-actions">
                         <button onClick={confirmDeleteHandler}>Yes</button>
                         <button onClick={() => setConfirmDelete(false)} className="cancel">No</button>
