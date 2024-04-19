@@ -43,6 +43,7 @@ public class Room {
     private boolean state;
     public boolean state(){return state;}
     public void deactivate(){this.state=false;}
+    public void activate(){this.state=true;}
 
     @ManyToMany
     @JoinTable(

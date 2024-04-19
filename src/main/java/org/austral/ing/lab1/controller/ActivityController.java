@@ -27,10 +27,16 @@ public class ActivityController {
     public String addActivity(Request req, Response res){
         ActivityDto activityDto = gson.fromJson(req.body(), ActivityDto.class);
         String name = activityDto.getName();
-        if(activities.findActivityByName(name) != null){
-            return "Activity already exists";
+        Activity activity = activities.findActivityByName(name);
+        if(activity != null){
+            if(activity.state()){
+                return "Activity already exists";
+            }
+            activity.activate();
         }
-        Activity activity = new Activity(name);
+        else{
+            activity = new Activity(name);
+        }
         activities.persist(activity);
         res.type("application/json");
         return activity.asJson();
@@ -43,16 +49,22 @@ public class ActivityController {
         if(activity == null){
             return "Activity does not exist";
         }
-
-        // Eliminar la actividad de todas las habitaciones que la contienen
+        if(!activity.state()){
+            return "Activity was already deleted";
+        }
+        /*
         List<Room> roomsWithActivity = rooms.findRoomsByActivity(name);
         for(Room room: roomsWithActivity){
-            room.removeActivity(activity);
-            if(room.getActivities().isEmpty()){
-                room.deactivate();
+            if(room.state()){
+                room.removeActivity(activity);
+                if(room.getActivities().isEmpty()){
+                    room.deactivate();
+                }
+                rooms.persist(room);
             }
-            rooms.persist(room);
         }
+
+         */
         activity.deactivate();
         activities.persist(activity);
 
