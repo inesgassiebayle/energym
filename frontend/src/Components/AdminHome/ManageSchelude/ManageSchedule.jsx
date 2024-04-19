@@ -140,7 +140,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
-import ModifyLessonModal from './ModifyLessonModal';
+import ModifyLessonModal from './ModifyLessonModal.jsx';
 
 const ManageSchedule = () => {
     const navigate = useNavigate();
@@ -150,6 +150,9 @@ const ManageSchedule = () => {
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [selectedLesson, setSelectedLesson] = useState('');
     const [showModifyModal, setShowModifyModal] = useState(false);
+    const handleDateChange = (e) => {
+        setSelectedDate(e.target.value);
+    };
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -196,19 +199,8 @@ const ManageSchedule = () => {
         }
     }, [selectedDate]);
 
-    // const handleView = (lesson) => {
-    //     setSelectedLesson(lesson);
-    //     setShowModifyModal(true);
-    // };
-    //
-    // const closeModal = () => {
-    //     setShowModifyModal(false);
-    //     setSelectedLesson(null); // Optional: Clear the current lesson selection
-    // };
 
-    const reloadClasses = () => {
-        fetchClassesForSelectedDate();
-    };
+
 
 
     const handleDeleteLesson = async (lesson) => {
@@ -267,7 +259,7 @@ const ManageSchedule = () => {
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
                                     <button className="modification-button delete" onClick={() => handleDeleteLesson(classInfo)}> Delete </button>
-                                    <button className='modification-button' onClick={() => handleView(classInfo)}>View</button>
+                                    <button className='modification-button'>View</button>
                                 </div>
                             ))}
 
@@ -295,18 +287,6 @@ const ManageSchedule = () => {
                         <button onClick={() => setConfirmDelete(false)} className="cancel">No</button>
                     </div>
                 </div>
-            )}
-            {/* Modal for modifying a lesson */}
-            {showModifyModal && (
-                <ModifyLessonModal
-                    isOpen={showModifyModal}
-                    onClose={closeModal}
-                    lesson={selectedLesson}
-                    onSave={() => {
-                        closeModal();
-                        fetchClassesForSelectedDate();
-                    }}
-                />
             )}
         </div>
     );

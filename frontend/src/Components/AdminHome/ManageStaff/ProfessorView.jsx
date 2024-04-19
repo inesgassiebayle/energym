@@ -14,6 +14,8 @@ const ProfessorView = () => {
     const [fullname, setFullname] = useState({firstName: '', lastName: ''});
     const [selectedLesson, setSelectedLesson] = useState('');
     const [showModifyModal, setShowModifyModal] = useState(false);
+    const [selectedLessonDate, setSelectedLessonDate] = useState('');
+
 
     const trainerLessons = async () => {
         try {
@@ -34,7 +36,10 @@ const ProfessorView = () => {
     }
 
     const handleInformation = (lesson) => {
-        setSelectedLesson(lesson);
+        setSelectedLesson(lesson.name);
+        console.log(lesson.name);
+        setSelectedLessonDate(lesson.startDate);
+        console.log(lesson.startDate);
         setShowModifyModal(true);
     };
 
@@ -60,7 +65,7 @@ const ProfessorView = () => {
                         <div key={index}>
                             <h2>{lesson.name}</h2>
                             <p>{lesson.startDate}</p>
-                            <button className='more' onClick={() => handleInformation(lesson.name)}>More</button>
+                            <button className='more' onClick={() => handleInformation(lesson)}>More</button>
                         </div>
                         ))}
                 </div>
@@ -75,6 +80,7 @@ const ProfessorView = () => {
                 isOpen={showModifyModal}
                 onClose={() => setShowModifyModal(false)}
                 lesson={selectedLesson}
+                date={selectedLessonDate}
             />
         </div>
     );

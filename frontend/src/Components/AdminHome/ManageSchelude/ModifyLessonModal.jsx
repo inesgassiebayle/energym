@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ModifyLessonModal.css';
@@ -10,7 +11,6 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, onSave }) => {
     const [roomName, setRoomName] = useState('');
     const [startDate, setStartDate] = useState('');
 
-    // Load current lesson details into the form when the modal is opened
     useEffect(() => {
         if (isOpen && lesson) {
             setName(lesson.name);
@@ -56,3 +56,4 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, onSave }) => {
 };
 
 export default ModifyLessonModal;
+
