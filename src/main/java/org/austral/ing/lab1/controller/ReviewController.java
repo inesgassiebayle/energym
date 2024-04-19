@@ -42,8 +42,15 @@ public class ReviewController {
             return "Student does not exist";
         }
 
+        User user = student.getUser();
+
+        if(!user.state()){
+            return "Student does not exist";
+        }
+
         String lessonName = reviewCreationDto.getLessonName();
         LocalDate date = reviewCreationDto.getDate();
+
         if(lessonName == null){
             return "Lesson name is not valid";
         }
@@ -68,7 +75,6 @@ public class ReviewController {
         }
 
         Review review = new Review(comment, rating, student, lesson);
-
 
         reviews.persist(review);
         lesson.addReview(review);

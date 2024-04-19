@@ -34,8 +34,40 @@ public class RoomController {
             return "Invalid input";
         }
 
-        if(rooms.findRoomByName(name)!=null){
-            return "Room already exists";
+        Room room = rooms.findRoomByName(name);
+
+        if(room!=null){
+            if(room.state()){
+                return "Room already exists";
+            }
+            room.activate();
+
+            if (capacity > 0) {
+                room.setCapacity(capacity);
+            } else {
+                return "Invalid capacity";
+            }
+
+            room.getActivities().clear();
+            for(String activityName: activities1){
+                Activity activity = activities.findActivityByName(activityName);
+                if (activity != null) {
+                    if(activity.state()){
+                        room.getActivities().add(activity);
+                    }
+                    else{
+                        return "Activity named " + activityName + " does not exist";
+                    }
+                } else {
+                    return "Activity named " + activityName + " does not exist";
+                }
+            }
+
+            rooms.persist(room);
+
+            res.type("application/json");
+
+            return room.asJson();
         }
 
         if(capacity<0){
@@ -46,11 +78,14 @@ public class RoomController {
             return "No activities selected";
         }
 
-        Room room = new Room(name, capacity);
+        room = new Room(name, capacity);
 
         for(String activity: activities1){
             Activity activity1 = activities.findActivityByName(activity);
             if(activity1 == null){
+                return "Activity does not exist";
+            }
+            if(!activity1.state()){
                 return "Activity does not exist";
             }
             room.setActivity(activity1);
@@ -133,10 +168,13 @@ public class RoomController {
             return "Room does not exist";
         }
 
-
+        if(!room.state()){
+            return "Room does not exist";
+        }
 
         if (!newName.isBlank() && !newName.equalsIgnoreCase(name)) {
-            if (rooms.findRoomByName(newName) != null) {
+            Room room2 = rooms.findRoomByName(newName);
+            if (room2 != null) {
                 return "New room name already exists";
             }
             room.setName(newName);
@@ -153,7 +191,10 @@ public class RoomController {
         for(String activityName: activities1){
             Activity activity = activities.findActivityByName(activityName);
             if (activity != null) {
-                room.getActivities().add(activity);
+                if(activity.state()){
+                    room.getActivities().add(activity);
+                }
+                return "Activity named " + activityName + " does not exist";
             } else {
                 return "Activity named " + activityName + " does not exist";
             }

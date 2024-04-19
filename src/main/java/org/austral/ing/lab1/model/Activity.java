@@ -48,6 +48,7 @@ public class Activity {
     private boolean state;
     public boolean state(){return state;}
     public void deactivate(){this.state=false;}
+    public void activate(){this.state=true;}
     public Activity(String name){
         this.name = name;
         this.rooms = new HashSet<>();

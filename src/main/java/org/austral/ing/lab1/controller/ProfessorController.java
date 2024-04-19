@@ -51,6 +51,14 @@ public class ProfessorController {
 
         Professor professor = professors.findProfessorByUsername(username);
 
+        if(professor == null){
+            return "Professor does not exist";
+        }
+
+        if(!professor.getUser().state()){
+            return "Professor does not exist";
+        }
+
         List<Lesson> lessons = professors.getLessons(professor);
         List<LessonDeletionDto> lessonsInfo = new ArrayList<>();
         for(Lesson lesson: lessons){
@@ -74,6 +82,10 @@ public class ProfessorController {
         }
 
         User user = professor.getUser();
+
+        if(!user.state()){
+            return "Professor was deleted";
+        }
 
         FullnameDto dto = new FullnameDto(user.getFirstName(), user.getLastName());
 
@@ -112,7 +124,6 @@ public class ProfessorController {
              if(user == null){
                  return "User does not exist";
              }
-
 
              reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
          }
