@@ -40,10 +40,12 @@ public class UserController {
         String password = signUpDto.getPassword();
 
         if(!isValidEmailFormat(email)){
+            res.status(400); // Bad Request
             return "Invalid email";
         }
 
         if(users.findUserByUsernameOrEmail(username, email)!=null){
+            res.status(400); // Bad Request
             return "Username or email already registered";
         }
 
@@ -70,10 +72,14 @@ public class UserController {
         String password = signUpDto.getPassword();
 
         if(!isValidEmailFormat(email)){
+            res.status(400); // Bad Request
+
             return "Invalid email";
         }
 
         if(users.findUserByUsernameOrEmail(username, email)!=null){
+            res.status(400); // Bad Request
+
             return "Username or email already registered";
         }
 
@@ -101,11 +107,18 @@ public class UserController {
         String password = signUpDto.getPassword();
 
         if(!isValidEmailFormat(email)){
+            res.status(400); // Bad Request
             return "Invalid email";
         }
 
         if(users.findUserByUsernameOrEmail(username, email)!=null){
+            res.status(400); // Bad Request
             return "Username or email already registered";
+        }
+
+        if(!isValidPassword(password)){
+            res.status(400); // Bad Request
+            return "Invalid password";
         }
 
         User user = new User(firstName, lastName, email, username, password);
@@ -155,6 +168,18 @@ public class UserController {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pat = Pattern.compile(emailRegex);
         return pat.matcher(email).matches();
+    }
+
+    public boolean isValidPassword(String password) {
+        // Regular expression to check if the password contains at least one number
+        String numberRegex = ".*[0-9].*";
+        // Regular expression to check if the password contains at least one uppercase letter
+        String uppercaseLetterRegex = ".*[A-Z].*";
+
+        Pattern numberPattern = Pattern.compile(numberRegex);
+        Pattern uppercaseLetterPattern = Pattern.compile(uppercaseLetterRegex);
+
+        return numberPattern.matcher(password).matches() && uppercaseLetterPattern.matcher(password).matches();
     }
 
     public String deleteUser(Request req, Response res){
