@@ -37,6 +37,14 @@ public class AuthenticationController {
 
         User user = users.findUserByUsername(loginDto.getUsername());
 
+        if(user == null){
+            return "User does not exist";
+        }
+
+        if(!user.state()){
+            return "User does not exist";
+        }
+
         // Verificación de usuario y contraseña
         if (user != null && user.getPassword().equals(loginDto.getPassword())) {
             // Comprobar si ya existe un token activo
@@ -111,8 +119,51 @@ public class AuthenticationController {
             res.status(404);
             return "User not found";
         }
+        if(!user.state()){
+            res.status(404);
+            return "User not found";
+        }
 
         res.type("application/json");
         return gson.toJson(user);
+    }
+
+    public String deleteAccount(Request req, Response res){
+        Optional<String> tokenOpt = getToken(req);
+
+        if (!tokenOpt.isPresent()) {
+            res.status(401); // Unauthorized
+            return "Not signed in";
+        }
+
+        String token = tokenOpt.get();
+        String username = usernameByToken.getIfPresent(token);
+
+        if (username == null) {
+            res.status(403);
+            return "Invalid token";
+        }
+
+        User user = users.findUserByUsername(username);
+
+        if (user == null) {
+            res.status(404);
+            return "User not found";
+        }
+
+        if(!user.state()){
+            res.status(404);
+            return "User was already deleted";
+        }
+
+        // Deactivate and persist the user
+        user.deactivate();
+        users.persist(user);
+
+        // Invalidate the token
+        usernameByToken.invalidate(token);
+
+        res.status(204); // No Content
+        return "";
     }
 }

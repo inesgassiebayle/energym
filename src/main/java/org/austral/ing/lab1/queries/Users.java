@@ -34,14 +34,10 @@ public class Users {
 
 
     public User findUserByUsername(String username) {
-        if (!entityManager().getTransaction().isActive()) {
-            entityManager().getTransaction().begin();
-        }
         TypedQuery<User> query = entityManager().createQuery("SELECT u " +
                 "FROM User u " +
                 "WHERE u.username LIKE :username", User.class);
         query.setParameter("username", username);
-        entityManager().getTransaction().commit();
         List<User> users = query.getResultList();
         if (users.isEmpty()) {
             return null;
