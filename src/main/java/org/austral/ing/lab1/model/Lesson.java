@@ -1,5 +1,7 @@
 package org.austral.ing.lab1.model;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -117,11 +119,16 @@ public class Lesson {
     }
 
     public Lesson() {
-
     }
 
+
     public String asJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", this.name);
+        jsonObject.addProperty("time", String.valueOf(this.time));
+        jsonObject.addProperty("date", String.valueOf(this.startDate));
+        jsonObject.addProperty("professor", this.getProfessor().getUser().getUsername());
+        jsonObject.addProperty("room", this.getRoom().getName());
+        return jsonObject.toString();
     }
 }

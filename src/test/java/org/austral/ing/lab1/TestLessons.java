@@ -13,9 +13,9 @@ import javax.persistence.Persistence;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class TestLessons {
     final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
@@ -47,6 +47,61 @@ public class TestLessons {
 
 
     }
+
+    @Test
+    public void findLessonsByProfessorAndTime(){
+        entityManager.getTransaction().begin();
+
+        User user = new User("clara", "lopez", "email@example.com", "Profesora1", "clara100");
+        user.setType(UserType.PROFESSOR);
+        entityManager.persist(user);
+
+        Professor professor = new Professor();
+        professor.setUser(user);
+        entityManager.persist(professor);
+
+        Lesson lesson1 = new Lesson("Morning Yoga", LocalTime.of(9, 0), LocalDate.now());
+        lesson1.setProfessor(professor);
+        entityManager.persist(lesson1);
+
+        entityManager.getTransaction().commit();
+
+        List<Lesson> foundLessons = lessons.findLessonsByProfessorAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
+
+        assertFalse(foundLessons.isEmpty());
+        assertEquals(1, foundLessons.size());
+        assertEquals("Morning Yoga", foundLessons.get(0).getName());
+        assertEquals(LocalDate.now(), foundLessons.get(0).getStartDate());
+        assertEquals(LocalTime.of(9, 0), foundLessons.get(0).getTime());
+
+
+        entityManager.getTransaction().begin();
+        entityManager.createQuery("DELETE FROM Lesson").executeUpdate();
+        entityManager.createQuery("DELETE FROM Professor").executeUpdate();
+        entityManager.createQuery("DELETE FROM User").executeUpdate();
+        entityManager.getTransaction().commit();
+    }
+    @Test
+    public void findLessonsByProfessorAndTimeVacia(){
+        entityManager.getTransaction().begin();
+
+        User user = new User("clara", "lopez", "email@example.com", "Profesora1", "clara100");
+        user.setType(UserType.PROFESSOR);
+        entityManager.persist(user);
+
+        Professor professor = new Professor();
+        professor.setUser(user);
+        entityManager.persist(professor);
+
+
+        List<Lesson> foundLessons = lessons.findLessonsByProfessorAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
+
+        assertTrue(foundLessons.isEmpty());
+        assertEquals(0, foundLessons.size());
+
+
+    }
+
 }
 
 
