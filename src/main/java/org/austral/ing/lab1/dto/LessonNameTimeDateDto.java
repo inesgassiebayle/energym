@@ -24,6 +24,5 @@ public class LessonNameTimeDateDto {
     }
 
     public LocalTime getTime() {
-        return LocalTime.parse(time, DateTimeFormatter.ISO_DATE_TIME);
-    }
-}
+        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+    }}

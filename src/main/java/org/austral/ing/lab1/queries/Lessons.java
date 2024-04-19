@@ -83,11 +83,10 @@ public class Lessons {
         query.setParameter("lessonName", lessonName);
         query.setParameter("lessonDate", lessonDate);
         query.setParameter("lessonTime", lessonTime);
+        if(query.getSingleResult() == null) return null;
+        return query.getSingleResult();
 
-        List<Lesson> lessons = query.getResultList();
-        return lessons.isEmpty() ? null : lessons.get(0);
     }
-
     public List<Lesson> findLessonsByDate(LocalDate lessonDate){
         TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.startDate = :lessonDate", Lesson.class);
         query.setParameter("lessonDate", lessonDate);
