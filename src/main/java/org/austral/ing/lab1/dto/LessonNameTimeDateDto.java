@@ -7,12 +7,12 @@ import java.time.format.DateTimeFormatter;
 public class LessonNameTimeDateDto {
     String name;
     String startDate;
-//    String time;
+    String time;
 
-    public LessonNameTimeDateDto(String name, String startDate){
+    public LessonNameTimeDateDto(String name, String startDate, String time){
         this.name = name;
         this.startDate = startDate;
-//        this.time = time;
+        this.time = time;
     }
 
     public String getName(){
@@ -23,7 +23,6 @@ public class LessonNameTimeDateDto {
         return LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-//    public LocalTime getTime() {
-//        return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
-//    }
+    public LocalTime getTime() { return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+    }
 }

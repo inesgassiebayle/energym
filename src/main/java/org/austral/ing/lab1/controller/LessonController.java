@@ -1,9 +1,6 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
-import org.austral.ing.lab1.dto.ConcurrentLessonCreationDto;
-import org.austral.ing.lab1.dto.LessonCreationDto;
-import org.austral.ing.lab1.dto.LessonDeletionDto;
-import org.austral.ing.lab1.dto.LessonNameTimeDto;
+import org.austral.ing.lab1.dto.*;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 
@@ -200,11 +197,12 @@ public class LessonController{
 
 
     public String deleteLesson(Request req, Response res) {
-        LessonDeletionDto deletionDto = gson.fromJson(req.body(), LessonDeletionDto.class);
+        LessonNameTimeDateDto deletionDto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
         String lessonName = deletionDto.getName();
         LocalDate lessonDate = deletionDto.getDate();
+        LocalTime lessonTime = deletionDto.getTime();
 
-        Lesson lesson = lessons.findLessonByNameAndDate(lessonName, lessonDate);
+        Lesson lesson = lessons.findLessonByNameDateAndTime(lessonName, lessonDate, lessonTime);
         if (lesson == null) {
             res.status(404);
             return "Lesson not found";
@@ -214,7 +212,7 @@ public class LessonController{
         this.lessons.persist(lesson);
 
         res.type("application/json");
-        return gson.toJson("Deactivated lesson(s) with name: " + lessonName + " and date: " + lessonDate);
+        return gson.toJson("Deactivated lesson(s) with name: " + lessonName + " and date: " + lessonDate + " and time: " + lessonTime);
     }
 
 
