@@ -5,8 +5,10 @@ import org.austral.ing.lab1.dto.RoomCreationDto;
 import org.austral.ing.lab1.dto.RoomDeletionDto;
 import org.austral.ing.lab1.dto.RoomModifyDto;
 import org.austral.ing.lab1.model.Activity;
+import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Room;
 import org.austral.ing.lab1.queries.Activities;
+import org.austral.ing.lab1.queries.Lessons;
 import org.austral.ing.lab1.queries.Rooms;
 import spark.Request;
 import spark.Response;
@@ -14,14 +16,17 @@ import spark.Response;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RoomController {
     private final Rooms rooms;
     private final Activities activities;
+    private final Lessons lessons;
     private final Gson gson = new Gson();
     public RoomController() {
         this.rooms = new Rooms();
         this.activities = new Activities();
+        this.lessons = new Lessons();
     }
 
     public String addRoom(Request req, Response res){
@@ -106,6 +111,13 @@ public class RoomController {
         Room room = rooms.findRoomByName(name);
         if(room == null){
             return "Room does not exist";
+        }
+
+        Set<Lesson> lessons2 = room.getClasses();
+
+        for(Lesson lesson: lessons2){
+            lesson.deactivate();
+            lessons.persist(lesson);
         }
 
         room.deactivate();
@@ -194,7 +206,9 @@ public class RoomController {
                 if(activity.state()){
                     room.getActivities().add(activity);
                 }
-                return "Activity named " + activityName + " does not exist";
+                else{
+                    return "Activity named " + activityName + " does not exist";
+                }
             } else {
                 return "Activity named " + activityName + " does not exist";
             }

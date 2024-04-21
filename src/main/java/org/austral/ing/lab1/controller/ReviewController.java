@@ -13,6 +13,7 @@ import spark.Response;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ReviewController {
     private final Users users;
@@ -50,25 +51,38 @@ public class ReviewController {
 
         String lessonName = reviewCreationDto.getLessonName();
         LocalDate date = reviewCreationDto.getDate();
+        LocalTime time = reviewCreationDto.getTime();
 
         if(lessonName == null){
             return "Lesson name is not valid";
         }
 
-        Lesson lesson = lessons.findLessonByNameAndDate(lessonName, date);
+        if(date == null){
+            return "Lesson date is not valid";
+        }
+
+        if(time == null){
+            return "Lesson time is not valid";
+        }
+
+
+        Lesson lesson = lessons.findLessonByNameDateAndTime(lessonName, date, time);
 
         if(lesson == null){
             return "Lesson does not exist";
         }
 
         String comment = reviewCreationDto.getComment();
+
         if(comment == null){
             return "Comment is not valid";
         }
+
         String rating1 = reviewCreationDto.getRating();
         if(rating1 == null){
             return "Review is not valid";
         }
+
         Integer rating = Integer.parseInt(rating1);
         if(rating < 0 || rating > 5){
             return "Review is not valid";

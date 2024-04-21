@@ -2,6 +2,7 @@ package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.LessonDeletionDto;
+import org.austral.ing.lab1.dto.LessonNameTimeDateDto;
 import org.austral.ing.lab1.dto.RoomCreationDto;
 import org.austral.ing.lab1.model.Activity;
 import org.austral.ing.lab1.model.Lesson;
@@ -11,6 +12,7 @@ import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class LessonController2 {
     private final Lessons lessons;
@@ -27,16 +29,17 @@ public class LessonController2 {
     }
 
     public String getLesson(Request req, Response res){
-        LessonDeletionDto lessonDeletionDto = gson.fromJson(req.body(), LessonDeletionDto.class);
-        LocalDate date = lessonDeletionDto.getDate();
-        String name = lessonDeletionDto.getName();
+        LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
+        LocalDate date = dto.getDate();
+        String name = dto.getName();
+        LocalTime time = dto.getTime();
 
-        if(name == null || date == null){
+        if(name == null || date == null || time == null){
             res.status(400); // Bad Request
             return "Invalid input";
         }
 
-        Lesson lesson = lessons.findLessonByNameAndDate(name, date);
+        Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
 
         if(lesson == null){
             return "Lesson was not found";

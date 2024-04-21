@@ -129,6 +129,7 @@ public class Lesson {
         jsonObject.addProperty("date", String.valueOf(this.startDate));
         jsonObject.addProperty("professor", this.getProfessor().getUser().getUsername());
         jsonObject.addProperty("room", this.getRoom().getName());
+        jsonObject.addProperty("activity", this.getActivity().getName());
         return jsonObject.toString();
     }
 }

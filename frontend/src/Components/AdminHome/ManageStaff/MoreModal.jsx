@@ -4,23 +4,24 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 
-const MoreModal = ({ isOpen, onClose, lesson, date }) => {
+const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [room, setRoom] = useState('');
     const [professor, setProfessor] = useState('');
-    const [time, setTime] =  useState('');
+    const [activity, setActivity] = useState('');
     const [reviews, setReviews] = useState([]);
 
     const fetchLesson = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/get', {
                     name: lesson,
-                    startDate: date
+                    startDate: date,
+                    time: time
             });
             console.log(response.data);
             setRoom(response.data.room);
-            setTime(response.data.time);
             setProfessor(response.data.time);
+            setActivity(response.data.activity);
 
         } catch (error) {
             console.error('Error fetching lesson details:', error);
@@ -31,7 +32,8 @@ const MoreModal = ({ isOpen, onClose, lesson, date }) => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/reviews', {
                     name: lesson,
-                    startDate: date
+                    startDate: date,
+                    time: time
             });
 
             const parsedReviews = response.data.map(review => ({
@@ -82,11 +84,18 @@ const MoreModal = ({ isOpen, onClose, lesson, date }) => {
                         <p>Start Date: {date}</p>
                         <p>Time: {time}</p>
                         <p>Room: {room}</p>
+                        <p>Activity: {activity}</p>
                         <p>Professor: {professor}</p>
                         <div className="reviews-container">
-                            {reviews.map((review, index) => (
-                                <ReviewSquare key={index} review={review}/>
-                            ))}
+                            <p>Class reviews: </p>
+                            {reviews.length>0 ? (<ul>
+                                {reviews.map((review, index) => (
+                                    <ReviewSquare key={index} review={review}/>
+                                ))}
+                            </ul>
+                            ) : (
+                                <p>No reviews for the selected class.</p>
+                            )}
                         </div>
                     </div>
 
