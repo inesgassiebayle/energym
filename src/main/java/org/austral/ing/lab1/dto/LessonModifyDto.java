@@ -4,8 +4,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class LessonModifyDto {
+    private String oldName;
+    private String oldTime;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
+    private String oldDate;
     private String name;
-    private String time;  // Should match the ISO_LOCAL_TIME format (HH:mm:ss)
+    private String time;
     private String activity;
 
     private String professor;
@@ -15,7 +18,11 @@ public class LessonModifyDto {
 
 
 
-    public LessonModifyDto(String name, String time, String activity, String professor, String roomName, String startDate) {
+    public LessonModifyDto(String oldName, String oldTime, String oldDate, String name, String time, String activity, String professor, String roomName, String startDate) {
+        this.oldName = oldName;
+        this.oldTime = oldTime;
+        this.oldDate = oldDate;
+
         this.name = name;
         this.time = time;
         this.activity = activity;
@@ -30,7 +37,6 @@ public class LessonModifyDto {
     public String getName() {
         return name;
     }
-
 
     public LocalTime getTime() {
         return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
@@ -51,7 +57,14 @@ public class LessonModifyDto {
     public String getProfessor() {
         return professor;
     }
+    public String getOldName(){return oldName;}
+    public LocalTime getOldTime() {
+        return LocalTime.parse(oldTime, DateTimeFormatter.ISO_LOCAL_TIME);
+    }
 
+    public LocalDate getOldDate() {
+        return LocalDate.parse(oldDate, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
 
 
 }

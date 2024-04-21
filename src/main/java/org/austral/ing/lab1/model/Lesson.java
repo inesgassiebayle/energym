@@ -17,6 +17,10 @@ public class Lesson {
 
     @Column()
     private String name;
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     public String getName(){
         return name;
@@ -26,9 +30,12 @@ public class Lesson {
     private LocalDate startDate;
 
     public LocalDate getStartDate(){return startDate;}
+    public void setStartDate(LocalDate date){this.startDate = date; }
+
     @Column()
     private LocalTime time;
     public LocalTime getTime(){return time;}
+    public void setTime(LocalTime time){this.time = time; }
 
     @ManyToOne
     @JoinColumn(name = "activityId")

@@ -228,4 +228,71 @@ public class LessonController{
         return gson.toJson(lessonInfo);
     }
 
+    public String lessonModify(Request req, Response res) {
+        LessonModifyDto modifyDto =  gson.fromJson(req.body(), LessonModifyDto.class);
+
+        String oldName = modifyDto.getOldName();
+        LocalDate oldDate = modifyDto.getOldDate();
+        LocalTime oldTime = modifyDto.getOldTime();
+        Lesson oldLesson = lessons.findLessonByNameDateAndTime(oldName,oldDate,oldTime);
+
+        String newName = modifyDto.getName();
+        LocalTime newTime = modifyDto.getTime();
+        LocalDate newDate = modifyDto.getStartDate();
+
+        // Fetch and set Activity
+        Activity newActivity = getActivityByName(modifyDto.getActivity());
+        if (newActivity == null) {
+            res.status(404);
+            return "Activity not found";
+        }
+
+        // Fetch and set Professor
+        Professor newProfessor = getProfessorByUsername(modifyDto.getProfessor());
+        if (newProfessor == null) {
+            res.status(404);
+            return "Professor not found";
+        }
+
+        //get room
+        Room newRoom = rooms.findRoomByName(modifyDto.getRoomName());
+        if (newRoom == null) {
+            res.status(404);
+            return "Room not found";
+        }
+
+        if (!newRoom.getActivities().contains(newActivity)) {
+            res.status(409);
+            return "Activity not supported in the selected room";
+        }
+
+        if (!isProfessorAvailable(modifyDto.getProfessor(), modifyDto.getTime(), newDate)) {
+            res.status(409);
+            return "Professor is not available at " + newDate.toString();
+        }
+        if (!isRoomAvailable(modifyDto.getRoomName(), modifyDto.getTime(), newDate)) {
+            res.status(409);
+            return "Room is not available at " + newDate.toString();
+        }
+
+        if (!lessons.isTimeSlotAvailable(modifyDto.getTime(), newDate)) {
+            res.status(409);
+            return "Time slot is not available";
+        }
+
+        if(oldLesson.getState()){
+            oldLesson.setName(newName);
+            oldLesson.setRoom(newRoom);
+            oldLesson.setActivity(newActivity);
+            oldLesson.setProfessor(newProfessor);
+            oldLesson.setTime(newTime);
+            oldLesson.setStartDate(newDate);
+        }
+        else return "lesson state false";
+
+        lessons.persist(oldLesson);
+
+        return "exito!"+  oldLesson.asJson() ;
+
+    }
 }

@@ -16,6 +16,10 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [oldProfessor, setOldProfessor] = useState('');
     const [oldRoomName, setOldRoom] = useState('');
     const [oldStartDate, setOldStartDate] = useState('');
+
+    const [activities, setActivities] = useState([]);
+    const [professors, setProfessors] = useState([]);
+    const [rooms, setRooms] = useState([]);
     const fetchDetails = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/get', {
@@ -34,6 +38,18 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             setRoomName(response.data.room);
         } catch (error) {
             console.error('Error fetching data:', error);
+        }
+        try {
+            const [actRes, profRes, roomRes] = await Promise.all([
+                axios.get('http://localhost:3333/activity/get'),
+                axios.get('http://localhost:3333/professor/get'),
+                axios.get('http://localhost:3333/room/get')
+            ]);
+            setActivities(actRes.data);
+            setProfessors(profRes.data);
+            setRooms(roomRes.data);
+        } catch (error) {
+            console.error('Error fetching initial data:', error);
         }
     };
 
@@ -55,15 +71,18 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         const updateData = {
             oldName: oldName,
             oldTime: oldTime,
-            oldDate: oldDate,
-            activiy: activity,
+            oldDate: oldStartDate,
             name: name,
+            time: time,
+            activity: activity,
             professor: professor,
-            date: startDate,
-            room: roomName
+            roomName: roomName,
+            startDate: startDate,
+
         };
         try {
-            /*await axios.patch(, updateData);*/
+            const responseUpdate = await axios.patch('http://localhost:3333/lesson/modify', updateData);
+            console.log(responseUpdate.data)
             onSave();
             onClose();
         } catch (error) {
@@ -72,19 +91,50 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         }
     };
 
-
+    const generateHourOptions = () => {
+        let options = [];
+        for (let i = 8; i <= 21; i++) {
+            options.push(`${i.toString().padStart(2, '0')}:00`);
+        }
+        return options;
+    };
 
     if (!isOpen) return null;
 
     return (
         <div className="modify-lesson-modal">
             <form onSubmit={handleSubmit}>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name" />
-                <input type="text" value={time} onChange={e => setTime(e.target.value)} placeholder="Time (HH:mm:ss)" />
-                <input type="text" value={activity} onChange={e => setActivity(e.target.value)} placeholder="Activity" />
-                <input type="text" value={professor} onChange={e => setProfessor(e.target.value)} placeholder="Professor" />
-                <input type="text" value={roomName} onChange={e => setRoomName(e.target.value)} placeholder="Room Name" />
-                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} placeholder="Start Date (YYYY-MM-DD)" />
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name"/>
+
+                <select value={time} onChange={(e) => setTime(e.target.value)} required>
+                    <option value="">Select Lesson Time</option>
+                    {generateHourOptions().map((hour, index) => (
+                        <option key={index} value={hour}>{hour}</option>
+                    ))}
+                </select>
+
+
+                <select value={activity} onChange={(e) => setActivity(e.target.value)} required>
+                    <option value="">Select Activity</option>
+                    {activities.map((activity, index) => (
+                        <option key={index} value={activity}>{activity}</option>
+                    ))}
+                </select>
+                <select value={professor} onChange={(e) => setProfessor(e.target.value)} required>
+                    <option value="">Select Professor</option>
+                    {professors.map((professor, index) => (
+                        <option key={index} value={professor}>{professor}</option>
+                    ))}
+                </select>
+                <select value={roomName} onChange={(e) => setRoomName(e.target.value)} required>
+                    <option value="">Select Room</option>
+                    {rooms.map((room, index) => (
+                        <option key={index} value={room}>{room}</option>
+                    ))}
+                </select>
+
+                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+                       placeholder="Start Date (YYYY-MM-DD)"/>
                 <button type="submit">Save Changes</button>
                 <button type="button" onClick={onClose}>Cancel</button>
             </form>

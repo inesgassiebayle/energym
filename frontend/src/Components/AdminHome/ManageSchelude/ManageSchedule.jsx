@@ -155,8 +155,8 @@ const ManageSchedule = () => {
                     lesson={selectedLesson}
                     date = {selectedDate}
                     onSave={() => {
-                        closeModal();
                         fetchClassesForSelectedDate();
+                        closeModal();
                     }}
                 />
             )}
