@@ -12,7 +12,7 @@ const ManageSchedule = () => {
     const [error, setError] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [selectedLesson, setSelectedLesson] = useState(null);
-    //const [showModifyModal, setShowModifyModal] = useState(false);
+    const [showModifyModal, setShowModifyModal] = useState(false);
 
     const handleDateChange = (e) => {
         setSelectedDate(e.target.value);
@@ -91,13 +91,13 @@ const ManageSchedule = () => {
     };
 
     const handleView = (lesson) => {
-        //setSelectedLesson(lesson);
-        // setShowModifyModal(true);
+        setSelectedLesson(lesson);
+        setShowModifyModal(true);
     };
 
     const closeModal = () => {
-        // setShowModifyModal(false);
-        // setSelectedLesson(null);
+        setShowModifyModal(false);
+        setSelectedLesson(null);
     };
 
     return (
@@ -148,18 +148,18 @@ const ManageSchedule = () => {
                     </div>
                 </div>
             )}
-            {/*{showModifyModal && (*/}
-            {/*    <ModifyLessonModal*/}
-            {/*        isOpen={showModifyModal}*/}
-            {/*        onClose={closeModal}*/}
-            {/*        lesson={selectedLesson}*/}
-            {/*        date = {selectedDate}*/}
-            {/*        onSave={() => {*/}
-            {/*            closeModal();*/}
-            {/*            fetchClassesForSelectedDate();*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*)}*/}
+            {showModifyModal && (
+                <ModifyLessonModal
+                    isOpen={showModifyModal}
+                    onClose={closeModal}
+                    lesson={selectedLesson}
+                    date = {selectedDate}
+                    onSave={() => {
+                        closeModal();
+                        fetchClassesForSelectedDate();
+                    }}
+                />
+            )}
         </div>
     );
 };
