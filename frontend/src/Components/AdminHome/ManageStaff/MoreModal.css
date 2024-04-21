@@ -26,4 +26,21 @@
     z-index: 10;
 }
 
+/* MoreModal.css */
+
+/* Estilo para las estrellas dentro de las reseñas */
+.review-square img {
+    width: 30px;  /* Hacer las estrellas más pequeñas */
+    height: auto; /* Mantener la proporción de aspecto */
+    display: inline-block; /* Asegurarse de que las estrellas estén en línea */
+    vertical-align: middle; /* Alineación vertical si es necesario */
+}
+
+/* Estilo para el contenedor de las estrellas para mantener todo en línea */
+.review-square p {
+    display: flex;
+    align-items: center; /* Centrar las estrellas verticalmente respecto al texto */
+    flex-wrap: nowrap; /* No permitir que los elementos se envuelvan a la siguiente línea */
+    gap: 4px; /* Espacio entre estrellas */
+}
 

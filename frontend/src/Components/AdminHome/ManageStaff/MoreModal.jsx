@@ -51,7 +51,15 @@ const MoreModal = ({ isOpen, onClose, lesson, date }) => {
         <div className="review-square">
             <h4>{review.username}</h4>
             <p>{review.comment}</p>
-            {Number.isInteger(review.rating) && <p>Rating: {Array.from({length: review.rating}).map((_, index) => <img key={index} src={star} alt={"rating"}/>)}</p>}
+            <div style={{display: 'flex', alignItems: 'center'}}>
+                {Number.isInteger(review.rating) && (
+                    <p>
+                        {Array.from({length: review.rating}).map((_, index) => (
+                            <img key={index} src={star} alt="rating"/>
+                        ))}
+                    </p>
+                )}
+            </div>
         </div>
     );
 
@@ -67,7 +75,7 @@ const MoreModal = ({ isOpen, onClose, lesson, date }) => {
         <div className="modal" tabIndex="-1" role="dialog">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
-                    <div className="modal-header">
+                <div className="modal-header">
                         <h5 className="modal-title">Details for "{lesson}"</h5> {/* Changed from Modify Room */}
                     </div>
                     <div className="modal-body">
