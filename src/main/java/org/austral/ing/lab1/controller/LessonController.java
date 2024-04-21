@@ -78,11 +78,6 @@ public class LessonController{
             res.status(409);
             return "Room is not available at the specified time";
         }
-        //fijarme que no se solapen horarios
-        if (!lessons.isTimeSlotAvailable(lessonDto.getTime(), lessonDto.getStartDate())) {
-            res.status(409);
-            return "Time slot is not available";
-        }
 
 
         if (room != null) {
@@ -145,10 +140,6 @@ public class LessonController{
                 return "Room is not available at " + startDate.toString();
             }
 
-            if (!lessons.isTimeSlotAvailable(lessonDto.getTime(), startDate)) {
-                res.status(409);
-                return "Time slot is not available";
-            }
 
 
             Lesson lesson = new Lesson(
@@ -203,7 +194,8 @@ public class LessonController{
         LocalTime lessonTime = deletionDto.getTime();
 
         Lesson lesson = lessons.findLessonByNameDateAndTime(lessonName, lessonDate, lessonTime);
-        if (lesson == null) {
+
+        if (lesson == null ) {
             res.status(404);
             return "Lesson not found";
         }
@@ -239,46 +231,79 @@ public class LessonController{
         String newName = modifyDto.getName();
         LocalTime newTime = modifyDto.getTime();
         LocalDate newDate = modifyDto.getStartDate();
+        Activity newActivity = getActivityByName(modifyDto.getActivity());
+        Professor newProfessor = getProfessorByUsername(modifyDto.getProfessor());
+        Room newRoom = rooms.findRoomByName(modifyDto.getRoomName());
+
+        boolean professorChanged = !oldLesson.getProfessor().equals(newProfessor);
+        boolean roomChanged = !oldLesson.getRoom().equals(newRoom);
+        boolean activityChanged = !oldLesson.getActivity().equals(newActivity);
+        boolean dateChanged = !oldLesson.getStartDate().equals(newDate);
+        boolean timeChanged = !oldLesson.getTime().equals(newTime);
+
+        if (professorChanged && !isProfessorAvailable(newProfessor.getUser().getUsername(), newTime, newDate)) {
+            res.status(409);
+            return "Professor is not available";
+        }
+
+        if (roomChanged && (!isRoomAvailable(newRoom.getName(), newTime, newDate) ||
+                !newRoom.getActivities().contains(newActivity))) {
+            res.status(409);
+            return "Room is not available or does not support the activity";
+        }
+
+        if (activityChanged && !newRoom.getActivities().contains(newActivity)) {
+            res.status(409);
+            return "New activity not supported in the selected room";
+        }
+
+        if (dateChanged || timeChanged) {
+
+            // Si el profesor no cambió pero la fecha/hora sí, verificar la disponibilidad del profesor en el nuevo horario
+            if (!professorChanged && !isProfessorAvailable(oldLesson.getProfessor().getUser().getUsername(), newTime, newDate)) {
+                res.status(409);
+                return "Professor is not available at the new time/date";
+            }
+
+            // Si la sala no cambió pero la fecha/hora sí, verificar la disponibilidad de la sala en el nuevo horario
+            if (!roomChanged && !isRoomAvailable(oldLesson.getRoom().getName(), newTime, newDate)) {
+                res.status(409);
+                return "Room is not available at the new time/date";
+            }
+
+            // Si el profesor cambió, y también la fecha/hora, verificar la disponibilidad del nuevo profesor
+            if (professorChanged && !isProfessorAvailable(newProfessor.getUser().getUsername(), newTime, newDate)) {
+                res.status(409);
+                return "New professor is not available at the new time/date";
+            }
+
+            // Si la sala cambió, y también la fecha/hora, verificar la disponibilidad de la nueva sala
+            if (roomChanged && (!isRoomAvailable(newRoom.getName(), newTime, newDate) || !newRoom.getActivities().contains(newActivity))) {
+                res.status(409);
+                return "New room is not available or does not support the activity at the new time/date";
+            }
+        }
+
 
         // Fetch and set Activity
-        Activity newActivity = getActivityByName(modifyDto.getActivity());
         if (newActivity == null) {
             res.status(404);
             return "Activity not found";
         }
 
         // Fetch and set Professor
-        Professor newProfessor = getProfessorByUsername(modifyDto.getProfessor());
+
         if (newProfessor == null) {
             res.status(404);
             return "Professor not found";
         }
 
         //get room
-        Room newRoom = rooms.findRoomByName(modifyDto.getRoomName());
         if (newRoom == null) {
             res.status(404);
             return "Room not found";
         }
 
-        if (!newRoom.getActivities().contains(newActivity)) {
-            res.status(409);
-            return "Activity not supported in the selected room";
-        }
-
-        if (!isProfessorAvailable(modifyDto.getProfessor(), modifyDto.getTime(), newDate)) {
-            res.status(409);
-            return "Professor is not available at " + newDate.toString();
-        }
-        if (!isRoomAvailable(modifyDto.getRoomName(), modifyDto.getTime(), newDate)) {
-            res.status(409);
-            return "Room is not available at " + newDate.toString();
-        }
-
-        if (!lessons.isTimeSlotAvailable(modifyDto.getTime(), newDate)) {
-            res.status(409);
-            return "Time slot is not available";
-        }
 
         if(oldLesson.getState()){
             oldLesson.setName(newName);
@@ -292,7 +317,7 @@ public class LessonController{
 
         lessons.persist(oldLesson);
 
-        return "exito!"+  oldLesson.asJson() ;
+        return "exito! " +  oldLesson.asJson() ;
 
     }
 }
