@@ -3,16 +3,14 @@ import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.*;
-import org.austral.ing.lab1.queries.Administrators;
-import org.austral.ing.lab1.queries.Professors;
-import org.austral.ing.lab1.queries.Students;
-import org.austral.ing.lab1.queries.Users;
+import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class UserController {
@@ -20,6 +18,7 @@ public class UserController {
     private final Students students;
     private final Professors professsors;
     private final Administrators administrators;
+    private final Lessons lessons;
 
     private final Gson gson = new Gson();
 
@@ -28,6 +27,7 @@ public class UserController {
         this.students = new Students();
         this.professsors = new Professors();
         this.administrators = new Administrators();
+        this.lessons = new Lessons();
     }
 
     public String studentSignup(Request req, Response res) {
@@ -197,6 +197,15 @@ public class UserController {
 
         user.deactivate();
         users.persist(user);
+
+        if(user.getType().equals(UserType.PROFESSOR)){
+            Professor professor = professsors.findProfessorByUsername(username);
+            Set<Lesson> lessons2 = professor.getClasses();
+            for(Lesson lesson: lessons2){
+                lesson.deactivate();
+                lessons.persist(lesson);
+            }
+        }
 
         res.type("application/json");
         return user.asJson();

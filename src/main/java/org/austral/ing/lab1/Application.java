@@ -66,7 +66,7 @@ public class Application {
         Spark.delete("/lesson/delete", lessonController::deleteLesson);
 
         Spark.get("/professor/get", professorController::getProfessors);
-        Spark.get("/professor/:username/lessons", professorController::getLessons);
+        Spark.post("/professor/getLessons", professorController::getLessons);
         Spark.get("/professor/:username/fullname", professorController::getFullname);
         Spark.post("/lesson/reviews", professorController::getLessonReviews);
 
