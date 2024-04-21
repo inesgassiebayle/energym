@@ -18,15 +18,18 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [oldStartDate, setOldStartDate] = useState('');
     const fetchDetails = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/lesson/get',{
-                name: oldName,
+            const response = await axios.post('http://localhost:3333/lesson/get', {
+                name: lesson.name,
                 startDate: date,
-                time: oldTime
+                time: lesson.time
             });
             setOldActivity(response.data.activity);
+            console.log(response.data.activity);
             setActivity(response.data.activity);
+            console.log(response.data.professor);
             setOldProfessor(response.data.professor);
             setProfessor(response.data.professor);
+            console.log(response.data.room);
             setOldRoom(response.data.room);
             setRoomName(response.data.room);
         } catch (error) {
@@ -46,13 +49,21 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         }
     }, [isOpen, lesson, date]);
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const updateData = {
-            name, time, activity, professor, roomName, startDate
+            oldName: oldName,
+            oldTime: oldTime,
+            oldDate: oldDate,
+            activiy: activity,
+            name: name,
+            professor: professor,
+            date: startDate,
+            room: roomName
         };
         try {
-            await axios.patch(, updateData);
+            /*await axios.patch(, updateData);*/
             onSave();
             onClose();
         } catch (error) {
@@ -60,6 +71,8 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             alert('Failed to update lesson');
         }
     };
+
+
 
     if (!isOpen) return null;
 

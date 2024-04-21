@@ -21,6 +21,8 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     useEffect(() => {
         if (!isOpen) return;
 
+        setName(roomName);
+
         const fetchRoomDetails = async () => {
             try {
                 const activitiesresponse = await axios.get('http://localhost:3333/activity/get');
@@ -86,14 +88,7 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                     <div className="modal-body">
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                {/*<input*/}
-                                {/*    type='text'*/}
-                                {/*    value={name}*/}
-                                {/*    onChange={(e) => setName(e.target.value)}*/}
-                                {/*    placeholder='Room Name'*/}
-                                {/*    required*/}
-                                {/*/>*/}
-
+                                <input type="text" value={name} placeholder="Room Name" onChange={(e) => setName(e.target.value)} required />
                                 <div className="select-activity-container">
                                     <div className="select-activity" onClick={() => setShowOptions(!showOptions)}>
                                         Select Activity
