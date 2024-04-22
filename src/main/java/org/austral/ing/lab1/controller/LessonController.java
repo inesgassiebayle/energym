@@ -176,14 +176,26 @@ public class LessonController{
 
     public boolean isProfessorAvailable(String professorUsername, LocalTime time, LocalDate date) {
         List<Lesson> conflictingLessons = lessons.findLessonsByProfessorAndTime(professorUsername, time, date);
-        if(conflictingLessons == null) return true;
-        return conflictingLessons.isEmpty();
+        if (conflictingLessons == null) return true;
+        List<Lesson> aliveLessons = new ArrayList<>();
+        for(Lesson lesson: conflictingLessons){
+            if(lesson.getState()){
+                aliveLessons.add(lesson);
+            }
+        }
+        return aliveLessons.isEmpty();
     }
 
     public boolean isRoomAvailable(String roomName, LocalTime time, LocalDate date) {
         List<Lesson> conflictingLessons = lessons.findLessonsByRoomAndTime(roomName, time, date);
-        if(conflictingLessons == null) return true;
-        return conflictingLessons.isEmpty();
+        if (conflictingLessons == null) return true;
+        List<Lesson> aliveLessons = new ArrayList<>();
+        for(Lesson lesson: conflictingLessons){
+            if(lesson.getState()){
+                aliveLessons.add(lesson);
+            }
+        }
+        return aliveLessons.isEmpty();
     }
 
 
@@ -200,6 +212,11 @@ public class LessonController{
             return "Lesson not found";
         }
 
+        if (!lesson.getState()){
+            res.status(404);
+            return "Lesson state false";
+        }
+
         lesson.deactivate();
         this.lessons.persist(lesson);
 
@@ -213,9 +230,11 @@ public class LessonController{
         LocalDate lessonDate = LocalDate.parse(dateString);
         List<Lesson> lessons1 = lessons.findLessonsByDate(lessonDate);
         List<LessonNameTimeDto> lessonInfo = new ArrayList<>();
-        for (Lesson lesson: lessons1){
-            lessonInfo.add(new LessonNameTimeDto(lesson.getName(), lesson.getTime().toString()));
+        for (Lesson lesson: lessons1) {
+            if (lesson.getState()) {
+                lessonInfo.add(new LessonNameTimeDto(lesson.getName(), lesson.getTime().toString()));
             }
+        }
         res.type("application/json");
         return gson.toJson(lessonInfo);
     }
@@ -235,11 +254,14 @@ public class LessonController{
         Professor newProfessor = getProfessorByUsername(modifyDto.getProfessor());
         Room newRoom = rooms.findRoomByName(modifyDto.getRoomName());
 
+
         boolean professorChanged = !oldLesson.getProfessor().equals(newProfessor);
         boolean roomChanged = !oldLesson.getRoom().equals(newRoom);
         boolean activityChanged = !oldLesson.getActivity().equals(newActivity);
         boolean dateChanged = !oldLesson.getStartDate().equals(newDate);
         boolean timeChanged = !oldLesson.getTime().equals(newTime);
+
+
 
         if (professorChanged && !isProfessorAvailable(newProfessor.getUser().getUsername(), newTime, newDate)) {
             res.status(409);
@@ -285,20 +307,14 @@ public class LessonController{
         }
 
 
-        // Fetch and set Activity
         if (newActivity == null) {
             res.status(404);
             return "Activity not found";
         }
-
-        // Fetch and set Professor
-
         if (newProfessor == null) {
             res.status(404);
             return "Professor not found";
         }
-
-        //get room
         if (newRoom == null) {
             res.status(404);
             return "Room not found";
