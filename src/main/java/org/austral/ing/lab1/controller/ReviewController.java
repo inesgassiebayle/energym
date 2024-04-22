@@ -3,10 +3,7 @@ package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.LessonDeletionDto;
 import org.austral.ing.lab1.dto.ReviewCreationDto;
-import org.austral.ing.lab1.model.Lesson;
-import org.austral.ing.lab1.model.Review;
-import org.austral.ing.lab1.model.Student;
-import org.austral.ing.lab1.model.User;
+import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
@@ -47,12 +44,12 @@ public class ReviewController {
             res.status(400);
             return "Student does not exist";
         }
-        String lessonName = reviewCreationDto.getLessonName();
+        String professor = reviewCreationDto.getProfessor();
         LocalDate date = reviewCreationDto.getDate();
         LocalTime time = reviewCreationDto.getTime();
-        if(lessonName == null){
+        if(professor == null){
             res.status(400);
-            return "Lesson name is not valid";
+            return "Professor is not valid";
         }
         if(date == null){
             res.status(400);
@@ -63,7 +60,12 @@ public class ReviewController {
             return "Lesson time is not valid";
         }
 
-        Lesson lesson = lessons.findLessonByNameDateAndTime(lessonName, date, time);
+        Professor professor2 = professors.findProfessorByUsername(professor);
+        if(professor2 == null){
+            res.status(400);
+            return "Invalid input";
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, date).get(0);
         if(lesson == null){
             res.status(400);
             return "Lesson does not exist";

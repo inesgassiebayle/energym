@@ -1,8 +1,6 @@
 package org.austral.ing.lab1.queries;
 import org.austral.ing.lab1.model.Lesson;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import java.time.LocalDate;
@@ -33,7 +31,7 @@ public class Lessons {
         return lessons.isEmpty() ? null : lessons.get(0);
     }
 
-    public List<Lesson> findLessonsByProfessorAndTime(String professorUsername, LocalTime time, LocalDate date) {
+    public List<Lesson> findLessonsByProfessorDateAndTime(String professorUsername, LocalTime time, LocalDate date) {
         TypedQuery<Lesson> query = entityManager().createQuery(
                 "SELECT l FROM Lesson l WHERE l.professor.user.username = :username AND l.time = :time AND l.startDate = :date", Lesson.class);
         query.setParameter("username", professorUsername);

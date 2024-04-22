@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class LessonController{
     private final Lessons lessons;
@@ -209,7 +208,7 @@ public class LessonController{
     }
 
     public boolean isProfessorAvailable(String professorUsername, LocalTime time, LocalDate date) {
-        List<Lesson> conflictingLessons = lessons.findLessonsByProfessorAndTime(professorUsername, time, date);
+        List<Lesson> conflictingLessons = lessons.findLessonsByProfessorDateAndTime(professorUsername, time, date);
         if (conflictingLessons == null) return true;
         List<Lesson> aliveLessons = new ArrayList<>();
         for(Lesson lesson: conflictingLessons){
@@ -234,12 +233,23 @@ public class LessonController{
 
 
     public String deleteLesson(Request req, Response res) {
-        LessonNameTimeDateDto deletionDto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
-        String lessonName = deletionDto.getName();
+        ProfessorDateTimeDto deletionDto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
+        String username = deletionDto.getName();
         LocalDate lessonDate = deletionDto.getDate();
         LocalTime lessonTime = deletionDto.getTime();
 
-        Lesson lesson = lessons.findLessonByNameDateAndTime(lessonName, lessonDate, lessonTime);
+        if(username == null || lessonDate == null || lessonTime == null){
+            res.status(400);
+            return "Invalid input";
+        }
+
+        Professor professor = professors.findProfessorByUsername(username);
+        if(professor == null){
+            res.status(400);
+            return "Professor does not exist";
+        }
+
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, lessonTime, lessonDate).get(0);
 
         if (lesson == null ) {
             res.status(404);
@@ -255,7 +265,7 @@ public class LessonController{
         this.lessons.persist(lesson);
 
         res.type("application/json");
-        return gson.toJson("Deactivated lesson(s) with name: " + lessonName + " and date: " + lessonDate + " and time: " + lessonTime);
+        return gson.toJson("Deactivated lesson(s) by: " + username + " and date: " + lessonDate + " and time: " + lessonTime);
     }
 
 
@@ -263,10 +273,10 @@ public class LessonController{
         String dateString = req.params(":date");
         LocalDate lessonDate = LocalDate.parse(dateString);
         List<Lesson> lessons1 = lessons.findLessonsByDate(lessonDate);
-        List<LessonNameTimeDto> lessonInfo = new ArrayList<>();
+        List<ProfessorNameDateTimeDto> lessonInfo = new ArrayList<>();
         for (Lesson lesson: lessons1) {
             if (lesson.getState()) {
-                lessonInfo.add(new LessonNameTimeDto(lesson.getName(), lesson.getTime().toString()));
+                lessonInfo.add(new ProfessorNameDateTimeDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getProfessor().getUser().getUsername()));
             }
         }
         res.type("application/json");
@@ -275,11 +285,11 @@ public class LessonController{
 
     public String lessonModify(Request req, Response res) {
         LessonModifyDto modifyDto =  gson.fromJson(req.body(), LessonModifyDto.class);
-
+        String oldProfessor = modifyDto.getOldProfessor();
         String oldName = modifyDto.getOldName();
         LocalDate oldDate = modifyDto.getOldDate();
         LocalTime oldTime = modifyDto.getOldTime();
-        Lesson oldLesson = lessons.findLessonByNameDateAndTime(oldName,oldDate,oldTime);
+        Lesson oldLesson = lessons.findLessonsByProfessorDateAndTime(oldProfessor, oldTime, oldDate).get(0);
         String newName = modifyDto.getName();
         LocalTime newTime = modifyDto.getTime();
         LocalDate newDate = modifyDto.getStartDate();
@@ -370,11 +380,11 @@ public class LessonController{
     }
 
     public String getLessonReviews(Request req, Response res){
-        LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
-        String name = dto.getName();
+        ProfessorDateTimeDto dto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
+        String username = dto.getName();
         LocalDate date = dto.getDate();
         LocalTime time = dto.getTime();
-        if(name == null){
+        if(username == null){
             res.status(400);
             return "Invalid lesson name";
         }
@@ -382,8 +392,18 @@ public class LessonController{
             res.status(400);
             return "Invalid date or time";
         }
-        Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
+        Professor professor = professors.findProfessorByUsername(username);
+        if(professor == null){
+            res.status(400);
+            return "Invalid input";
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, time, date).get(0);
         if(lesson == null){
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        if(!lesson.getState()){
+            res.status(400);
             return "Lesson does not exist";
         }
         Set<Review> reviews = lesson.getReviews();
@@ -404,17 +424,24 @@ public class LessonController{
     }
 
     public String getLesson(Request req, Response res){
-        LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
+        ProfessorDateTimeDto dto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
         LocalDate date = dto.getDate();
-        String name = dto.getName();
+        String username = dto.getName();
         LocalTime time = dto.getTime();
 
-        if(name == null || date == null || time == null){
+        if(username == null || date == null || time == null){
             res.status(400); // Bad Request
             return "Invalid input";
         }
 
-        Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
+        Professor professor = professors.findProfessorByUsername(username);
+
+        if(professor==null){
+            res.status(400);
+            return "Invalid input";
+        }
+
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, time, date).get(0);
 
         if(lesson == null){
             return "Lesson was not found";

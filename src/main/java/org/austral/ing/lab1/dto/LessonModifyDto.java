@@ -10,19 +10,18 @@ public class LessonModifyDto {
     private String name;
     private String time;
     private String activity;
-
+    private String oldProfessor;
     private String professor;
-    private String startDate; //actua como date a pesar de llamarse startdate que es para facilitar la concurrencia
-
+    private String startDate;
     private String roomName;
 
 
 
-    public LessonModifyDto(String oldName, String oldTime, String oldDate, String name, String time, String activity, String professor, String roomName, String startDate) {
+    public LessonModifyDto(String oldName, String oldTime, String oldDate, String name, String time, String activity, String professor, String oldProfessor, String roomName, String startDate) {
         this.oldName = oldName;
         this.oldTime = oldTime;
         this.oldDate = oldDate;
-
+        this.oldProfessor = oldProfessor;
         this.name = name;
         this.time = time;
         this.activity = activity;
@@ -65,6 +64,7 @@ public class LessonModifyDto {
     public LocalDate getOldDate() {
         return LocalDate.parse(oldDate, DateTimeFormatter.ISO_LOCAL_DATE);
     }
+    public String getOldProfessor(){return oldProfessor;}
 
 
 }

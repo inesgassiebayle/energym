@@ -66,7 +66,7 @@ public class TestLessons {
 
         entityManager.getTransaction().commit();
 
-        List<Lesson> foundLessons = lessons.findLessonsByProfessorAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
+        List<Lesson> foundLessons = lessons.findLessonsByProfessorDateAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
 
         assertFalse(foundLessons.isEmpty());
         assertEquals(1, foundLessons.size());
@@ -94,7 +94,7 @@ public class TestLessons {
         entityManager.persist(professor);
 
 
-        List<Lesson> foundLessons = lessons.findLessonsByProfessorAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
+        List<Lesson> foundLessons = lessons.findLessonsByProfessorDateAndTime("professor1", LocalTime.of(9, 0), LocalDate.now());
 
         assertTrue(foundLessons.isEmpty());
         assertEquals(0, foundLessons.size());

@@ -8,15 +8,15 @@ public class ReviewCreationDto {
     private String comment;
     private String rating;
     private String username;
-    private String lessonName;
+    private String professor;
     private String lessonDate;
 
     private String lessonTime;
-    public ReviewCreationDto(String comment, String rating, String username, String lessonName, String lessonDate, String lessonTime){
+    public ReviewCreationDto(String comment, String rating, String username, String professor, String lessonDate, String lessonTime){
         this.comment = comment;
         this.rating = rating;
         this.username = username;
-        this.lessonName = lessonName;
+        this.professor = professor;
         this.lessonDate = lessonDate;
         this.lessonTime = lessonTime;
     }
@@ -25,8 +25,8 @@ public class ReviewCreationDto {
         return rating;
     }
 
-    public String getLessonName() {
-        return lessonName;
+    public String getProfessor() {
+        return professor;
     }
 
     public String getComment() {

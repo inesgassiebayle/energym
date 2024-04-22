@@ -68,7 +68,7 @@ const ManageSchedule = () => {
 
     const confirmDeleteHandler = async () => {
         const lessonData = {
-            name: selectedLesson.name,
+            username: selectedLesson.professor,
             startDate: selectedDate,
             time: selectedLesson.time
         };
@@ -122,7 +122,7 @@ const ManageSchedule = () => {
                         <ul>
                             {classesForSelectedDate.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <span>{classInfo.name} by {classInfo.professor} at {classInfo.time}</span>
                                     <button className="modification-button delete" onClick={() => handleDeleteLesson(classInfo)}>Delete</button>
                                     <button className='modification-button' onClick={() => handleView(classInfo)}>View</button>
                                 </div>
@@ -141,7 +141,7 @@ const ManageSchedule = () => {
             </div>
             {confirmDelete && (
                 <div className="confirmation-message">
-                    <p>Are you sure you want to delete the lesson "{selectedLesson?.name}"?</p>
+                    <p>Are you sure you want to delete the lesson {selectedLesson?.name}?</p>
                     <div className="confirmation-actions">
                         <button onClick={confirmDeleteHandler}>Yes</button>
                         <button onClick={() => setConfirmDelete(false)} className="cancel">No</button>

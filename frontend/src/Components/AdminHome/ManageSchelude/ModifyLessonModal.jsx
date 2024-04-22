@@ -29,7 +29,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const fetchDetails = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/get', {
-                name: lesson.name,
+                username: lesson.professor,
                 startDate: date,
                 time: lesson.time
             });
@@ -83,6 +83,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             time: time,
             activity: activity,
             professor: professor,
+            oldProfessor: oldProfessor,
             roomName: roomName,
             startDate: startDate,
 
@@ -98,8 +99,6 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             setProfessorUnavailableError('');
             setRoomUnavailableError('');
             setActivityUnsupported('');
-
-
             if (errorMsg.includes("Professor is not available")) {
                 setProfessorUnavailableError("Professor is unavailable at the new time/date");
             } else if (errorMsg.includes("Room is not available or does not support the activity")) {

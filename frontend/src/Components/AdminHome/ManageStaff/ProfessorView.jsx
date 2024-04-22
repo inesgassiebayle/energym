@@ -93,7 +93,7 @@ const ProfessorView = () => {
                         <ul>
                             {lessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <span>{classInfo.name} by {trainer} at {classInfo.time}</span>
                                     <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
                                 </div>
                             ))}
@@ -112,7 +112,7 @@ const ProfessorView = () => {
             <MoreModal
                 isOpen={showModifyModal}
                 onClose={() => setShowModifyModal(false)}
-                lesson={selectedLesson}
+                trainer={trainer}
                 date={selectedLessonDate}
                 time={selectedLessonTime}
             />

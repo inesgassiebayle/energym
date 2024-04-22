@@ -4,22 +4,24 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 
-const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
+const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [room, setRoom] = useState('');
     const [activity, setActivity] = useState('');
     const [reviews, setReviews] = useState([]);
+    const [lesson, setName] = useState('');
 
     const fetchLesson = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/get', {
-                    name: lesson,
+                    username: trainer,
                     startDate: date,
                     time: time
             });
             console.log(response.data);
             setRoom(response.data.room);
             setActivity(response.data.activity);
+            setName(response.data.name);
 
         } catch (error) {
             console.error('Error fetching lesson details:', error);
@@ -29,7 +31,7 @@ const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
     const fetchReviews = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/reviews', {
-                    name: lesson,
+                    username: trainer,
                     startDate: date,
                     time: time
             });
@@ -76,7 +78,7 @@ const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                 <div className="modal-header">
-                        <h5 className="modal-title">Details for "{lesson}"</h5> {/* Changed from Modify Room */}
+                        <h5 className="modal-title">Details for "{lesson}"</h5>
                     </div>
                     <div className="modal-body">
                         <p>Start Date: {date}</p>
