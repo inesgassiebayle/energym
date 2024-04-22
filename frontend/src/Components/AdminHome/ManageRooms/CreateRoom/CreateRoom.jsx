@@ -13,6 +13,12 @@ const CreateRoom = () => {
     const [activityNames, setActivityNames] = useState([]);
     const [showOptions, setShowOptions] = useState(false); // Estado para mostrar u ocultar las opciones
 
+    const [roomError, setRoomNameInvalid] = useState('');
+    const [capacityError, setCapacityInvalid] = useState('');
+    const [activityError, setActivityInvalid] = useState('');
+
+
+
     useEffect(() => {
         const fetchActivityNames = async () => {
             try {
@@ -40,7 +46,18 @@ const CreateRoom = () => {
             console.log(response.data);
             navigate('/AdministratorHome');
         } catch (error) {
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error al enviar solicitud:', error);
+            setRoomNameInvalid('');
+            setCapacityInvalid('');
+            setActivityInvalid('');
+            if (errorMsg.includes("Room already exists")){
+                setRoomNameInvalid("Room name already exists");
+            }else if (errorMsg.includes("Invalid capacity")) {
+                setCapacityInvalid("Invalid capacity");
+            }else if (errorMsg.includes("Activity does not exist")) {
+                setActivityInvalid("No activities selected")
+            }
         }
     };
 
@@ -60,15 +77,25 @@ const CreateRoom = () => {
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
+
                 <input
                     type='text'
                     value={className}
-                    onChange={(e) => setClassName(e.target.value)}
+                    onChange={(e) => {
+                        setClassName(e.target.value)
+                        setRoomNameInvalid('');
+                    }}
                     placeholder='Room Name'
-                    required
+
                 />
+                {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
+
                 <div className="select-activity-container">
-                    <div className="select-activity" onClick={() => setShowOptions(!showOptions)}>
+
+                    <div className="select-activity" onClick={() => {
+                        setShowOptions(!showOptions)
+                        setActivityInvalid('')
+                    }}>
                         Select Activity
                     </div>
                     {showOptions && (
@@ -80,6 +107,7 @@ const CreateRoom = () => {
                                         name={activityName}
                                         checked={selectedActivities[activityName] || false}
                                         onChange={handleSelectChange}
+                                        required
                                     />
                                     <label>{activityName}</label>
                                 </div>
@@ -87,13 +115,21 @@ const CreateRoom = () => {
                         </div>
                     )}
                 </div>
+                {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
+
                 <input
                     type='number'
                     value={capacity}
-                    onChange={(e) => setCapacity(e.target.value)}
+                    onChange={(e) => {
+                        setCapacity(e.target.value)
+                        setCapacityInvalid("");
+                    }}
                     placeholder='Capacity'
                     required
                 />
+
+                {capacityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{capacityError}</div>}
+
                 <div className='form-actions'>
                     <button type='submit'>Confirm</button>
                     <button type='button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Cancel</button>

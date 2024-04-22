@@ -12,6 +12,9 @@ const Login = ()=>{
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    const [loginError, setLoginError] = useState('');
+
+
     const login = async () => {
         try {
             const response = await axios.post(`http://localhost:3333/user/login`, {
@@ -35,7 +38,12 @@ const Login = ()=>{
                 console.log(userData);
             }
         } catch (error) {
-            console.error("Error de inicio de sesión:", error);
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            console.error('Error while sending request:', errorMsg);
+            setLoginError('');
+            if (errorMsg.includes("User does not exist")|| errorMsg.includes("User not found")) {
+                setLoginError("User or password incorrect");
+            }
         }
     };
 
@@ -50,17 +58,29 @@ const Login = ()=>{
                 </div>
             </div>
             <div className='login-inputs'>
+
                 <div className='login-input'>
                     <img src={person_icon} alt=""/>
-                    <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                    <input type='text' placeholder='Username' value={username} onChange={(e) => {
+                        setUsername(e.target.value)
+                        setLoginError('');
+                    }}/>
                 </div>
                 <div className='login-input'>
                     <img src={password_icon} alt=""/>
-                    <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input type='password' placeholder='Password' value={password} onChange={(e) => {
+                        setPassword(e.target.value)
+                        setLoginError('');
+                    }}
+                    />
+
                 </div>
+                {loginError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{loginError}</div>}
+
             </div>
             <div className='forgot-password'>Forgot your password? <Link to={"/Login/RestorePassword"}><button>Click Here!</button></Link></div>
             <button className='login-button' onClick={login}>Login</button>
+
         </div>
     )
 }

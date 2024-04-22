@@ -17,6 +17,12 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     const [username, setUsername] = useState('');
     const [activityName, setActivityName] = useState(''); // Agregamos el estado para la actividad seleccionada
 
+    const [roomError, setRoomNameInvalid] = useState('');
+    const [capacityError, setCapacityInvalid] = useState('');
+    const [activityError, setActivityInvalid] = useState('');
+
+
+
 
     useEffect(() => {
         if (!isOpen) return;
@@ -72,7 +78,17 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
             onClose(true);
             onSave();
         } catch (error) {
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error al enviar solicitud:', error);
+            setRoomNameInvalid('');
+            setCapacityInvalid('');
+            if (errorMsg.includes("New room name already exists")){
+                setRoomNameInvalid("New room name already exists");
+            } else if (errorMsg.includes("Invalid capacity")){
+                setCapacityInvalid("Invalid capacity")
+            } else if (errorMsg.includes("Activity named")){
+                setActivityInvalid("No activities selected")
+            }
         }
     };
 
@@ -88,9 +104,15 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                     <div className="modal-body">
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <input type="text" value={name} placeholder="Room Name" onChange={(e) => setName(e.target.value)} required />
+                                <input type="text" value={name} placeholder="Room Name" onChange={(e) => {
+                                    setName(e.target.value)
+                                    setRoomNameInvalid('');
+                                }} required />
                                 <div className="select-activity-container">
-                                    <div className="select-activity" onClick={() => setShowOptions(!showOptions)}>
+                                    <div className="select-activity" onClick={() => {
+                                        setShowOptions(!showOptions)
+                                        setActivityInvalid('');
+                                    }}>
                                         Select Activity
                                     </div>
                                     {showOptions && (
@@ -114,13 +136,20 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                                 <input
                                     type='number'
                                     value={capacity}
-                                    onChange={(e) => setCapacity(e.target.value)}
+                                    onChange={(e) => {
+                                        setCapacity(e.target.value)
+                                        setCapacityInvalid('');
+                                    }}
                                     placeholder='Capacity'
                                     required
                                 />
 
                             </div>
                             <button className="apply-changes">Save changes</button>
+                            {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
+                            {capacityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{capacityError}</div>}
+                            {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
+
                         </form>
                     </div>
                     <div className="modal-footer">
