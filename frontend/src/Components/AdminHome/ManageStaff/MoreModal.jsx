@@ -7,7 +7,6 @@ import {useNavigate} from "react-router-dom";
 const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [room, setRoom] = useState('');
-    const [professor, setProfessor] = useState('');
     const [activity, setActivity] = useState('');
     const [reviews, setReviews] = useState([]);
 
@@ -20,7 +19,6 @@ const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
             });
             console.log(response.data);
             setRoom(response.data.room);
-            setProfessor(response.data.time);
             setActivity(response.data.activity);
 
         } catch (error) {
@@ -85,7 +83,6 @@ const MoreModal = ({ isOpen, onClose, lesson, date, time}) => {
                         <p>Time: {time}</p>
                         <p>Room: {room}</p>
                         <p>Activity: {activity}</p>
-                        <p>Professor: {professor}</p>
                         <div className="reviews-container">
                             <p>Class reviews: </p>
                             {reviews.length>0 ? (<ul>
