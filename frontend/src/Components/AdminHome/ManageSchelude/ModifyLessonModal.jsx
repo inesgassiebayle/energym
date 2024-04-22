@@ -20,6 +20,12 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [activities, setActivities] = useState([]);
     const [professors, setProfessors] = useState([]);
     const [rooms, setRooms] = useState([]);
+
+    const [professorError, setProfessorUnavailableError] = useState('');
+    const [roomError, setRoomUnavailableError] = useState('');
+    const [activityError, setActivityUnsupported] = useState('');
+
+
     const fetchDetails = async () => {
         try {
             const response = await axios.post('http://localhost:3333/lesson/get', {
@@ -86,8 +92,20 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             onSave();
             onClose();
         } catch (error) {
-            console.error('Error updating lesson:', error);
-            alert('Failed to update lesson');
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            console.error('Error while sending request:', errorMsg);
+            setProfessorUnavailableError('');
+            setRoomUnavailableError('');
+            setActivityUnsupported('');
+
+
+            if (errorMsg.includes("Professor is not available")) {
+                setProfessorUnavailableError("Professor is unavailable at the new time/date");
+            } else if (errorMsg.includes("Room is not available or does not support the activity")) {
+                setRoomUnavailableError("Room is not available or does not support the activity")
+            } else if (errorMsg.includes('New activity not supported in the selected room')){
+                setActivityUnsupported("New activity not supported in the selected room")
+            }
         }
     };
 
@@ -106,7 +124,12 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             <form onSubmit={handleSubmit}>
                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name"/>
 
-                <select value={time} onChange={(e) => setTime(e.target.value)} required>
+                <select value={time} onChange={(e) => {
+                    setTime(e.target.value);
+                    setProfessorUnavailableError('');
+                    setRoomUnavailableError('');
+
+                }} required>
                     <option value="">Select Lesson Time</option>
                     {generateHourOptions().map((hour, index) => (
                         <option key={index} value={hour}>{hour}</option>
@@ -114,29 +137,49 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
                 </select>
 
 
-                <select value={activity} onChange={(e) => setActivity(e.target.value)} required>
+                <select value={activity} onChange={(e) => {
+                    setActivity(e.target.value);
+                    setActivityUnsupported('');
+                }} required>
                     <option value="">Select Activity</option>
                     {activities.map((activity, index) => (
                         <option key={index} value={activity}>{activity}</option>
                     ))}
                 </select>
-                <select value={professor} onChange={(e) => setProfessor(e.target.value)} required>
+                <select value={professor}
+                        onChange={(e) => {
+                            setProfessor(e.target.value);
+                            setProfessorUnavailableError(''); //limpiar el error
+
+                        }} required>
                     <option value="">Select Professor</option>
                     {professors.map((professor, index) => (
                         <option key={index} value={professor}>{professor}</option>
                     ))}
                 </select>
-                <select value={roomName} onChange={(e) => setRoomName(e.target.value)} required>
+
+                <select value={roomName} onChange={(e) => {
+                    setRoomName(e.target.value);
+                    setRoomUnavailableError('');
+                }} required>
+
                     <option value="">Select Room</option>
                     {rooms.map((room, index) => (
                         <option key={index} value={room}>{room}</option>
                     ))}
                 </select>
 
-                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+                <input type="date" value={startDate} onChange={e => {
+                    setStartDate(e.target.value);
+                    setProfessorUnavailableError('');
+                    setRoomUnavailableError('');
+                }}
                        placeholder="Start Date (YYYY-MM-DD)"/>
                 <button type="submit">Save Changes</button>
                 <button type="button" onClick={onClose}>Cancel</button>
+                {professorError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{professorError}</div>}
+                {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
+
             </form>
         </div>
     );
