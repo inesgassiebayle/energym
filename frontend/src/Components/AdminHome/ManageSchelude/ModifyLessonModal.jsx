@@ -42,6 +42,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             console.log(response.data.room);
             setOldRoom(response.data.room);
             setRoomName(response.data.room);
+            setActivityUnsupported();
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -179,6 +180,8 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
                 <button type="button" onClick={onClose}>Cancel</button>
                 {professorError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{professorError}</div>}
                 {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
+                {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
+
 
             </form>
         </div>
