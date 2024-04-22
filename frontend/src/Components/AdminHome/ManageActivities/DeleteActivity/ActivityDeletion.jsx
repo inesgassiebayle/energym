@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './ActivityDeletion.css';
 import logo from "../../../Assets/Logo.png";
 import axios from 'axios';
+import authentication from "../../Hoc/Hoc";
 
 const ActivityDeletion = () => {
     const navigate = useNavigate();
@@ -71,4 +72,4 @@ const ActivityDeletion = () => {
     );
 }
 
-export default ActivityDeletion;
+export default authentication(ActivityDeletion);

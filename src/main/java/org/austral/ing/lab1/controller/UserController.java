@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.controller;
 import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
+import org.austral.ing.lab1.dto.PasswordChangeDto;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
@@ -151,6 +152,39 @@ public class UserController {
                 lessons.persist(lesson);
             }
         }
+        res.type("application/json");
+        return user.asJson();
+    }
+
+    public String changePassword(Request req, Response res){
+        PasswordChangeDto dto = gson.fromJson(req.body(), PasswordChangeDto.class);
+        String username = dto.getUsername();
+        String password = dto.getPassword();
+        String confirmationPassword = dto.getPasswordConfirmation();
+
+        if(username == null || username.isBlank()){
+            res.status(400);
+            return "Invalid input";
+        }
+        User user = users.findUserByUsername(username);
+        if(user == null) {
+            res.status(400);
+            return "User does not exist";
+        }
+        if(!user.state()){
+            res.status(400);
+            return "User does not exist";
+        }
+        if(!password.equals(confirmationPassword)){
+            res.status(400);
+            return "Passwords do not match";
+        }
+        if(!isValidPassword(password)){
+            res.status(400);
+            return "Invalid password";
+        }
+        user.setPassword(password);
+        users.persist(user);
         res.type("application/json");
         return user.asJson();
     }

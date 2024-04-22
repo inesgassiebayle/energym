@@ -18,7 +18,7 @@ const AdminHome = () => {
                     }
                 });
                 localStorage.removeItem('token');
-                navigate('/Login');
+                navigate('/login');
             } catch (error) {
                 console.error('Failed to invalidate the token on the server:', error);
             }
@@ -38,7 +38,7 @@ const AdminHome = () => {
                         }
                     });
                     localStorage.removeItem('token');
-                    navigate('/Login');
+                    navigate('/login');
                 } catch (error) {
                     console.error('Failed to delete the account:', error);
                 }

@@ -66,3 +66,17 @@
     padding-top: 20px;
     border-top: 2px dashed #007bff;
 }
+
+.admin-button.modify-account {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.admin-button.modify-account img {
+    width: 30px;
+    height: auto;
+    display: block;
+}
+

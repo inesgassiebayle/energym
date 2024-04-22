@@ -29,7 +29,7 @@ const SignUp = () => {
                 password: password
             });
             console.log(response.data);
-            navigate('/Login');
+            navigate('/login');
         } catch (error) {
             const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error while sending request:', errorMsg);

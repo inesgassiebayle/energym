@@ -31,6 +31,10 @@ public class ActivityController {
     public String addActivity(Request req, Response res){
         ActivityDto activityDto = gson.fromJson(req.body(), ActivityDto.class);
         String name = activityDto.getName();
+        if(name == null){
+            res.status(400);
+            return "Name is required";
+        }
         Activity activity = activities.findActivityByName(name);
         if(activity != null){
             if(activity.state()){

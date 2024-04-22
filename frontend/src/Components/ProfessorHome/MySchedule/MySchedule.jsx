@@ -10,8 +10,6 @@ const MySchedule = () => {
     const handleDateChange = (e) => {
         const selectedDate = e.target.value;
         setSelectedDate(selectedDate);
-        // Aquí deberías llamar a tu API para obtener las clases planificadas para la fecha seleccionada
-        // Por ahora, simplemente dejamos un array vacío
         setClassesForSelectedDate([]);
     };
 

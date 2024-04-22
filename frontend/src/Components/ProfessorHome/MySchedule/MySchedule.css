@@ -8,7 +8,7 @@
 }
 
 .my-schedule-container h2 {
-    color: #00CED1; /* Color turquesa */
+    color: #00CED1;
 }
 
 .date-picker {
@@ -46,6 +46,6 @@
     align-items: center;
     background-image: linear-gradient(to right, #007bff, #0056b3);
     font-family: 'Poppins', sans-serif;
-    margin: 20px auto 0; /* Centro el botón horizontalmente y agrego espacio superior */
-    display: block; /* Hacer que el botón ocupe todo el ancho */
+    margin: 20px auto 0;
+    display: block;
 }

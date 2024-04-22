@@ -48,6 +48,8 @@ public class Application {
         Spark.get("/user/verify", authenticationController::getCurrentUser);
         Spark.delete("/user/:username/delete", userController::deleteUser);
         Spark.delete("/user/delete", authenticationController::deleteAccount);
+        Spark.patch("/user/change-password", userController::changePassword);
+
 
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);

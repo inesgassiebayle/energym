@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ModifyLessonModal.css';
+import authentication from "../Hoc/Hoc";
 
 const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [name, setName] = useState('');
@@ -187,4 +188,4 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     );
 };
 
-export default ModifyLessonModal;
+export default authentication(ModifyLessonModal);

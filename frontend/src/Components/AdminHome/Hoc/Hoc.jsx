@@ -25,13 +25,13 @@ const authentication = WrappedComponent => {
                     // Check if the user is an administrator
                     if (response.data.type !== 'ADMINISTRATOR') {
                         console.log('User is not an administrator, redirecting to login.');
-                        navigate('/Login');
+                        navigate('/login');
                         return;
                     }
 
                 } catch (error) {
                     console.error('Token validation failed:', error);
-                    navigate('/Login');
+                    navigate('/login');
                 }
             }
 

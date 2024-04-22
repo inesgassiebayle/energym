@@ -87,16 +87,16 @@
     align-items: center;
     background-image: linear-gradient(to right, #007bff, #0056b3);
     font-family: 'Poppins', sans-serif;
-    flex: 1; /* Que ambos botones ocupen el mismo espacio */
-    margin: 0 5px; /* Agregar un pequeño margen entre los botones */
+    flex: 1;
+    margin: 0 5px;
 }
 
 .create-activity-container button:nth-child(1) {
-    margin-right: 5px; /* Margen derecho solo para el botón "Cancel" */
+    margin-right: 5px;
 }
 
 .create-activity-container button:nth-child(2) {
-    margin-left: 5px; /* Margen izquierdo solo para el botón "Confirm" */
+    margin-left: 5px;
 }
 
 .create-activity-container button:hover {
@@ -107,5 +107,22 @@
 
 .create-activity-container .form-actions {
     display: flex;
-    justify-content: center; /* Centrar horizontalmente los botones */
+    justify-content: center;
+}
+
+.error-message{
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 100px);
+    margin-top: 8px;
+    padding: 10px;
+    background-color: #ffdddd;
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }

@@ -4,6 +4,7 @@ import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
 import ModifyLessonModal from './ModifyLessonModal.jsx';
+import authentication from '../Hoc/Hoc'
 
 const ManageSchedule = () => {
     const navigate = useNavigate();
@@ -31,33 +32,6 @@ const ManageSchedule = () => {
     };
 
     useEffect(() => {
-        const verifyToken = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.log('No token found, redirecting to login.');
-                navigate('/Login');
-                return;
-            }
-
-            try {
-                const response = await axios.get('http://localhost:3333/user/verify', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.data.type !== 'ADMINISTRATOR') {
-                    console.log('User is not an administrator, redirecting to login.');
-                    navigate('/Login');
-                    return;
-                }
-            } catch (error) {
-                console.error('Token validation failed:', error);
-                navigate('/Login');
-            }
-        };
-
-        verifyToken();
         fetchClassesForSelectedDate();
     }, [navigate, selectedDate]);
 
@@ -164,4 +138,4 @@ const ManageSchedule = () => {
     );
 };
 
-export default ManageSchedule;
+export default authentication(ManageSchedule);

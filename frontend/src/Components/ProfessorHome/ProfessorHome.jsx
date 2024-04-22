@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProfessorHome.css'; // Estilo CSS para ProfessorHome
-import logo from "../Assets/Logo.png"; // Logo de la aplicación
+import './ProfessorHome.css';
+import logo from "../Assets/Logo.png";
 
 const ProfessorHome = () => {
     let navigate = useNavigate();

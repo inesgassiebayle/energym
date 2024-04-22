@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
+import authentication from "../Hoc/Hoc";
 
 const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -107,4 +108,4 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     );
 };
 
-export default MoreModal;
+export default authentication(MoreModal);

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AddLesson.css';
 import logo from "../../../Assets/Logo.png";
 import axios from "axios";
+import authentication from "../../Hoc/Hoc";
 
 const LessonAddition = () => {
     const [lessonName, setLessonName] = useState('');
@@ -167,6 +168,6 @@ const LessonAddition = () => {
     );
 }
 
-export default LessonAddition;
+export default authentication(LessonAddition);
 
 

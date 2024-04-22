@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CreateRoom.css';
 import logo from "../../../Assets/Logo.png";
 import axios from "axios";
+import authentication from "../../Hoc/Hoc";
 
 const CreateRoom = () => {
     let navigate = useNavigate();
@@ -102,4 +103,4 @@ const CreateRoom = () => {
     );
 }
 
-export default CreateRoom;
+export default authentication(CreateRoom);
