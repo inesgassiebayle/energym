@@ -29,46 +29,42 @@ public class AuthenticationController {
     public String createAuthentication(Request req, Response res) {
         LoginDto loginDto = gson.fromJson(req.body(), LoginDto.class);
 
-        // Validación de credenciales nulas
         if (loginDto.getUsername() == null || loginDto.getPassword() == null) {
-            res.status(400); // HTTP 400 Bad Request
+            res.status(400);
             return gson.toJson("Invalid username or password");
         }
 
         User user = users.findUserByUsername(loginDto.getUsername());
 
         if(user == null){
+            res.status(400);
             return "User does not exist";
         }
 
         if(!user.state()){
+            res.status(400);
             return "User does not exist";
         }
 
-        // Verificación de usuario y contraseña
-        if (user != null && user.getPassword().equals(loginDto.getPassword())) {
-            // Comprobar si ya existe un token activo
+        if (user.getPassword().equals(loginDto.getPassword())) {
             Optional<String> existingToken = usernameByToken.asMap().entrySet().stream()
                     .filter(entry -> entry.getValue().equals(user.getUsername()))
                     .map(Map.Entry::getKey)
                     .findFirst();
 
             if (existingToken.isPresent()) {
-                // Opción 1: Devolver el token existente (sin crear uno nuevo)
-                // Opción 2: Invalidar el token antiguo y continuar para crear uno nuevo
                 usernameByToken.invalidate(existingToken.get());
             }
 
-            // Generar nuevo token
             final String token = UUID.randomUUID().toString();
             usernameByToken.put(token, user.getUsername());
 
             AuthenticationDto authenticationDto = new AuthenticationDto(user, token);
-            res.status(200); // HTTP 200 OK
+            res.status(200);
             return gson.toJson(authenticationDto);
 
         } else {
-            res.status(404); // HTTP 404 Not Found
+            res.status(404);
             return gson.toJson("User not found");
         }
     }
@@ -102,7 +98,7 @@ public class AuthenticationController {
         Optional<String> tokenOpt = getToken(req);
 
         if (!tokenOpt.isPresent()) {
-            res.status(401); // Unauthorized
+            res.status(401);
             return "Not signed in";
         }
 
@@ -132,7 +128,7 @@ public class AuthenticationController {
         Optional<String> tokenOpt = getToken(req);
 
         if (!tokenOpt.isPresent()) {
-            res.status(401); // Unauthorized
+            res.status(401);
             return "Not signed in";
         }
 
@@ -156,14 +152,12 @@ public class AuthenticationController {
             return "User was already deleted";
         }
 
-        // Deactivate and persist the user
         user.deactivate();
         users.persist(user);
 
-        // Invalidate the token
         usernameByToken.invalidate(token);
 
-        res.status(204); // No Content
+        res.status(204);
         return "";
     }
 }

@@ -32,39 +32,35 @@ public class UserController {
 
     public String studentSignup(Request req, Response res) {
         SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
-
         String firstName = signUpDto.getFirstName();
         String lastName = signUpDto.getLastName();
         String email = signUpDto.getEmail();
         String username = signUpDto.getUsername();
         String password = signUpDto.getPassword();
-
         if(!isValidEmailFormat(email)){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Invalid email";
         }
-
         if(users.findUserByUsernameOrEmail(username, email)!=null){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Username or email already registered";
         }
-
+        if(!isValidPassword(password)){
+            res.status(400);
+            return "Invalid password";
+        }
         User user = new User(firstName, lastName, email, username, password);
         user.setType(UserType.STUDENT);
         users.persist(user);
-
         Student student = new Student();
         student.setUser(user);
         students.persist(student);
-
         res.type("application/json");
-
         return user.asJson();
     }
 
     public String professorSignup(Request req, Response res) {
         SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
-
         String firstName = signUpDto.getFirstName();
         String lastName = signUpDto.getLastName();
         String email = signUpDto.getEmail();
@@ -72,95 +68,53 @@ public class UserController {
         String password = signUpDto.getPassword();
 
         if(!isValidEmailFormat(email)){
-            res.status(400); // Bad Request
-
+            res.status(400);
             return "Invalid email";
         }
-
         if(users.findUserByUsernameOrEmail(username, email)!=null){
-            res.status(400); // Bad Request
-
+            res.status(400);
             return "Username or email already registered";
         }
-
+        if(!isValidPassword(password)){
+            res.status(400);
+            return "Invalid password";
+        }
         User user = new User(firstName, lastName, email, username, password);
         user.setType(UserType.PROFESSOR);
         users.persist(user);
-
         Professor professor = new Professor();
         professor.setUser(user);
         professsors.persist(professor);
-
         res.type("application/json");
-
-
         return user.asJson();
     }
 
     public String administratorSignup(Request req, Response res) {
         SignUpDto signUpDto = gson.fromJson(req.body(), SignUpDto.class);
-
         String firstName = signUpDto.getFirstName();
         String lastName = signUpDto.getLastName();
         String email = signUpDto.getEmail();
         String username = signUpDto.getUsername();
         String password = signUpDto.getPassword();
-
         if(!isValidEmailFormat(email)){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Invalid email";
         }
-
         if(users.findUserByUsernameOrEmail(username, email)!=null){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Username or email already registered";
         }
-
         if(!isValidPassword(password)){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Invalid password";
         }
-
         User user = new User(firstName, lastName, email, username, password);
         user.setType(UserType.ADMINISTRATOR);
         users.persist(user);
-
         Administrator administrator = new Administrator();
         administrator.setUser(user);
         administrators.persist(administrator);
-
         res.type("application/json");
-
-        return user.asJson();
-    }
-
-    public String login(Request req, Response res) {
-
-        // Get the parameters from the request (username and password)
-        final String username = req.queryParams("username");
-        final String password = req.queryParams("password");
-
-        // Find the user based on the provided username
-        User user = users.findUserByUsername(username);
-
-        // Check if the user is found and if the password matches
-        if (user == null || !user.getPassword().equals(password)) {
-            return "Invalid username or password";
-        }
-
-
-        // Check if the user already has a session started
-        if (req.session().attribute("userId") != null) {
-            return "Already signed in";
-        }
-
-        // Set the user's identification in the session to mark them as authenticated
-        req.session().attribute("userId", user.getId());
-
-        // Set the response type as JSON
-        res.type("application/json");
-
-        // Return the JSON representation of the user object
         return user.asJson();
     }
 
@@ -171,33 +125,24 @@ public class UserController {
     }
 
     public boolean isValidPassword(String password) {
-        // Regular expression to check if the password contains at least one number
         String numberRegex = ".*[0-9].*";
-        // Regular expression to check if the password contains at least one uppercase letter
         String uppercaseLetterRegex = ".*[A-Z].*";
-
         Pattern numberPattern = Pattern.compile(numberRegex);
         Pattern uppercaseLetterPattern = Pattern.compile(uppercaseLetterRegex);
-
         return numberPattern.matcher(password).matches() && uppercaseLetterPattern.matcher(password).matches();
     }
 
     public String deleteUser(Request req, Response res){
         String username = req.params(":username");
-
         if(username == null || username.isBlank()){
             return "Invalid input";
         }
-
         User user = users.findUserByUsername(username);
-
         if(user == null) {
             return "User does not exist";
         }
-
         user.deactivate();
         users.persist(user);
-
         if(user.getType().equals(UserType.PROFESSOR)){
             Professor professor = professsors.findProfessorByUsername(username);
             Set<Lesson> lessons2 = professor.getClasses();
@@ -206,7 +151,6 @@ public class UserController {
                 lessons.persist(lesson);
             }
         }
-
         res.type("application/json");
         return user.asJson();
     }

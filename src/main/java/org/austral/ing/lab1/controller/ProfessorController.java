@@ -46,20 +46,24 @@ public class ProfessorController {
         String username = dto.getName();
 
         if(username == null || username.isBlank()){
+            res.status(400);
             return "Invalid username";
         }
 
         if(date == null){
+            res.status(400);
             return "Invalid date";
         }
 
         Professor professor = professors.findProfessorByUsername(username);
 
         if(professor == null){
+            res.status(404);
             return "Professor does not exist";
         }
 
         if(!professor.getUser().state()){
+            res.status(404);
             return "Professor does not exist";
         }
 
@@ -78,18 +82,21 @@ public class ProfessorController {
         String username = req.params(":username");
 
         if(username == null || username.isBlank()){
+            res.status(400);
             return "Invalid input";
         }
 
         Professor professor = professors.findProfessorByUsername(username);
 
         if(professor == null){
+            res.status(404);
             return "Professor not found";
         }
 
         User user = professor.getUser();
 
         if(!user.state()){
+            res.status(404);
             return "Professor was deleted";
         }
 
@@ -98,51 +105,4 @@ public class ProfessorController {
         res.type("application/json");
         return gson.toJson(dto);
     }
-
-    public String getLessonReviews(Request req, Response res){
-         LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
-         String name = dto.getName();
-         LocalDate date = dto.getDate();
-         LocalTime time = dto.getTime();
-
-         if(name == null){
-             res.status(400); // Bad Request
-             return "Invalid lesson name";
-         }
-
-         if(date==null || time == null){
-             res.status(400); // Bad Request
-             return "Invalid date or time";
-         }
-
-         Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
-
-         if(lesson == null){
-             return "Lesson does not exist";
-         }
-
-         Set<Review> reviews = lesson.getReviews();
-
-         List<ReviewDto> reviewDtos = new ArrayList<>();
-
-         for(Review review: reviews){
-             Student student = review.getStudent();
-
-             if(student==null){
-                 return "Student does not exist";
-             }
-
-             User user = student.getUser();
-
-             if(user == null){
-                 return "User does not exist";
-             }
-
-             reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
-         }
-
-        res.type("application/json");
-        return gson.toJson(reviewDtos);
-    }
-
 }

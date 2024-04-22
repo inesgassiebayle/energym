@@ -3,12 +3,8 @@ import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.*;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
-
 import spark.Request;
 import spark.Response;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -336,4 +332,59 @@ public class LessonController{
         return "exito! " +  oldLesson.asJson() ;
 
     }
+
+    public String getLessonReviews(Request req, Response res){
+        LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
+        String name = dto.getName();
+        LocalDate date = dto.getDate();
+        LocalTime time = dto.getTime();
+        if(name == null){
+            res.status(400);
+            return "Invalid lesson name";
+        }
+        if(date==null || time == null){
+            res.status(400);
+            return "Invalid date or time";
+        }
+        Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
+        if(lesson == null){
+            return "Lesson does not exist";
+        }
+        Set<Review> reviews = lesson.getReviews();
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+        for(Review review: reviews){
+            Student student = review.getStudent();
+            if(student==null){
+                return "Student does not exist";
+            }
+            User user = student.getUser();
+            if(user == null){
+                return "User does not exist";
+            }
+            reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+        }
+        res.type("application/json");
+        return gson.toJson(reviewDtos);
+    }
+
+    public String getLesson(Request req, Response res){
+        LessonNameTimeDateDto dto = gson.fromJson(req.body(), LessonNameTimeDateDto.class);
+        LocalDate date = dto.getDate();
+        String name = dto.getName();
+        LocalTime time = dto.getTime();
+
+        if(name == null || date == null || time == null){
+            res.status(400); // Bad Request
+            return "Invalid input";
+        }
+
+        Lesson lesson = lessons.findLessonByNameDateAndTime(name, date, time);
+
+        if(lesson == null){
+            return "Lesson was not found";
+        }
+
+        return lesson.asJson();
+    }
 }
+

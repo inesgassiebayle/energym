@@ -43,16 +43,6 @@ public class Lessons {
         return results;
     }
 
-
-//    public List<Lesson> findLessonsByProfessorAndTime(String professorUsername, LocalTime time, LocalDate date) {
-//        TypedQuery<Lesson> query = entityManager().createQuery(
-//                "SELECT l FROM Lesson l WHERE l.professor.user.username = :username AND l.time = :time AND l.startDate = :date", Lesson.class);
-//        query.setParameter("username", professorUsername);
-//        query.setParameter("time", time);
-//        query.setParameter("date", date);
-//        return query.getResultList();
-//    }
-
     public List<Lesson> findLessonsByRoomAndTime(String roomName, LocalTime time, LocalDate date) {
         TypedQuery<Lesson> query = entityManager().createQuery(
                 "SELECT l FROM Lesson l WHERE l.room.name = :roomName AND l.time = :time AND l.startDate = :date", Lesson.class);
@@ -85,8 +75,14 @@ public class Lessons {
         query.setParameter("lessonTime", lessonTime);
         if(query.getSingleResult() == null) return null;
         return query.getSingleResult();
-
     }
+
+    public List<Lesson> findLessonByActivity(String activity){
+        TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.activity.name = :activity", Lesson.class);
+        query.setParameter("activity", activity);
+        return query.getResultList();
+    }
+
     public List<Lesson> findLessonsByDate(LocalDate lessonDate){
         TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.startDate = :lessonDate", Lesson.class);
         query.setParameter("lessonDate", lessonDate);
