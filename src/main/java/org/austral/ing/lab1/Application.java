@@ -23,9 +23,9 @@ public class Application {
         final ProfessorController professorController = new ProfessorController();
         final AuthenticationController authenticationController = new AuthenticationController();
         final ReviewController reviewController = new ReviewController();
-        //final InitialDataBase initialDataBase = new InitialDataBase();
+        final InitialDataBase initialDataBase = new InitialDataBase();
 
-        //initialDataBase.createInitialDataBase();
+        initialDataBase.createInitialDataBase();
 
         Spark.port(3333);
 
