@@ -10,7 +10,8 @@ const ActivityDeletion = () => {
     const [activityNames, setActivityNames] = useState([]);
     const [selectedActivity, setSelectedActivity] = useState('');
     const [confirmDelete, setConfirmDelete] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchActivityNames = async () => {
@@ -19,20 +20,33 @@ const ActivityDeletion = () => {
                 setActivityNames(response.data);
             } catch (error) {
                 console.error('Error fetching activity names:', error);
+                setErrorMessage('Failed to fetch activity names.');
             }
         };
         fetchActivityNames();
     }, []);
 
-    const handleSubmit = async () => {
-        try {
-            const response = await axios.post('http://localhost:3333/activity/delete', {
-                name: selectedActivity
-            });
-            console.log('Activity deleted:', response.data);
-            navigate('/AdministratorHome');
-        } catch (error) {
-            console.error('Error deleting activity:', error);
+    const handleDeleteConfirmation = () => {
+        setConfirmDelete(true);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrorMessage('');
+        setSuccessMessage('');
+
+        if (confirmDelete && selectedActivity) {
+            try {
+                const response = await axios.post('http://localhost:3333/activity/delete', {
+                    name: selectedActivity
+                });
+                console.log('Activity deleted:', response.data);
+                setSuccessMessage(`Activity '${selectedActivity}' was successfully deleted.`);
+                navigate('/AdministratorHome');
+            } catch (error) {
+                console.error('Error deleting activity:', error);
+                setErrorMessage('Failed to delete activity.');
+            }
         }
     };
 
@@ -43,31 +57,35 @@ const ActivityDeletion = () => {
                     <div className="text">Delete Activity</div>
                 </div>
                 <div className="logo">
-                    <img src={logo} alt=""/>
+                    <img src={logo} alt="Energy Gym logo"/>
                 </div>
             </div>
-            {!confirmDelete ? (
-                <form onSubmit={() => setConfirmDelete(true)}>
-                    <select value={selectedActivity} onChange={(e) => setSelectedActivity(e.target.value)} required>
-                        <option value=''>Select Activity</option>
-                        {activityNames.map((activityName, index) => (
-                            <option key={index} value={activityName}>{activityName}</option>
-                        ))}
-                    </select>
-                    <div className='form-actions'>
-                        <button type='submit'>Confirm</button>
-                        <button type='button' onClick={() => navigate('/AdministratorHome/ManageActivities')} className='cancel'>Cancel</button>
+            <form onSubmit={handleSubmit}>
+                {!confirmDelete ? (
+                    <>
+                        <select value={selectedActivity} onChange={(e) => setSelectedActivity(e.target.value)} required>
+                            <option value=''>Select Activity</option>
+                            {activityNames.map((activityName, index) => (
+                                <option key={index} value={activityName}>{activityName}</option>
+                            ))}
+                        </select>
+                        <div className='form-actions'>
+                            <button type='button' onClick={handleDeleteConfirmation}>Confirm</button>
+                            <button type='button' onClick={() => navigate('/AdministratorHome/ManageActivities')} className='cancel'>Cancel</button>
+                        </div>
+                    </>
+                ) : (
+                    <div className='confirmation-message'>
+                        <p>Are you sure you want to delete the activity "{selectedActivity}"?</p>
+                        <div className='confirmation-actions'>
+                            <button type='submit'>Yes</button>
+                            <button type='button' onClick={() => setConfirmDelete(false)} className='cancel'>No</button>
+                        </div>
                     </div>
-                </form>
-            ) : (
-                <div className='confirmation-message'>
-                    <p>Are you sure you want to delete the activity "{selectedActivity}"?</p>
-                    <div className='confirmation-actions'>
-                        <button onClick={handleSubmit}>Yes</button>
-                        <button onClick={() => setConfirmDelete(false)} className='cancel'>No</button>
-                    </div>
-                </div>
-            )}
+                )}
+            </form>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
         </div>
     );
 }

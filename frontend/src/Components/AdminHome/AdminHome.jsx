@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminHome.css';
 import logo from "../Assets/Logo.png";
+import deleteIcon from "../Assets/person.png"
 import axios from "axios";
 import authentication from './Hoc/Hoc';
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const AdminHome = () => {
     let navigate = useNavigate();
+    const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
     const handleLogout = async () => {
         const token = localStorage.getItem('token');
@@ -25,25 +28,8 @@ const AdminHome = () => {
         }
     };
 
-    const handleDelete = async () => {
-        const confirmation = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
-
-        if (confirmation) {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    await axios.delete('http://localhost:3333/user/delete', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                } catch (error) {
-                    console.error('Failed to delete the account:', error);
-                }
-            }
-        }
+    const handleDeleteAccountClick = () => {
+        setShowChangePasswordModal(true);
     };
 
     return (
@@ -65,7 +51,19 @@ const AdminHome = () => {
                     Activities
                 </button>
                 <button className='admin-button logout' onClick={handleLogout}>Log Out</button>
-                <button className='admin-button logout' onClick={handleDelete}>Delete account</button>
+
+                <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>
+                    <img src={deleteIcon} alt="Delete account" />
+                </button>
+
+                {showChangePasswordModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <ChangePasswordModal />
+                            <button className="button-close" onClick={() => setShowChangePasswordModal(false)}>✖</button>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </div>
