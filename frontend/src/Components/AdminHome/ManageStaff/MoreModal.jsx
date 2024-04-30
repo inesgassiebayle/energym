@@ -11,14 +11,19 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     const [activity, setActivity] = useState('');
     const [reviews, setReviews] = useState([]);
     const [lesson, setName] = useState('');
+    const [loadingLesson, setLoadingLesson] = useState(false);
 
     const fetchLesson = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/lesson/get', {
+            setLoadingLesson(true)
+            const response = await axios.get('http://localhost:3333/lesson', {
+                params: {
                     username: trainer,
                     startDate: date,
                     time: time
-            });
+                }
+            })
+
             console.log(response.data);
             setRoom(response.data.room);
             setActivity(response.data.activity);
@@ -26,15 +31,19 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
 
         } catch (error) {
             console.error('Error fetching lesson details:', error);
+        } finally {
+            setLoadingLesson(false);
         }
     };
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/lesson/reviews', {
+            const response = await axios.get('http://localhost:3333/lesson/reviews', {
+                params: {
                     username: trainer,
                     startDate: date,
                     time: time
+                }
             });
 
             const parsedReviews = response.data.map(review => ({
@@ -68,6 +77,7 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
 
     useEffect(() => {
         if (!isOpen) return;
+
         fetchLesson();
         fetchReviews();
     }, [isOpen, navigate]);
@@ -82,7 +92,7 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
                     <div className="modal-body">
                         <p>Start Date: {date}</p>
                         <p>Time: {time}</p>
-                        <p>Room: {room}</p>
+                        <p>Room: {loadingLesson ? `loading...` : room}</p>
                         <p>Activity: {activity}</p>
                         <div className="reviews-container">
                             <p>Class reviews: </p>

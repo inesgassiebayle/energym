@@ -380,7 +380,8 @@ public class LessonController{
     }
 
     public String getLessonReviews(Request req, Response res){
-        ProfessorDateTimeDto dto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
+
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
         String username = dto.getName();
         LocalDate date = dto.getDate();
         LocalTime time = dto.getTime();
@@ -424,7 +425,7 @@ public class LessonController{
     }
 
     public String getLesson(Request req, Response res){
-        ProfessorDateTimeDto dto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
         LocalDate date = dto.getDate();
         String username = dto.getName();
         LocalTime time = dto.getTime();

@@ -72,11 +72,11 @@ public class Application {
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
         Spark.get("/professor/:username/fullname", professorController::getFullname);
-        Spark.post("/lesson/reviews", lessonController::getLessonReviews);
+        Spark.get("/lesson/reviews", lessonController::getLessonReviews);
         Spark.patch("/lesson/modify", lessonController::lessonModify);
 
 
-        Spark.post("/lesson/get", lessonController::getLesson);
+        Spark.get("/lesson", lessonController::getLesson);
 
         Spark.post("/review/create", reviewController::createReview);
 

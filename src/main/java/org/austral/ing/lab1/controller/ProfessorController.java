@@ -41,7 +41,8 @@ public class ProfessorController {
     }
 
     public String getLessons(Request req, Response res){
-        ProfessorDateLessonsDto dto = gson.fromJson(req.body(), ProfessorDateLessonsDto.class);
+        ProfessorDateLessonsDto dto = new ProfessorDateLessonsDto(req.queryParams("username"), req.queryParams("date"));
+
         LocalDate date = dto.getDate();
         String username = dto.getName();
 
