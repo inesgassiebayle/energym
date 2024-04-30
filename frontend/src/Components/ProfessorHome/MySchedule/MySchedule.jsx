@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './MySchedule.css';
 import {Link, useNavigate, useParams} from 'react-router-dom';
+import ClassInfoModal from "./ClassInfoModal";
 
 
 
@@ -10,11 +11,25 @@ const MySchedule = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [error, setError] = useState('');
     const [lessons, setLessons] = useState([]);
+    const [selectedLesson, setSelectedLesson] = useState('');
+    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [selectedLessonDate, setSelectedLessonDate] = useState('');
+    const [selectedLessonTime, setSelectedLessonTime] = useState('');
 
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
     };
+
+    const handleInformation = (lesson) => {
+        setSelectedLesson(lesson.name);
+        console.log(lesson.name);
+        setSelectedLessonDate(lesson.startDate);
+        console.log(lesson.startDate);
+        setSelectedLessonTime(lesson.time);
+        console.log(lesson.time);
+        setShowModifyModal(true);
+    }
 
     useEffect(() => {
         if (selectedDate) {
@@ -40,7 +55,7 @@ const MySchedule = () => {
 
 
     return (
-        <div className="my-schedule-container">
+        <div className ="my-schedule-container">
             <h2>My Schedule</h2>
             <div className="date-picker">
                 <label htmlFor="date">Select a date:</label>
@@ -58,7 +73,10 @@ const MySchedule = () => {
                     {lessons.length > 0 ? (
                         <ul>
                             {lessons.map((classInfo, index) => (
-                                <li key={index}>{classInfo.name} {classInfo.time}</li>
+                                <div key={index} className='staff-item'>
+                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
+                                </div>
                             ))}
                         </ul>
                     ) : (
@@ -66,10 +84,20 @@ const MySchedule = () => {
                     )}
                 </div>
             )}
+
             <Link to={'/trainer/${userData.username}'}>
                 <button className='staff-button back'>Home</button>
             </Link>
-            </div>
+
+            <ClassInfoModal
+                isOpen={showModifyModal}
+                onClose={() => setShowModifyModal(false)}
+                lessonName={selectedLesson}
+                date={selectedLessonDate}
+                time={selectedLessonTime}
+                username ={username}
+            />
+        </div>
     );
 };
 
