@@ -8,7 +8,7 @@ const GetStarted = ()=>{
 
     return (
         <div className='get-started-container'>
-            <div className='logo'>
+            <div className='logo-get-started'>
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='get-started-actions'>
