@@ -1,11 +1,12 @@
-
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import './ProfessorHome.css';
 import logo from "../Assets/Logo.png";
+import authentication from "./Common/Hoc/Authentication";
 
 const ProfessorHome = () => {
-    let navigate = useNavigate();
+    const {username} = useParams();
+    const navigate = useNavigate();
 
     return (
         <div className='professor-home-container'>
@@ -14,8 +15,7 @@ const ProfessorHome = () => {
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='professor-actions'>
-                <button className='professor-button' onClick={() => navigate('/ProfessorHome/MyRatings')}>My Ratings</button>
-                <button className='professor-button' onClick={() => navigate('/ProfessorHome/MySchedule')}>My Schedule</button>
+                <button className='professor-button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My Schedule</button>
                 <button className='professor-button' onClick={() => navigate('/my-account')}>My Account</button>
                 <button className='professor-button logout' onClick={() => navigate('/')}>Log Out</button>
             </div>
@@ -23,4 +23,4 @@ const ProfessorHome = () => {
     );
 }
 
-export default ProfessorHome;
+export default authentication(ProfessorHome);

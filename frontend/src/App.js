@@ -41,8 +41,8 @@ function App() {
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
-            <Route path="/trainer/:username" element={<MySchedule/>}/>
-            {/*<Route path="/ProfessorHome/MySchedule" element={<MySchedule/>}/>*/}
+            <Route path="/trainer/:username" element={<ProfessorHome/>}/>
+            <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
         </Routes>
     );
 }
