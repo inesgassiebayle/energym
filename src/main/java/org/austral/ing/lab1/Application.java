@@ -73,7 +73,6 @@ public class Application {
 
         Spark.get("/professor/:username/fullname", professorController::getFullname);
         Spark.get("/lesson/reviews", lessonController::getLessonReviews);
-        //Spark.get("/lesson/:date", lessonController::getLessonsByDate);
         Spark.patch("/lesson/modify", lessonController::lessonModify);
         Spark.get("/lesson", lessonController::getLesson);
 
