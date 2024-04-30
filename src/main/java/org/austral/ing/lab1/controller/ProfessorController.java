@@ -106,4 +106,44 @@ public class ProfessorController {
         res.type("application/json");
         return gson.toJson(dto);
     }
+
+    public String getLessonsByDateAndProfessor(Request req, Response res){
+        ProfessorDateDto professorDateDto = gson.fromJson(req.body(), ProfessorDateDto.class);
+        LocalDate date = professorDateDto.getDate();
+        String username = professorDateDto.getName();
+
+        if(username == null || username.isBlank()){
+            res.status(400);
+            return "Invalid username";
+        }
+
+        if(date == null){
+            res.status(400);
+            return "Invalid date";
+        }
+
+        Professor professor = professors.findProfessorByUsername(username);
+
+        if(professor == null){
+            res.status(404);
+            return "Professor does not exist";
+        }
+
+//        if(!professor.getUser().state()){
+//            res.status(404);
+//            return "Professor does not exist";
+//        }
+
+        List<Lesson> lessons = professors.findLessonByDateAndProfessor(date, professor);
+        List<LessonNameTimeDateDto> lessonsInfo = new ArrayList<>();
+        for(Lesson lesson: lessons){
+            if(lesson.getState()){
+                lessonsInfo.add(new LessonNameTimeDateDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+            }
+        }
+        res.type("application/json");
+        return gson.toJson(lessonsInfo);
+    }
+
+
 }

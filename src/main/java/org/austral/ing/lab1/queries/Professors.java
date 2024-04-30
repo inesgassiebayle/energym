@@ -5,6 +5,7 @@ import org.austral.ing.lab1.model.*;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.austral.ing.lab1.EntityManagerController.entityManager;
@@ -66,6 +67,13 @@ public class Professors {
         TypedQuery<Lesson> query = entityManager().createQuery(
                 "SELECT l FROM Lesson l WHERE l.professor.professorId = :id", Lesson.class);
         query.setParameter("id", professorId);
+        return query.getResultList();
+    }
+
+    public List<Lesson> findLessonByDateAndProfessor(LocalDate lessonDate, Professor professor){
+        TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.startDate = :lessonDate AND l.professor =: professor ", Lesson.class);
+        query.setParameter("lessonDate", lessonDate);
+        query.setParameter("professor", professor);
         return query.getResultList();
     }
 
