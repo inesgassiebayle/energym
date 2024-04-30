@@ -45,6 +45,11 @@ const ManageRooms = () => {
         setShowModifyModal(true);
     };
 
+    const closeModal = () => {
+        setShowModifyModal(false);
+        reloadRoomNames();
+    }
+
     const confirmDeleteHandler = async () => {
         try {
             await axios.delete(`http://localhost:3333/room/${selectedRoom}/delete`);
@@ -90,9 +95,9 @@ const ManageRooms = () => {
                 )}
                 <ModifyRoomModal
                     isOpen={showModifyModal}
-                    onClose={() => setShowModifyModal(false)}
+                    onClose={closeModal}
                     roomName={selectedRoom}
-                    onSave={reloadRoomNames} // Cambia esto para pasar la función de recarga
+                    onSave={reloadRoomNames}
                 />
             </div>
         </>

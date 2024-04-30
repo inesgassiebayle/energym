@@ -41,7 +41,7 @@ function App() {
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
-            <Route path="/ProfessorHome" element={<ProfessorHome/>}/>
+            <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/ProfessorHome/MySchedule" element={<MySchedule/>}/>
         </Routes>
     );

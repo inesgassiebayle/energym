@@ -32,7 +32,7 @@ const Login = ()=>{
             } else if (userData.type === 'ADMINISTRATOR') {
                 navigate('/AdministratorHome');
             } else if(userData.type === 'PROFESSOR'){
-                navigate('/ProfessorHome')
+                navigate(`/trainer/${userData.username}`);
             }
             else {
                 console.log(userData);

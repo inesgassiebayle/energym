@@ -48,9 +48,11 @@ const ProfessorView = () => {
         if (selectedDate) {
             const fetchClassesForSelectedDate = async () => {
                 try {
-                    const response = await axios.post(`http://localhost:3333/professor/getLessons`, {
+                    const response = await axios.get('http://localhost:3333/professor/lessons', {
+                        params: {
                             date: selectedDate,
                             username: trainer
+                        }
                     });
                     setLessons(response.data);
                 } catch (error) {
