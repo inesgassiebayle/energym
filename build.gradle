@@ -29,5 +29,9 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.auth0:java-jwt:3.18.2'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.13'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.13'
+
+
 
 }

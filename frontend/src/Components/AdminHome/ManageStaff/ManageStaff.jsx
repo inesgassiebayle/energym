@@ -2,24 +2,27 @@ import './ManageStaff.css';
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import logo from '../../Assets/Logo.png';
-import person_icon from "../../Assets/person.png";
 import axios from "axios";
 import authentication from "../Hoc/Hoc";
+import spinner from "../../Assets/spinning-loading.gif";
 
 const ManageStaff = () => {
     let navigate = useNavigate();
-    const [username, setUsername] = useState('');
     const [trainerNames, setTrainerNames] = useState([]);
     const [selectedTrainer, setSelectedTrainer] = useState('');
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchTrainerNames = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get('http://localhost:3333/professor/get');
                 setTrainerNames(response.data);
             } catch (error) {
                 console.error('Error fetching trainer names:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchTrainerNames();

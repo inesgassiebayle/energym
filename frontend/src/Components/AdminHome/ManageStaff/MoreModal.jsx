@@ -4,6 +4,7 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import authentication from "../Hoc/Hoc";
+import spinner from "../../Assets/spinning-loading.gif";
 
 const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -12,6 +13,8 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     const [reviews, setReviews] = useState([]);
     const [lesson, setName] = useState('');
     const [loadingLesson, setLoadingLesson] = useState(false);
+    const [loadingReviews, setLoadingReviews] = useState(false);
+
 
     const fetchLesson = async () => {
         try {
@@ -38,6 +41,7 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
 
     const fetchReviews = async () => {
         try {
+            setLoadingReviews(true)
             const response = await axios.get('http://localhost:3333/lesson/reviews', {
                 params: {
                     username: trainer,
@@ -56,6 +60,8 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
 
         } catch (error) {
             console.error('Error fetching lesson reviews:', error.response ? error.response.data : error.message);
+        }  finally {
+            setLoadingReviews(false);
         }
     };
 
@@ -92,24 +98,30 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
                     <div className="modal-body">
                         <p>Start Date: {date}</p>
                         <p>Time: {time}</p>
-                        <p>Room: {loadingLesson ? `loading...` : room}</p>
+                        <p>Room: {loadingLesson ?
+                            <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : room}</p>
                         <p>Activity: {activity}</p>
                         <div className="reviews-container">
                             <p>Class reviews: </p>
-                            {reviews.length>0 ? (<ul>
-                                {reviews.map((review, index) => (
-                                    <ReviewSquare key={index} review={review}/>
-                                ))}
-                            </ul>
+                            {loadingReviews ? (
+                                <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                             ) : (
-                                <p>No reviews for the selected class.</p>
+                                reviews.length > 0 ? (
+                                    <ul>
+                                        {reviews.map((review, index) => (
+                                            <ReviewSquare key={index} review={review}/>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No reviews for the selected class.</p>
+                                )
                             )}
                         </div>
                     </div>
 
-                    <div className="modal-footer">
-                        <button className="cancel" onClick={onClose}>Close</button>
-                    </div>
+            <div className="modal-footer">
+                <button className="cancel" onClick={onClose}>Close</button>
+            </div>
         </div>
     );
 };

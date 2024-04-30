@@ -270,7 +270,11 @@ public class LessonController{
 
 
     public String getLessonsByDate(Request req, Response res) {
-        String dateString = req.params(":date");
+        String dateString = req.queryParams("startDate");
+        if(dateString == null){
+            res.status(400);
+            return "Invalid date";
+        }
         LocalDate lessonDate = LocalDate.parse(dateString);
         List<Lesson> lessons1 = lessons.findLessonsByDate(lessonDate);
         List<ProfessorNameDateTimeDto> lessonInfo = new ArrayList<>();
@@ -380,7 +384,6 @@ public class LessonController{
     }
 
     public String getLessonReviews(Request req, Response res){
-
         ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
         String username = dto.getName();
         LocalDate date = dto.getDate();
@@ -425,13 +428,22 @@ public class LessonController{
     }
 
     public String getLesson(Request req, Response res){
-        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
+        String dateParam = req.queryParams("startDate");
+        String usernameParam = req.queryParams("username");
+        String timeParam = req.queryParams("time");
+
+        if (usernameParam == null || timeParam == null) {
+            return getLessonsByDate(req, res);
+        }
+
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(usernameParam, dateParam, timeParam);
+
         LocalDate date = dto.getDate();
         String username = dto.getName();
         LocalTime time = dto.getTime();
 
         if(username == null || date == null || time == null){
-            res.status(400); // Bad Request
+            res.status(400);
             return "Invalid input";
         }
 

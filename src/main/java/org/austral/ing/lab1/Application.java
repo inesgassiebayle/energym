@@ -50,7 +50,6 @@ public class Application {
         Spark.delete("/user/delete", authenticationController::deleteAccount);
         Spark.patch("/user/change-password", userController::changePassword);
 
-
         Spark.post("/activity/add", activityController::addActivity);
         Spark.post("/activity/delete", activityController::deleteActivity);
         Spark.get("/activity/get", activityController::getActivities);
@@ -66,16 +65,16 @@ public class Application {
         Spark.post("/lesson/addSingle", lessonController:: addSingleLesson);
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
-        Spark.get("/lesson/:date/getLessons", lessonController::getLessonsByDate);
-        Spark.delete("/lesson/delete", lessonController::deleteLesson);
+
+        Spark.delete("/lesson", lessonController::deleteLesson);
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
+
         Spark.get("/professor/:username/fullname", professorController::getFullname);
         Spark.get("/lesson/reviews", lessonController::getLessonReviews);
+        //Spark.get("/lesson/:date", lessonController::getLessonsByDate);
         Spark.patch("/lesson/modify", lessonController::lessonModify);
-
-
         Spark.get("/lesson", lessonController::getLesson);
 
         Spark.post("/review/create", reviewController::createReview);

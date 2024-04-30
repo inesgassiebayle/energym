@@ -29,10 +29,12 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
 
     const fetchDetails = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/lesson/get', {
-                username: lesson.professor,
-                startDate: date,
-                time: lesson.time
+            const response = await axios.get('http://localhost:3333/lesson', {
+                params: {
+                    username: lesson.professor,
+                    startDate: date,
+                    time: lesson.time
+                }
             });
             setOldActivity(response.data.activity);
             console.log(response.data.activity);

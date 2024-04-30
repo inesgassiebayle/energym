@@ -22,7 +22,11 @@ const ManageSchedule = () => {
     const fetchClassesForSelectedDate = async () => {
         if (selectedDate) {
             try {
-                const response = await axios.get(`http://localhost:3333/lesson/${selectedDate}/getLessons`);
+                const response = await axios.get(`http://localhost:3333/lesson`, {
+                    params: {
+                        startDate: selectedDate
+                    }
+                });
                 setClassesForSelectedDate(response.data);
             } catch (error) {
                 console.error('Error fetching classes:', error);
@@ -48,7 +52,7 @@ const ManageSchedule = () => {
         };
 
         try {
-            const endpoint = 'http://localhost:3333/lesson/delete';
+            const endpoint = 'http://localhost:3333/lesson';
             const response = await axios({
                 method: 'delete',
                 url: endpoint,
