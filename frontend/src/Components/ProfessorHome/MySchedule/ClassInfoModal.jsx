@@ -51,7 +51,8 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
                 <p>Time: {time}</p>
                 <p>Room: {loadingLesson ?
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : room}</p>
-                <p>Activity: {activity}</p>
+                <p>Activity: {loadingLesson ?
+                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : activity}</p>
             </div>
 
             <div className="modal-footer">
