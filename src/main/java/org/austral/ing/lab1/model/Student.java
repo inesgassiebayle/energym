@@ -10,20 +10,15 @@ public class Student{
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long studentId;
-    @ManyToMany
-    @JoinTable(
-            name = "bookedClasses",
-            joinColumns = @JoinColumn(name = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "classId")
-    )
-    private Set<Lesson> classes = new HashSet<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<BookedLesson> bookings = new HashSet<>();
 
-    public Set<Lesson> getClasses() {
-        return classes;
+    public Set<BookedLesson> getBookings() {
+        return bookings;
     }
 
-    public void setClasses(Set<Lesson> classes) {
-        this.classes = classes;
+    public void addBooking(BookedLesson booking) {
+        this.bookings.add(booking);
     }
 
     @OneToMany(mappedBy = "student")

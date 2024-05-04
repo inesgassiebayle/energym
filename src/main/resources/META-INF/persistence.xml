@@ -12,6 +12,7 @@
         <class>org.austral.ing.lab1.model.Lesson</class>
         <class>org.austral.ing.lab1.model.Review</class>
         <class>org.austral.ing.lab1.model.Membership</class>
+        <class>org.austral.ing.lab1.model.BookedLesson</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver"/>

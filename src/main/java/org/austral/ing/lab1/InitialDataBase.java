@@ -83,8 +83,8 @@ public class InitialDataBase {
     }
 
     public void createLessons(){
-        LocalTime time = LocalTime.parse("13:00:00", DateTimeFormatter.ISO_LOCAL_TIME);
-        LocalDate date = LocalDate.parse("2024-05-03", DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalTime time = LocalTime.parse("20:00:00", DateTimeFormatter.ISO_LOCAL_TIME);
+        LocalDate date = LocalDate.parse("2024-05-05", DateTimeFormatter.ISO_LOCAL_DATE);
         Lesson lesson = new Lesson("Relax and Stretch", time, date);
         lesson.setRoom(rooms.findRoomByName("Lounge"));
         lesson.setActivity(activities.findActivityByName("Yoga"));
@@ -107,13 +107,6 @@ public class InitialDataBase {
         students.persist(stud2);
     }
 
-    public void createReviews(){
-        Review review = new Review("Great class", 5, students.findStudentByUsername("stud1"), lessons.findLessonByName("Relax and Stretch"));
-        reviews.persist(review);
-        Review review2 = new Review("Kind of boring", 2, students.findStudentByUsername("stud2"), lessons.findLessonByName("Relax and Stretch"));
-        reviews.persist(review2);
-    }
-
     public void createInitialDataBase(){
         createAdministrator();
         createProfessors();
@@ -121,6 +114,5 @@ public class InitialDataBase {
         createRooms();
         createLessons();
         createStudents();
-        createReviews();
     }
 }

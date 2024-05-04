@@ -15,7 +15,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
             setLoadingReviews(true)
             const response = await axios.get('http://localhost:3333/lesson/reviews', {
                 params: {
-                    username: trainer,
+                    username: username,
                     startDate: date,
                     time: time
                 }

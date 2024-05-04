@@ -4,6 +4,8 @@ import './MySchedule.css';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import ClassInfoModal from "./ClassInfoModal";
 import authentication from "../Common/Hoc/Authentication";
+import ReviewsModal from "./ReviewsModal";
+import Assistance from "./Assistance";
 
 
 const MySchedule = () => {
@@ -12,14 +14,14 @@ const MySchedule = () => {
     const [error, setError] = useState('');
     const [lessons, setLessons] = useState([]);
     const [selectedLesson, setSelectedLesson] = useState('');
-    const [showModifyModal, setShowModifyModal] = useState(false);
+    const [showMoreModal, setShowMoreModal] = useState(false);
+    const [showReviewsModal, setShowReviewModal] = useState(false);
+    const [showAssistanceModal, setShowAssistanceModal] = useState(false);
     const [selectedLessonDate, setSelectedLessonDate] = useState('');
     const [selectedLessonTime, setSelectedLessonTime] = useState('');
     const [pastLessons, setPastLessons] = useState([]);
     const [presentLessons, setPresentLessons] = useState([]);
     const [futureLessons, setFutureLessons] = useState([]);
-
-
 
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
@@ -33,7 +35,21 @@ const MySchedule = () => {
         console.log(lesson.startDate);
         setSelectedLessonTime(lesson.time);
         console.log(lesson.time);
-        setShowModifyModal(true);
+    }
+
+    const openMoreModal = (lesson) => {
+        handleInformation(lesson);
+        setShowMoreModal(true);
+    }
+
+    const openReviewsModal = (lesson) => {
+        handleInformation(lesson);
+        setShowReviewModal(true);
+    }
+
+    const openAssistanceModal = (lesson) => {
+        handleInformation(lesson);
+        setShowAssistanceModal(true);
     }
 
     useEffect(() => {
@@ -114,21 +130,21 @@ const MySchedule = () => {
                             {pastLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>Reviews</button>
+                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                                    <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews</button>
                                 </div>
                             ))}
                             {presentLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>Assistence</button>
+                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                                    <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance</button>
                                 </div>
                             ))}
                             {futureLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
+                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
                                 </div>
                             ))}
                         </ul>
@@ -143,8 +159,26 @@ const MySchedule = () => {
             </Link>
 
             <ClassInfoModal
-                isOpen={showModifyModal}
-                onClose={() => setShowModifyModal(false)}
+                isOpen={showMoreModal}
+                onClose={() => setShowMoreModal(false)}
+                lessonName={selectedLesson}
+                date={selectedLessonDate}
+                time={selectedLessonTime}
+                username ={username}
+            />
+
+            <ReviewsModal
+                isOpen={showReviewsModal}
+                onClose={() => setShowReviewModal(false)}
+                lessonName={selectedLesson}
+                date={selectedLessonDate}
+                time={selectedLessonTime}
+                username ={username}
+            />
+
+            <Assistance
+                isOpen={showAssistanceModal}
+                onClose={() => setShowAssistanceModal(false)}
                 lessonName={selectedLesson}
                 date={selectedLessonDate}
                 time={selectedLessonTime}

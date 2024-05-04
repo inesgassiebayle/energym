@@ -1,7 +1,6 @@
 package org.austral.ing.lab1.model;
 
 import javax.persistence.*;
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

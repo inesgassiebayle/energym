@@ -61,15 +61,15 @@ public class Lesson {
         this.room = room;
     }
 
-    @ManyToMany(mappedBy = "classes")
-    private Set<Student> students = new HashSet<>();
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    private Set<BookedLesson> bookings = new HashSet<>();
 
-    public Set<Student> getStudents() {
-        return students;
+    public Set<BookedLesson> getBookings() {
+        return bookings;
     }
 
-    public void setStudents(Set<Student> students) {
-        this.students = students;
+    public void addBooking(BookedLesson booking) {
+        this.bookings.add(booking);
     }
 
     @ManyToOne

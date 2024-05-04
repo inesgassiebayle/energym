@@ -23,6 +23,7 @@ public class Application {
         final ProfessorController professorController = new ProfessorController();
         final AuthenticationController authenticationController = new AuthenticationController();
         final ReviewController reviewController = new ReviewController();
+        final StudentController studentController = new StudentController();
         final InitialDataBase initialDataBase = new InitialDataBase();
 
         initialDataBase.createInitialDataBase();
@@ -70,6 +71,8 @@ public class Application {
         Spark.patch("/lesson/modify", lessonController::lessonModify);
         Spark.get("/lesson", lessonController::getLesson);
         Spark.delete("/lesson", lessonController::deleteLesson);
+        Spark.get("/lesson/students", lessonController::getStudents);
+
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
@@ -77,6 +80,7 @@ public class Application {
         Spark.post("/review/create", reviewController::createReview);
         Spark.get("/compare-date", lessonController::compareDate);
 
+        Spark.post("/student/booking", studentController::bookClass);
         after((request, response) -> closeEntityManager());
 
     }

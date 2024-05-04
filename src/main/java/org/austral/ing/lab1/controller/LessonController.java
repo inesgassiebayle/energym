@@ -459,6 +459,12 @@ public class LessonController{
         Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, time, date).get(0);
 
         if(lesson == null){
+            res.status(400);
+            return "Lesson was not found";
+        }
+
+        if(!lesson.getState()) {
+            res.status(400);
             return "Lesson was not found";
         }
 
@@ -487,6 +493,97 @@ public class LessonController{
                 return "Future";
             }
             return "Past";
+        }
+    }
+
+    public String getStudents(Request req, Response res) {
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
+        String username = dto.getName();
+        LocalDate date = dto.getDate();
+        LocalTime time = dto.getTime();
+        if(username == null){
+            res.status(400);
+            return "Invalid lesson name";
+        }
+        if(date==null || time == null){
+            res.status(400);
+            return "Invalid date or time";
+        }
+        Professor professor = professors.findProfessorByUsername(username);
+        if(professor == null){
+            res.status(400);
+            return "Invalid input";
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, time, date).get(0);
+        if(lesson == null){
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        if(!lesson.getState()){
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        Set<BookedLesson> bookings = lesson.getBookings();
+        List<String> studentUsernames = new ArrayList<>();
+        for(BookedLesson booking: bookings){
+            if(booking.state()){
+                User user = booking.getStudent().getUser();
+                if(user.state()) {
+                    studentUsernames.add(user.getUsername());
+                }
+            }
+        }
+        return gson.toJson(studentUsernames);
+    }
+
+    public String assistanceCheck(Request req, Response res) {
+        AssistanceDto assistanceDto = new AssistanceDto(req.queryParams("date"), req.queryParams("time"), req.queryParams("professor"), req.queryParams("students"));
+        LocalDate date = assistanceDto.getDate();
+        LocalTime time = assistanceDto.getTime();
+        String professor = assistanceDto.getProfessor();
+        if (date == null || time == null || professor == null) {
+            res.status(400);
+            return "Invalid input";
+        }
+        if (!correctDateAndTime(date, time)) {
+            res.status(400);
+            return "Invalid date or time";
+        }
+        Professor professor1 = professors.findProfessorByUsername(professor);
+        if (professor1 == null) {
+            res.status(400);
+            return "Invalid professor";
+        }
+        if (!professor1.getUser().state()) {
+            res.status(400);
+            return "Invalid professor";
+        }
+        Lesson lesson = lessons.findLessonByNameDateAndTime(professor, date, time);
+        if (lesson == null) {
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        return "";
+    }
+
+    public boolean correctDateAndTime(LocalDate date, LocalTime time) {
+        LocalDate nowDate = LocalDate.now();
+        if (date.isBefore(nowDate)) {
+            return false;
+        }
+        else if (date.isAfter(nowDate)) {
+            return false;
+        }
+        else {
+            LocalTime nowTime = LocalTime.now();
+
+            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
+                return true;
+            }
+            else if (nowTime.isBefore(time)) {
+                return false;
+            }
+            return false;
         }
     }
 }
