@@ -3,7 +3,7 @@ import axios from 'axios';
 import './MySchedule.css';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import ClassInfoModal from "./ClassInfoModal";
-
+import authentication from "../Common/Hoc/Authentication";
 
 
 const MySchedule = () => {
@@ -15,6 +15,11 @@ const MySchedule = () => {
     const [showModifyModal, setShowModifyModal] = useState(false);
     const [selectedLessonDate, setSelectedLessonDate] = useState('');
     const [selectedLessonTime, setSelectedLessonTime] = useState('');
+    const [pastLessons, setPastLessons] = useState([]);
+    const [presentLessons, setPresentLessons] = useState([]);
+    const [futureLessons, setFutureLessons] = useState([]);
+
+
 
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
@@ -52,6 +57,40 @@ const MySchedule = () => {
         console.log('Viewing details for trainer:', username);
     }, [username, selectedDate]);
 
+    useEffect(() => {
+        classifyClasses(lessons);
+    }, [lessons]);
+
+    const classifyClasses = async (classes) => {
+        var oldClasses = [];
+        var futureClasses = [];
+        var presentClasses = [];
+
+        for (let cls of classes) {
+            try {
+                const response = await axios.get('http://localhost:3333/compare-date', {
+                    params: {
+                        date: cls.startDate,
+                        time: cls.time
+                    }
+                });
+                if (response.data === "Past") {
+                    oldClasses.push(cls);
+                }
+                if (response.data === "Present") {
+                    presentClasses.push(cls);
+                }
+                if (response.data === "Future") {
+                    futureClasses.push(cls);
+                }
+            } catch (error) {
+                console.error('Error comparing date:', error);
+            }
+        }
+        setPastLessons(oldClasses);
+        setPresentLessons(presentClasses);
+        setFutureLessons(futureClasses);
+    };
 
 
     return (
@@ -72,7 +111,21 @@ const MySchedule = () => {
                     <h3>Classes for {selectedDate}:</h3>
                     {lessons.length > 0 ? (
                         <ul>
-                            {lessons.map((classInfo, index) => (
+                            {pastLessons.map((classInfo, index) => (
+                                <div key={index} className='staff-item'>
+                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
+                                    <button className='more' onClick={() => handleInformation(classInfo)}>Reviews</button>
+                                </div>
+                            ))}
+                            {presentLessons.map((classInfo, index) => (
+                                <div key={index} className='staff-item'>
+                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
+                                    <button className='more' onClick={() => handleInformation(classInfo)}>Assistence</button>
+                                </div>
+                            ))}
+                            {futureLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
                                     <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
@@ -85,7 +138,7 @@ const MySchedule = () => {
                 </div>
             )}
 
-            <Link to={'/trainer/${userData.username}'}>
+            <Link to={`/trainer/${username}`}>
                 <button className='staff-button back'>Home</button>
             </Link>
 
@@ -101,4 +154,4 @@ const MySchedule = () => {
     );
 };
 
-export default MySchedule;
+export default authentication(MySchedule);

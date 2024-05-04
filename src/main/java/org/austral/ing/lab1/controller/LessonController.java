@@ -5,6 +5,8 @@ import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
+import spark.Spark;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -461,6 +463,31 @@ public class LessonController{
         }
 
         return lesson.asJson();
+    }
+
+    public String compareDate(Request req, Response res) {
+        String dateString = req.queryParams("date");
+        String timeString = req.queryParams("time");
+        LocalDate date = LocalDate.parse(dateString);
+        LocalDate nowDate = LocalDate.now();
+        if (date.isBefore(nowDate)) {
+            return "Past";
+        }
+        else if (date.isAfter(nowDate)) {
+            return "Future";
+        }
+        else {
+            LocalTime time = LocalTime.parse(timeString);
+            LocalTime nowTime = LocalTime.now();
+
+            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
+                return "Present";
+            }
+            else if (nowTime.isBefore(time)) {
+                return "Future";
+            }
+            return "Past";
+        }
     }
 }
 

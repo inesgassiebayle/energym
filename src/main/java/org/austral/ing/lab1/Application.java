@@ -65,18 +65,17 @@ public class Application {
         Spark.post("/lesson/addSingle", lessonController:: addSingleLesson);
         Spark.post("/lesson/addConcurrent", lessonController:: addConcurrentLessons);
         Spark.post("/lesson/deleteLesson", lessonController:: deleteLesson);
-
+        Spark.get("/professor/:username/fullname", professorController::getFullname);
+        Spark.get("/lesson/reviews", lessonController::getLessonReviews);
+        Spark.patch("/lesson/modify", lessonController::lessonModify);
+        Spark.get("/lesson", lessonController::getLesson);
         Spark.delete("/lesson", lessonController::deleteLesson);
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
 
-        Spark.get("/professor/:username/fullname", professorController::getFullname);
-        Spark.get("/lesson/reviews", lessonController::getLessonReviews);
-        Spark.patch("/lesson/modify", lessonController::lessonModify);
-        Spark.get("/lesson", lessonController::getLesson);
-
         Spark.post("/review/create", reviewController::createReview);
+        Spark.get("/compare-date", lessonController::compareDate);
 
         after((request, response) -> closeEntityManager());
 
