@@ -19,6 +19,8 @@ public class LessonController{
     private final Activities activities;
     private final Professors professors;
     private final Rooms rooms;
+    private final Students students4;
+    private final LessonBookings lessonBookings;
     private final Gson gson = new Gson();
 
     public LessonController() {
@@ -26,6 +28,8 @@ public class LessonController{
         this.activities = new Activities();
         this.professors = new Professors();
         this.rooms = new Rooms();
+        this.students4 = new Students();
+        this.lessonBookings = new LessonBookings();
     }
     public String addSingleLesson(Request req, Response res) {
         LessonCreationDto lessonDto = gson.fromJson(req.body(), LessonCreationDto.class);
@@ -537,10 +541,11 @@ public class LessonController{
     }
 
     public String assistanceCheck(Request req, Response res) {
-        AssistanceDto assistanceDto = new AssistanceDto(req.queryParams("date"), req.queryParams("time"), req.queryParams("professor"), req.queryParams("students"));
+        AssistanceDto assistanceDto = gson.fromJson(req.body(), AssistanceDto.class);
         LocalDate date = assistanceDto.getDate();
         LocalTime time = assistanceDto.getTime();
         String professor = assistanceDto.getProfessor();
+        String[] students = assistanceDto.getStudents();
         if (date == null || time == null || professor == null) {
             res.status(400);
             return "Invalid input";
@@ -558,12 +563,48 @@ public class LessonController{
             res.status(400);
             return "Invalid professor";
         }
-        Lesson lesson = lessons.findLessonByNameDateAndTime(professor, date, time);
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, date).get(0);
         if (lesson == null) {
             res.status(400);
             return "Lesson does not exist";
         }
-        return "";
+        if (!lesson.getState()) {
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        Set<BookedLesson> bookings = lesson.getBookings();
+        List<Student> students1 = new ArrayList<>();
+        for (String student: students){
+            Student student1 = students4.findStudentByUsername(student);
+            if (student1 == null) {
+                res.status(400);
+                return "Invalid student";
+            }
+            if (!student1.getUser().state()) {
+                res.status(400);
+                return "Invalid student";
+            }
+            students1.add(student1);
+        }
+        for (BookedLesson booking: bookings) {
+            if (booking.state()) {
+                if (!students1.contains(booking.getStudent())) {
+                    booking.notAssisted();
+                    lessonBookings.persist(booking);
+                }
+            }
+        }
+        for (Student student: students1) {
+            BookedLesson booking = lessonBookings.findBookingByLessonAndStudent(lesson, student);
+            if (!booking.state()) {
+                res.status(400);
+                return "Invalid student";
+            }
+            booking.assisted();
+            lessonBookings.persist(booking);
+        }
+
+        return "Assistance checked";
     }
 
     public boolean correctDateAndTime(LocalDate date, LocalTime time) {

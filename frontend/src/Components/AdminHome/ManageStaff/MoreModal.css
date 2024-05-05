@@ -1,4 +1,3 @@
-/* MoreModal.css */
 .modalStaff {
     position: fixed;
     top: 50%;
@@ -88,14 +87,12 @@
     background-color: #c82333;
 }
 
-/* Ensure that the modal is always centered in the viewport */
 html,
 body {
     height: 100%;
     margin: 0;
 }
 
-/* Additional global styles for body, buttons, etc., if needed */
 body {
     font-family: 'Arial', sans-serif;
 }
@@ -103,51 +100,3 @@ body {
 button {
     font-size: 16px;
 }
-
-
-/*!* MoreModal.css or your stylesheet *!*/
-/*.review-square {*/
-/*    padding: 10px;*/
-/*    margin: 10px 0;*/
-/*    border: 1px solid #ccc;*/
-/*    border-radius: 4px;*/
-/*    background-color: #f9f9f9;*/
-/*}*/
-
-/*.reviews-container {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*}*/
-
-/*.modal-content {*/
-/*    !* Set a maximum height for the modal content *!*/
-/*    max-height: 80vh; !* vh units ensure it's relative to the viewport height *!*/
-/*    overflow-y: auto; !* Enables scrolling on the y-axis if the content is too tall *!*/
-/*}*/
-
-/*!* Optional: If you want to ensure that the modal header stays fixed at the top *!*/
-/*.modal-header {*/
-/*    position: sticky;*/
-/*    top: 0;*/
-/*    background: white;*/
-/*    z-index: 10;*/
-/*}*/
-
-/*!* MoreModal.css *!*/
-
-/*!* Estilo para las estrellas dentro de las reseñas *!*/
-/*.review-square img {*/
-/*    width: 30px;  !* Hacer las estrellas más pequeñas *!*/
-/*    height: auto; !* Mantener la proporción de aspecto *!*/
-/*    display: inline-block; !* Asegurarse de que las estrellas estén en línea *!*/
-/*    vertical-align: middle; !* Alineación vertical si es necesario *!*/
-/*}*/
-
-/*!* Estilo para el contenedor de las estrellas para mantener todo en línea *!*/
-/*.review-square p {*/
-/*    display: flex;*/
-/*    align-items: center; !* Centrar las estrellas verticalmente respecto al texto *!*/
-/*    flex-wrap: nowrap; !* No permitir que los elementos se envuelvan a la siguiente línea *!*/
-/*    gap: 4px; !* Espacio entre estrellas *!*/
-/*}*/
-

@@ -37,6 +37,9 @@ public class BookedLesson {
     public void assisted() {
         assistance = true;
     }
+    public void notAssisted() {
+        assistance = false;
+    }
 
     @Column
     private boolean state = true;

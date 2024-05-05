@@ -72,7 +72,7 @@ public class Application {
         Spark.get("/lesson", lessonController::getLesson);
         Spark.delete("/lesson", lessonController::deleteLesson);
         Spark.get("/lesson/students", lessonController::getStudents);
-
+        Spark.post("lesson/assistance", lessonController::assistanceCheck);
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);

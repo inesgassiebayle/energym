@@ -3,21 +3,38 @@ import {useNavigate, useParams} from 'react-router-dom';
 import './ProfessorHome.css';
 import logo from "../Assets/Logo.png";
 import authentication from "./Common/Hoc/Authentication";
+import axios from "axios";
 
 const ProfessorHome = () => {
     const {username} = useParams();
     const navigate = useNavigate();
 
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                await axios.post('http://localhost:3333/user/logout', {}, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                localStorage.removeItem('token');
+                navigate('/login');
+            } catch (error) {
+                console.error('Failed to invalidate the token on the server:', error);
+            }
+        }
+    };
+
     return (
         <div className='professor-home-container'>
-            <div className='title'>Professor Home</div>
             <div className='logo-professor'>
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='professor-actions'>
                 <button className='professor-button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My Schedule</button>
                 <button className='professor-button' onClick={() => navigate('/my-account')}>My Account</button>
-                <button className='professor-button logout' onClick={() => navigate('/')}>Log Out</button>
+                <button className='professor-button logout' onClick={handleLogout}>Log Out</button>
             </div>
         </div>
     );

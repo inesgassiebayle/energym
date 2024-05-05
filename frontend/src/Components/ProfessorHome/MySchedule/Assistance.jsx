@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
+import './CheckList.css'
 
-const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
+const Assistance = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [students, setStudents] = useState([]);
     const [loadingStudents, setLoadingStudents] = useState(false);
@@ -30,9 +30,28 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
         }
     };
 
-    const handleSelect = (event) => {
-        const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
-        setSelectedStudents(selectedOptions);
+
+
+    const handleSelect = (event, student) => {
+        if (event.target.checked) {
+            setSelectedStudents(prevSelected => [...prevSelected, student]);
+        } else {
+            setSelectedStudents(prevSelected => prevSelected.filter(s => s !== student));
+        }
+    };
+
+    const handleConfirm = async () => {
+        try {
+            await axios.post('http://localhost:3333/lesson/assistance', {
+                date: date,
+                time: time,
+                professor: username,
+                students: selectedStudents.join(',')
+            });
+            onClose();
+        } catch (error) {
+            console.error('Error sending assistance:', error);
+        }
     };
 
     useEffect(() => {
@@ -46,23 +65,36 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
     return (
         <div className="modal" tabIndex="-1" role="dialog">
             <div className="modal-header">
-                <h5 className="modal-title">Assistance for "{lessonName}"</h5>
+                <h5 className="modal-title">Assistance for {lessonName}</h5>
             </div>
 
             <div className="modal-body">
-                <select multiple={true} value={selectedStudents} onChange={handleSelect}>
-                    {students.map((student, index) => (
-                        <option key={index} value={student}>{student}</option>
-                    ))}
-                </select>
+                {loadingStudents ? (
+                    <img src={spinner} alt="Loading..." />
+                ) : (
+                    <ul className="students-list">
+                        {students.map((student, index) => (
+                            <li key={index}>
+                                <input
+                                    type="checkbox"
+                                    value={student}
+                                    checked={selectedStudents.includes(student)}
+                                    onChange={(e) => handleSelect(e, student)}
+                                />
+                                <label>{student}</label>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
             </div>
 
             <div className="modal-footer">
                 <button className="cancel" onClick={onClose}>Close</button>
+                <button className="cancel" onClick={handleConfirm}>Confirm</button>
             </div>
         </div>
     );
 };
 
-export default ClassInfoModal;
+export default Assistance;

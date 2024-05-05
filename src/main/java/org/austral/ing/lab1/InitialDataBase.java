@@ -16,6 +16,7 @@ public class InitialDataBase {
     private final Lessons lessons;
     private final Students students;
     private final Reviews reviews;
+    private final LessonBookings lessonBookings;
 
     public InitialDataBase(){
         this.administrators = new Administrators();
@@ -26,6 +27,7 @@ public class InitialDataBase {
         this.lessons = new Lessons();
         this.students = new Students();
         this.reviews = new Reviews();
+        this.lessonBookings = new LessonBookings();
     }
     public void createAdministrator(){
         User user = new User("admin", "admin", "admin@gmail.com", "admin", "Admin123");
@@ -90,6 +92,11 @@ public class InitialDataBase {
         lesson.setActivity(activities.findActivityByName("Yoga"));
         lesson.setProfessor(professors.findProfessorByUsername("prof1"));
         lessons.persist(lesson);
+        Lesson lesson2 = new Lesson("Workout", LocalTime.parse("22:00:00", DateTimeFormatter.ISO_LOCAL_TIME), LocalDate.parse("2024-05-04", DateTimeFormatter.ISO_LOCAL_DATE));
+        lesson2.setRoom(rooms.findRoomByName("Lounge"));
+        lesson2.setActivity(activities.findActivityByName("Yoga"));
+        lesson2.setProfessor(professors.findProfessorByUsername("prof1"));
+        lessons.persist(lesson2);
     }
 
     public void createStudents(){
@@ -107,6 +114,17 @@ public class InitialDataBase {
         students.persist(stud2);
     }
 
+    public void bookClass(){
+        Student student = students.findStudentByUsername("stud1");
+        Lesson lesson = lessons.findLessonByName("Workout");
+        BookedLesson booking = new BookedLesson(student, lesson);
+        lessonBookings.persist(booking);
+        Student student2 = students.findStudentByUsername("stud2");
+        Lesson lesson2 = lessons.findLessonByName("Workout");
+        BookedLesson booking2 = new BookedLesson(student2, lesson2);
+        lessonBookings.persist(booking2);
+    }
+
     public void createInitialDataBase(){
         createAdministrator();
         createProfessors();
@@ -114,5 +132,6 @@ public class InitialDataBase {
         createRooms();
         createLessons();
         createStudents();
+        bookClass();
     }
 }

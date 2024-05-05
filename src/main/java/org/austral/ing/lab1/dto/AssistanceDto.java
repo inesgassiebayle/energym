@@ -5,14 +5,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class AssistanceDto {
-    private LocalDate date;
-    private LocalTime time;
+    private String date;
+    private String time;
     private String professor;
     private String students;
 
     public AssistanceDto(String date, String time, String professor, String students){
-        this.date = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        this.time = LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
+        this.date = date;
+        this.time = time;
         this.professor = professor;
         this.students = students;
     }
@@ -24,14 +24,17 @@ public class AssistanceDto {
     }
 
     public LocalTime getTime(){
-        return time;
+        return  LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);
     }
 
     public LocalDate getDate(){
-        return date;
+        return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public String[] getStudents(){
+        if (students == null | students.isEmpty()) {
+            return new String[0];
+        }
         return students.split(",");
     }
 }
