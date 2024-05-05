@@ -77,7 +77,8 @@ public class Application {
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
 
-        Spark.post("/review/create", reviewController::createReview);
+        Spark.post("/review", reviewController::createReview);
+        Spark.get("/review", reviewController::getReview);
         Spark.get("/compare-date", lessonController::compareDate);
 
         Spark.post("/student/book-lesson", studentController::bookClass);

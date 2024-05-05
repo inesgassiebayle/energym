@@ -3,10 +3,7 @@ package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
 import org.austral.ing.lab1.dto.BookingDto;
 import org.austral.ing.lab1.dto.ProfessorDateTimeDto;
-import org.austral.ing.lab1.model.BookedLesson;
-import org.austral.ing.lab1.model.Lesson;
-import org.austral.ing.lab1.model.Professor;
-import org.austral.ing.lab1.model.Student;
+import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
@@ -23,6 +20,7 @@ public class StudentController {
     private final Lessons lessons;
     private final Professors professors;
     private final LessonBookings lessonBookings;
+    private final Reviews reviews;
     private final Gson gson = new Gson();
 
     public StudentController() {
@@ -31,6 +29,7 @@ public class StudentController {
         this.lessons = new Lessons();
         this.professors = new Professors();
         this.lessonBookings = new LessonBookings();
+        this.reviews = new Reviews();
     }
 
     public String bookClass(Request req, Response res) {
@@ -187,6 +186,10 @@ public class StudentController {
             for (BookedLesson booking: lesson.getBookings()) {
                 if(booking.state()) {
                     if (booking.getStudent().equals(student)) {
+                        Review review = reviews.findReviewByLessonAndStudent(lesson, student);
+                        if(review != null) {
+                            return "Past class booked and reviewed";
+                        }
                         return "Past class booked";
                     }
                     bookings.add(booking);

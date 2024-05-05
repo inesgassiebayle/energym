@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import authentication from "../Common/Hoc/Authentication";
 import axios from 'axios';
+import CreateReviewModal from "./CreateReviewModal";
+import ModifyReviewModal from "./ModifyReviewModal";
 
 
 const StudentSchedule = () => {
@@ -14,7 +16,15 @@ const StudentSchedule = () => {
     const [futureBookedClasses, setFutureBookedClasses] = useState([]);
     const [futureFullClasses, setFutureFullClasses] = useState([]);
     const [futureAvailableClasses, setFutureAvailableClasses] = useState([]);
-
+    const [oldReviewedClasses, setOldReviewedClasses] = useState([]);
+    const [showCreateReviewModal, setShowCreateReviewModal] = useState(false);
+    const [lessonName, setLessonName] = useState('');
+    const [lessonProfessor, setLessonProfessor] = useState('');
+    const [lessonTime, setLessonTime] = useState('');
+    const [lessonDate, setLessonDate] = useState('');
+    const [showModifyReviewModal, setShowModifyReviewModal] = useState(false);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
@@ -54,6 +64,42 @@ const StudentSchedule = () => {
         catch (error) {
             console.error('Error booking lesson:', error);
         }
+    };
+
+    const openCreateReviewModal = (lesson) => {
+        handleInformation(lesson);
+        fetchOldReview();
+        setShowCreateReviewModal(true);
+    }
+
+    const openModifyReview =  (lesson) => {
+        handleInformation(lesson);
+        setShowModifyReviewModal(true);
+    }
+
+    const fetchOldReview = async () => {
+        try {
+            const response = await axios.get('http://localhost:3333/review', {
+                params: {
+                    username: username,
+                    professor: lessonProfessor,
+                    time: lessonTime,
+                    date: lessonDate
+                }
+            });
+            console.log(response.data);
+            setRating(response.data.rating);
+            setComment(response.data.comment);
+        } catch (error) {
+            console.error('Error fetching review:', error);
+        }
+    }
+
+    const handleInformation = (lesson) => {
+        setLessonName(lesson.name);
+        setLessonProfessor(lesson.professor);
+        setLessonTime(lesson.time);
+        setLessonDate(selectedDate);
     }
 
     const fetchLessons = async () => {
@@ -79,6 +125,7 @@ const StudentSchedule = () => {
         var futureBookedClasses = [];
         var futureFullClasses = [];
         var futureAvailableClasses = [];
+        var oldReviewedClasses = [];
 
         for (let cls of classes) {
             try {
@@ -105,6 +152,9 @@ const StudentSchedule = () => {
                 if (response.data === "Past class not booked") {
                     oldNotBookedClasses.push(cls);
                 }
+                if (response.data === "Past class booked and reviewed") {
+                    oldReviewedClasses.push(cls);
+                }
             } catch (error) {
                 console.error('Error comparing date:', error);
             }
@@ -114,6 +164,7 @@ const StudentSchedule = () => {
         setFutureBookedClasses(futureBookedClasses);
         setOldNotBookedClasses(oldNotBookedClasses);
         setOldBookedClasses(oldBookedClasses);
+        setOldReviewedClasses(oldReviewedClasses);
     };
 
     useEffect(() => {
@@ -147,13 +198,16 @@ const StudentSchedule = () => {
                             {lessons.sort((a, b) => a.time.localeCompare(b.time)).map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    {oldBookedClasses.includes(classInfo) && <button className='past-booked'>Booked</button>}
+                                    {oldBookedClasses.includes(classInfo) &&
+                                        <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
                                     {oldNotBookedClasses.includes(classInfo) && <span className='past-not-booked'>Not Booked</span>}
                                     {futureBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => deleteBooking(classInfo)}>Cancel booking</button>}
                                     {futureFullClasses.includes(classInfo) && <span className='future-full'>Full capacity</span>}
                                     {futureAvailableClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => createBooking(classInfo)}>Book lesson</button>}
+                                    {oldReviewedClasses.includes(classInfo) &&
+                                        <button className='more' onClick={() => openModifyReview(classInfo)}>Modify Review</button>}
                                 </div>
                             ))}
                         </ul> ) : (<p>No available lessons on this date</p> )}
@@ -163,8 +217,26 @@ const StudentSchedule = () => {
             <Link to={`/student/${username}`}>
                 <button className='staff-button back'>Home</button>
             </Link>
-
-
+            <CreateReviewModal
+                isOpen={showCreateReviewModal}
+                onClose={() => setShowCreateReviewModal(false)}
+                username ={username}
+                lessonName={lessonName}
+                lessonProfessor={lessonProfessor}
+                lessonTime={lessonTime}
+                lessonDate={selectedDate}
+            />
+            <ModifyReviewModal
+                isOpen={showModifyReviewModal}
+                onClose={() => setShowModifyReviewModal(false)}
+                username ={username}
+                lessonName={lessonName}
+                lessonProfessor={lessonProfessor}
+                lessonTime={lessonTime}
+                lessonDate={selectedDate}
+                oldComment={comment}
+                oldRating={rating}
+            />
         </div>
     );
 };

@@ -1,6 +1,8 @@
 package org.austral.ing.lab1.queries;
 
+import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Review;
+import org.austral.ing.lab1.model.Student;
 import org.austral.ing.lab1.model.User;
 
 import javax.persistence.EntityManager;
@@ -53,6 +55,17 @@ public class Reviews {
         return entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson.classId = :classId", Review.class)
                 .setParameter("classId", classId)
                 .getResultList();
+    }
+
+    public Review findReviewByLessonAndStudent(Lesson lesson, Student student) {
+        List<Review> reviews = entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson = :lesson AND r.student = :student", Review.class)
+                .setParameter("student", student)
+                .setParameter("lesson", lesson)
+                .getResultList();
+        if (reviews.isEmpty()) {
+            return null;
+        }
+        return reviews.get(0);
     }
 
     public void persist(Review review) {
