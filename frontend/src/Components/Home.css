@@ -1,0 +1,58 @@
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #00d6d1;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    width: 650px;
+    padding: 40px 20px;
+    margin: 80px auto 20px auto;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.home-logo img {
+    width: 150px;
+    margin-bottom: 40px;
+}
+
+.home-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.button, .logout {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.button:not(:last-child) {
+    margin-bottom: 10px;
+}

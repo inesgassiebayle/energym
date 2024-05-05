@@ -28,7 +28,7 @@ const Login = ()=>{
             const userData = response.data;
 
             if (userData.type === 'STUDENT') {
-                navigate('/StudentHome');
+                navigate(`/student/${userData.username}`);
             } else if (userData.type === 'ADMINISTRATOR') {
                 navigate('/AdministratorHome');
             } else if(userData.type === 'PROFESSOR'){

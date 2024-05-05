@@ -19,6 +19,7 @@ import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom
 import AddLesson from "./Components/AdminHome/ManageSchelude/AddLesson/AddLesson";
 import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
 import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
+import StudentSchedule from "./Components/StudentHome/MySchedule/MySchedule";
 
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
             <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
+                <Route path="/student/:username" element={<StudentHome/>}/>
+                <Route path="/student/:username/schedule" element={<StudentSchedule/>}/>
         </Routes>
     );
 }

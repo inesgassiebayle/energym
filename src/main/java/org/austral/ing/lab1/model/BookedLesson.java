@@ -48,6 +48,14 @@ public class BookedLesson {
         return state;
     }
 
+    public void deactivate() {
+        state = false;
+    }
+
+    public void activate() {
+        state = true;
+    }
+
     public BookedLesson(Student student, Lesson lesson) {
         this.student = student;
         this.lesson = lesson;

@@ -80,7 +80,10 @@ public class Application {
         Spark.post("/review/create", reviewController::createReview);
         Spark.get("/compare-date", lessonController::compareDate);
 
-        Spark.post("/student/booking", studentController::bookClass);
+        Spark.post("/student/book-lesson", studentController::bookClass);
+        Spark.delete("/student/booking", studentController::deleteBooking);
+        Spark.get("/student/classify-lessons", studentController::classifyLessons);
+
         after((request, response) -> closeEntityManager());
 
     }

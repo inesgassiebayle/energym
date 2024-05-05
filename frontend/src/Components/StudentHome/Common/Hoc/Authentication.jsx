@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from "axios";
 const authentication = WrappedComponent => {
@@ -22,13 +22,15 @@ const authentication = WrappedComponent => {
                         }
                     });
 
-                    if (response.data.type !== 'PROFESSOR') {
-                        console.log('User is not a professor, redirecting to login.');
+                    if (response.data.type !== 'STUDENT') {
+                        console.log('User is not a student, redirecting to login.');
                         navigate('/login');
                         return;
                     }
 
                     if(response.data.username !== username){
+                        console.log(response.data.username);
+                        console.log(username);
                         console.log('User is not the same as the one logged in, redirecting to login.');
                         navigate('/login');
                         return;
@@ -41,7 +43,7 @@ const authentication = WrappedComponent => {
             }
 
             verifyToken();
-            }, []);
+        }, []);
         return <WrappedComponent {...props} />;
     };
 };
