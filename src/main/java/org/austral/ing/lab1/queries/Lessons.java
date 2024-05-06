@@ -3,8 +3,10 @@ import org.austral.ing.lab1.model.Lesson;
 
 import javax.persistence.TypedQuery;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.austral.ing.lab1.EntityManagerController.entityManager;
@@ -99,6 +101,23 @@ public class Lessons {
         entityManager().getTransaction().begin();
         entityManager().remove(lesson);
         entityManager().getTransaction().commit();
+    }
+
+    public List<Lesson> findConcurrentLessons(LocalTime time, String professorUsername, String name, String roomName, String activity, DayOfWeek dayOfWeek){
+        TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.time = :time AND l.professor.user.username = :professorUsername AND l.name = :name AND l.room.name = :roomName AND l.activity.name = :activity", Lesson.class);
+        query.setParameter("time", time);
+        query.setParameter("professorUsername", professorUsername);
+        query.setParameter("name", name);
+        query.setParameter("roomName", roomName);
+        query.setParameter("activity", activity);
+        List<Lesson> lessons = query.getResultList();
+        List<Lesson> concurrentLessons = new ArrayList<>();
+        for (Lesson lesson: lessons){
+            if (lesson.getStartDate().getDayOfWeek() == dayOfWeek && lesson.getState()){
+                concurrentLessons.add(lesson);
+            }
+        }
+        return concurrentLessons;
     }
 
 

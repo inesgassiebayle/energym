@@ -4,6 +4,7 @@ import authentication from "../Common/Hoc/Authentication";
 import axios from 'axios';
 import CreateReviewModal from "./CreateReviewModal";
 import ModifyReviewModal from "./ModifyReviewModal";
+import Booking from "./Booking";
 
 
 const StudentSchedule = () => {
@@ -25,25 +26,35 @@ const StudentSchedule = () => {
     const [showModifyReviewModal, setShowModifyReviewModal] = useState(false);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
+    const [showBooking, setShowBooking] = useState(false);
+    const [concurrency, setConcurrency] = useState(false);
+    const [day, setDay] = useState('');
+    const [startDay, setStartDay] = useState('');
+    const [endDay, setEndDay] = useState('');
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
     };
 
-    const createBooking = async (lesson) => {
+    const checkConcurrency = async (lesson) => {
         try {
-            const response =  await axios.post('http://localhost:3333/student/book-lesson', {
-                professor: lesson.professor,
-                student: username,
-                date: lesson.startDate,
-                time: lesson.time
+            const response = await axios.get('http://localhost:3333/lesson/concurrent', {
+                params: {
+                    professor: lesson.professor,
+                    date: selectedDate,
+                    time: lesson.time
+                }
             });
-            console.log(response.data);
-            await fetchLessons();
-            classifyClasses(lessons);
-        }
-        catch (error) {
-            console.error('Error booking lesson:', error);
+            if (response.data === 'Not concurrent lessons') {
+                setConcurrency(false);
+            } else {
+                setConcurrency(true);
+                setDay(response.data.day);
+                setStartDay(response.data.startDay);
+                setEndDay(response.data.endDay);
+            }
+        } catch (error) {
+            console.error('Error checking concurrency:', error);
         }
     };
 
@@ -53,7 +64,8 @@ const StudentSchedule = () => {
                 params: {
                     professor: lesson.professor,
                     student: username,
-                    date: lesson.startDate,
+                    startDate: lesson.startDate,
+                    endDate: lesson.startDate,
                     time: lesson.time
                 }
             });
@@ -75,6 +87,18 @@ const StudentSchedule = () => {
     const openModifyReview =  (lesson) => {
         handleInformation(lesson);
         setShowModifyReviewModal(true);
+    }
+
+    const openBooking = (lesson) => {
+        handleInformation(lesson);
+        checkConcurrency(lesson);
+        setShowBooking(true);
+    }
+
+    const handleBookingClosing = () => {
+        setShowBooking(false);
+        fetchLessons();
+        classifyClasses(lessons);
     }
 
     const fetchOldReview = async () => {
@@ -205,7 +229,7 @@ const StudentSchedule = () => {
                                         <button className='more' onClick={() => deleteBooking(classInfo)}>Cancel booking</button>}
                                     {futureFullClasses.includes(classInfo) && <span className='future-full'>Full capacity</span>}
                                     {futureAvailableClasses.includes(classInfo) &&
-                                        <button className='more' onClick={() => createBooking(classInfo)}>Book lesson</button>}
+                                        <button className='more' onClick={() => openBooking(classInfo)}>Book lesson</button>}
                                     {oldReviewedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openModifyReview(classInfo)}>Modify Review</button>}
                                 </div>
@@ -226,16 +250,18 @@ const StudentSchedule = () => {
                 lessonTime={lessonTime}
                 lessonDate={selectedDate}
             />
-            <ModifyReviewModal
-                isOpen={showModifyReviewModal}
-                onClose={() => setShowModifyReviewModal(false)}
+            <Booking
+                isOpen={showBooking}
+                onClose={() => setShowBooking(false)}
                 username ={username}
                 lessonName={lessonName}
                 lessonProfessor={lessonProfessor}
                 lessonTime={lessonTime}
                 lessonDate={selectedDate}
-                oldComment={comment}
-                oldRating={rating}
+                concurrency={concurrency}
+                day={day}
+                startDay={startDay}
+                endDay={endDay}
             />
         </div>
     );

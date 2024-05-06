@@ -1,7 +1,9 @@
 package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
+import org.austral.ing.lab1.Result;
 import org.austral.ing.lab1.dto.BookingDto;
+import org.austral.ing.lab1.dto.ConcurrentBookingDto;
 import org.austral.ing.lab1.dto.ProfessorDateTimeDto;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
@@ -11,6 +13,7 @@ import spark.Response;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +38,8 @@ public class StudentController {
     public String bookClass(Request req, Response res) {
         BookingDto dto = gson.fromJson(req.body(), BookingDto.class);
         String professor = dto.getProfessor();
-        LocalDate date = dto.getDate();
+        LocalDate startDate = dto.getStartDate();
+        LocalDate endDate = dto.getEndDate();
         LocalTime time = dto.getTime();
         String student = dto.getStudent();
 
@@ -56,11 +60,7 @@ public class StudentController {
             res.status(400);
             return "Invalid lesson name";
         }
-        if(date==null || time == null){
-            res.status(400);
-            return "Invalid date or time";
-        }
-        if (!correctDate(date, time)) {
+        if(endDate==null || startDate == null|| time == null){
             res.status(400);
             return "Invalid date or time";
         }
@@ -73,38 +73,62 @@ public class StudentController {
             res.status(400);
             return "Professor not active";
         }
-
-        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, date).get(0);
-
-        if(lesson == null){
-            res.status(400);
-            return "Lesson was not found";
-        }
-
-        if(!lesson.getState()) {
-            res.status(400);
-            return "Lesson was not found";
-        }
-
-        BookedLesson booking = lessonBookings.findBookingByDateAndTimeAndStudent(date, time, student1);
-        if (booking == null) {
-            booking = new BookedLesson(student1, lesson);
+        if (endDate.equals(startDate)) {
+            BookedLesson booking = bookSingleClass(professor1, startDate, time, student1);
+            if (booking == null) {
+                res.status(400);
+                return "Invalid input";
+            }
             lessonBookings.persist(booking);
             return booking.asJson();
+        }
+        else {
+            if(endDate.isBefore(startDate)) {
+                res.status(400);
+                return "Invalid input";
+            }
+            List<BookedLesson> bookings = new ArrayList<>();
+            for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(7)) {
+                BookedLesson booking = bookSingleClass(professor1, date, time, student1);
+                if (booking == null) {
+                    res.status(400);
+                    return "Invalid input";
+                }
+                bookings.add(booking);
+            }
+            for (BookedLesson booking: bookings) {
+                lessonBookings.persist(booking);
+            }
+            return "Succesfull bookings";
+        }
+    }
+
+
+    public BookedLesson bookSingleClass(Professor professor, LocalDate date, LocalTime time, Student student) {
+        if (!correctDate(date, time)) {
+            return null;
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor.getUser().getUsername(), time, date).get(0);
+        if(lesson == null){
+            return null;
+        }
+        if(!lesson.getState()) {
+            return null;
+        }
+        BookedLesson booking = lessonBookings.findBookingByDateAndTimeAndStudent(date, time, student);
+        if (booking == null) {
+            return new BookedLesson(student, lesson);
         }
 
         if (!booking.state()) {
             booking.activate();
-            lessonBookings.persist(booking);
-            return booking.asJson();
+            return booking;
         }
 
-        if (booking.getLesson().getProfessor().equals(professor1)) {
-            res.status(400);
-            return "Booking already exists";
+        if (booking.getLesson().getProfessor().equals(professor)) {
+            return booking;
         }
-        res.status(400);
-        return "Student already has a class at that time";
+        return null;
     }
 
     public boolean correctDate(LocalDate date, LocalTime time) {
@@ -200,9 +224,10 @@ public class StudentController {
     }
 
     public String deleteBooking(Request req, Response res) {
-        BookingDto dto = new BookingDto(req.queryParams("professor"), req.queryParams("student"), req.queryParams("date"), req.queryParams("time"));
+        BookingDto dto = new BookingDto(req.queryParams("professor"), req.queryParams("student"), req.queryParams("startDate"), req.queryParams("endDate"), req.queryParams("time"));
         String professor = dto.getProfessor();
-        LocalDate date = dto.getDate();
+        LocalDate startDate = dto.getStartDate();
+        LocalDate endDate = dto.getEndDate();
         LocalTime time = dto.getTime();
         String student = dto.getStudent();
 
@@ -223,14 +248,11 @@ public class StudentController {
             res.status(400);
             return "Invalid lesson name";
         }
-        if(date==null || time == null){
+        if(startDate==null || time == null){
             res.status(400);
             return "Invalid date or time";
         }
-        if (!correctDate(date, time)) {
-            res.status(400);
-            return "Invalid date or time";
-        }
+
         Professor professor1 = professors.findProfessorByUsername(professor);
         if(professor1 == null){
             res.status(400);
@@ -241,28 +263,125 @@ public class StudentController {
             return "Professor not active";
         }
 
-        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, date).get(0);
+        if(startDate.equals(endDate)) {
+            Result booking = deleteSingleBooking(student1, professor1, startDate, time);
+            if (booking.getBooking().isEmpty()) {
+                res.status(400);
+                return booking.getMessage().get();
+            }
+            lessonBookings.persist(booking.getBooking().get());
+            return booking.getBooking().get().asJson();
+        }
+        else {
+            if(endDate.isBefore(startDate)) {
+                res.status(400);
+                return "Invalid input";
+            }
+            List<BookedLesson> bookings = new ArrayList<>();
+            for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(7)) {
+                Result booking = deleteSingleBooking(student1, professor1, date, time);
+                if (booking.getBooking().isEmpty()) {
+                    res.status(400);
+                    return booking.getMessage().get();
+                }
+                bookings.add(booking.getBooking().get());
+            }
+            for (BookedLesson booking: bookings) {
+                lessonBookings.persist(booking);
+            }
+            return "Succesfull bookings";
+        }
+
+    }
+
+    public Result deleteSingleBooking(Student student, Professor professor, LocalDate date, LocalTime time){
+        if (!correctDate(date, time)) {
+           return new Result("Invalid date or time");
+        }
+
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor.getUser().getUsername(), time, date).get(0);
 
         if(lesson == null){
-            res.status(400);
-            return "Lesson was not found";
+            return new Result("Lesson does not exist");
         }
 
         if(!lesson.getState()) {
-            res.status(400);
-            return "Lesson was not found";
+            return new Result("Lesson does not exist");
         }
-        BookedLesson booking = lessonBookings.findBookingByLessonAndStudent(lesson, student1);
+        BookedLesson booking = lessonBookings.findBookingByLessonAndStudent(lesson, student);
         if (booking == null) {
-            res.status(400);
-            return "Booking not found";
+            return new Result("Booking does not exist");
         }
         if (!booking.state()) {
-            res.status(400);
-            return "Booking not active";
+            return new Result("Booking does not exist");
         }
         booking.deactivate();
-        lessonBookings.persist(booking);
-        return booking.asJson();
+        return new Result(booking);
+
+    }
+
+
+    public String checkConcurrency(Request req, Response res) {
+        String professor = req.queryParams("professor");
+        String stringDate = req.queryParams("date");
+        String stringTime = req.queryParams("time");
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(professor, stringDate, stringTime);
+        if (professor == null || stringDate == null || stringTime == null) {
+            res.status(400);
+            return "Invalid input";
+        }
+        if (professor.isBlank() || stringDate.isBlank() || stringTime.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        Professor professor1 = professors.findProfessorByUsername(professor);
+        if (professor1 == null) {
+            res.status(400);
+            return "Professor not found";
+        }
+        if (!professor1.getUser().state()) {
+            res.status(400);
+            return "Professor not active";
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, dto.getTime(), dto.getDate()).get(0);
+        if (lesson == null) {
+            res.status(400);
+            return "Lesson not found";
+        }
+        if (!lesson.getState()) {
+            res.status(400);
+            return "Lesson not active";
+        }
+
+        List<Lesson> lessons2 = lessons.findConcurrentLessons(dto.getTime(), professor, lesson.getName(), lesson.getRoom().getName(), lesson.getActivity().getName(), dto.getDate().getDayOfWeek());
+        if (lessons2.size() == 1) {
+            return "Not concurrent lessons";
+        }
+        else {
+            LocalDate minDate = getMinimumDate(lessons2);
+            LocalDate maxDate = getMaximumDate(lessons2);
+            ConcurrentBookingDto concurrentBookingDto = new ConcurrentBookingDto(lesson.getStartDate().getDayOfWeek().toString(), minDate, maxDate);
+            return gson.toJson(concurrentBookingDto);
+        }
+    }
+
+    private LocalDate getMaximumDate(List<Lesson> lessons) {
+        LocalDate max = lessons.get(0).getStartDate();
+        for (Lesson lesson: lessons) {
+            if (lesson.getState() && lesson.getStartDate().isAfter(max)) {
+                max = lesson.getStartDate();
+            }
+        }
+        return max;
+    }
+
+    private LocalDate getMinimumDate(List<Lesson> lessons) {
+        LocalDate min = lessons.get(0).getStartDate();
+        for (Lesson lesson: lessons) {
+            if (lesson.getState() && lesson.getStartDate().isBefore(min)) {
+                min = lesson.getStartDate();
+            }
+        }
+        return min;
     }
 }

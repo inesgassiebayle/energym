@@ -84,6 +84,7 @@ public class Application {
         Spark.post("/student/book-lesson", studentController::bookClass);
         Spark.delete("/student/booking", studentController::deleteBooking);
         Spark.get("/student/classify-lessons", studentController::classifyLessons);
+        Spark.get("/lesson/concurrent", studentController::checkConcurrency);
 
         after((request, response) -> closeEntityManager());
 
