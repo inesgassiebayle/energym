@@ -116,7 +116,7 @@ public class InitialDataBase {
 
     public void bookClass(){
         Student student = students.findStudentByUsername("stud1");
-        Lesson lesson = lessons.findLessonByName("Workout");
+        Lesson lesson = lessons.findLessonByName("Relax and Stretch");
         BookedLesson booking = new BookedLesson(student, lesson);
         booking.assisted();
         lessonBookings.persist(booking);

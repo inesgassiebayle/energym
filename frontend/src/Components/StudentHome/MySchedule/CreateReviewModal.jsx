@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import './Booking.css';
 
 const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate}) => {
     const [rating, setRating] = useState(0);
@@ -37,10 +38,10 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
 
     return (
         <div className="modal">
-            <div className="header">
-                <h5 className="title">Create Review for {lessonName}</h5>
+            <div className="modal-header">
+                <h5 className="modal-title">Create Review for {lessonName}</h5>
             </div>
-            <div>
+            <div className="modal-body">
                 <div>
                     <label htmlFor="rating">Rating</label>
                     <select id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
@@ -51,9 +52,9 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
                     <textarea id="comment" value={comment} onChange={e => setComment(e.target.value)}/>
                 </div>
             </div>
-            <div className="footer">
-                <button onClick={handleClose}>Cancel</button>
-                <button onClick={handleSubmit}>Submit</button>
+            <div className="modal-footer">
+                <button onClick={handleClose} className="modal-button cancel">Cancel</button>
+                <button onClick={handleSubmit} className="modal-button submit">Submit</button>
             </div>
         </div>
     )

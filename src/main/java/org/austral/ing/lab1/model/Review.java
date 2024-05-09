@@ -22,6 +22,21 @@ public class Review {
     }
 
     @Column()
+    private boolean state;
+
+    public boolean state() {
+        return state;
+    }
+
+    public void activate() {
+        state = true;
+    }
+
+    public void deactivate() {
+        state = false;
+    }
+
+    @Column()
     @Min(0)
     @Max(5)
     private Integer rating;
@@ -54,11 +69,20 @@ public class Review {
         this.lesson = lesson;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
     public Review(String comment, Integer rating, Student student, Lesson lesson){
         this.comment = comment;
         this.rating = rating;
         this.student = student;
         this.lesson = lesson;
+        this.state = true;
     }
 
     public Review(Integer rating){

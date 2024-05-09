@@ -10,12 +10,11 @@ import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 public class StudentController {
     private final Users users;
@@ -74,13 +73,13 @@ public class StudentController {
             return "Professor not active";
         }
         if (endDate.equals(startDate)) {
-            BookedLesson booking = bookSingleClass(professor1, startDate, time, student1);
-            if (booking == null) {
+            Result booking = bookSingleClass(professor1, startDate, time, student1);
+            if (booking.getBooking().isEmpty()) {
                 res.status(400);
                 return "Invalid input";
             }
-            lessonBookings.persist(booking);
-            return booking.asJson();
+            lessonBookings.persist(booking.getBooking().get());
+            return booking.getBooking().get().asJson();
         }
         else {
             if(endDate.isBefore(startDate)) {
@@ -89,12 +88,12 @@ public class StudentController {
             }
             List<BookedLesson> bookings = new ArrayList<>();
             for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(7)) {
-                BookedLesson booking = bookSingleClass(professor1, date, time, student1);
-                if (booking == null) {
+                Result booking = bookSingleClass(professor1, date, time, student1);
+                if (booking.getBooking().isEmpty()) {
                     res.status(400);
-                    return "Invalid input";
+                    return booking.getMessage().get();
                 }
-                bookings.add(booking);
+                bookings.add(booking.getBooking().get());
             }
             for (BookedLesson booking: bookings) {
                 lessonBookings.persist(booking);
@@ -104,31 +103,44 @@ public class StudentController {
     }
 
 
-    public BookedLesson bookSingleClass(Professor professor, LocalDate date, LocalTime time, Student student) {
+    public Result bookSingleClass(Professor professor, LocalDate date, LocalTime time, Student student) {
         if (!correctDate(date, time)) {
-            return null;
+            return new Result("Invalid date");
         }
         Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor.getUser().getUsername(), time, date).get(0);
         if(lesson == null){
-            return null;
+            return new Result("Lesson does not exist");
         }
         if(!lesson.getState()) {
-            return null;
+            return new Result("Lesson does not exist");
         }
-        BookedLesson booking = lessonBookings.findBookingByDateAndTimeAndStudent(date, time, student);
+        List<BookedLesson> booking = lessonBookings.findBookingByDateAndTimeAndStudent(date, time, student);
         if (booking == null) {
-            return new BookedLesson(student, lesson);
+            return new Result(new BookedLesson(student, lesson));
         }
-
-        if (!booking.state()) {
-            booking.activate();
-            return booking;
+        boolean deactivated = false;
+        BookedLesson b = null;
+        for (BookedLesson bookedLesson: booking) {
+            if (bookedLesson.state()) {
+                if (bookedLesson.getLesson().getProfessor().equals(professor)) {
+                    return new Result(bookedLesson);
+                }
+                else {
+                    return new Result("Lesson already booked");
+                }
+            }
+            else {
+                if (bookedLesson.getLesson().equals(lesson)) {
+                    deactivated = true;
+                    b = bookedLesson;
+                }
+            }
         }
-
-        if (booking.getLesson().getProfessor().equals(professor)) {
-            return booking;
+        if (deactivated) {
+            b.activate();
+            return new Result(b);
         }
-        return null;
+        return new Result(new BookedLesson(student, lesson));
     }
 
     public boolean correctDate(LocalDate date, LocalTime time) {
@@ -354,15 +366,56 @@ public class StudentController {
         }
 
         List<Lesson> lessons2 = lessons.findConcurrentLessons(dto.getTime(), professor, lesson.getName(), lesson.getRoom().getName(), lesson.getActivity().getName(), dto.getDate().getDayOfWeek());
-        if (lessons2.size() == 1) {
+        List<Lesson> concurrentLessons = filter(lessons2, dto.getDate());
+        if (concurrentLessons.size() == 1) {
             return "Not concurrent lessons";
         }
         else {
-            LocalDate minDate = getMinimumDate(lessons2);
-            LocalDate maxDate = getMaximumDate(lessons2);
+            LocalDate minDate = getMinimumDate(concurrentLessons);
+            LocalDate maxDate = getMaximumDate(concurrentLessons);
             ConcurrentBookingDto concurrentBookingDto = new ConcurrentBookingDto(lesson.getStartDate().getDayOfWeek().toString(), minDate, maxDate);
             return gson.toJson(concurrentBookingDto);
         }
+    }
+
+    public List<Lesson> filter(List<Lesson> lessons, LocalDate date) {
+        lessons.sort(Comparator.comparing(Lesson::getStartDate));
+
+        List<Lesson> lessonsBeforeOrOnDate = new ArrayList<>();
+        List<Lesson> lessonsAfterDate = new ArrayList<>();
+
+        for (Lesson lesson : lessons) {
+            if (lesson.getStartDate().isBefore(date) || lesson.getStartDate().isEqual(date)) {
+                lessonsBeforeOrOnDate.add(lesson);
+            } else {
+                lessonsAfterDate.add(lesson);
+            }
+        }
+
+        List<Lesson> filteredLessons = new ArrayList<>();
+
+        filteredLessons.add(lessonsBeforeOrOnDate.get(lessonsBeforeOrOnDate.size()-1));
+
+        for (int i = lessonsBeforeOrOnDate.size()-2; i >= 0 ; i--) {
+            Lesson currentLesson = lessonsBeforeOrOnDate.get(i);
+            Lesson lastLessonInFiltered = filteredLessons.get(filteredLessons.size() - 1);
+            boolean sevenDaysBetween = lastLessonInFiltered.getStartDate().equals(currentLesson.getStartDate().plusDays(7));
+            if (sevenDaysBetween) {
+                filteredLessons.add(currentLesson);
+            }
+        }
+
+        filteredLessons.sort(Comparator.comparing(Lesson::getStartDate));
+
+        for (int i = 0; i < lessonsAfterDate.size() ; i++) {
+            Lesson currentLesson = lessonsAfterDate.get(i);
+            Lesson lastLessonInFiltered = filteredLessons.get(filteredLessons.size() - 1);
+            boolean sevenDaysBetween = lastLessonInFiltered.getStartDate().equals(currentLesson.getStartDate().minusDays(7));
+            if (sevenDaysBetween) {
+                filteredLessons.add(currentLesson);
+            }
+        }
+        return filteredLessons;
     }
 
     private LocalDate getMaximumDate(List<Lesson> lessons) {
@@ -383,5 +436,137 @@ public class StudentController {
             }
         }
         return min;
+    }
+
+    public String checkConcurrentBookings(Request req, Response res){
+        String professor = req.queryParams("professor");
+        String stringDate = req.queryParams("date");
+        String stringTime = req.queryParams("time");
+        String studentUsername = req.queryParams("student");
+        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(professor, stringDate, stringTime);
+        if (professor == null || stringDate == null || stringTime == null || studentUsername == null) {
+            res.status(400);
+            return "Invalid input";
+        }
+        if (professor.isBlank() || stringDate.isBlank() || stringTime.isBlank() || studentUsername.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        Professor professor1 = professors.findProfessorByUsername(professor);
+        if (professor1 == null) {
+            res.status(400);
+            return "Professor not found";
+        }
+        if (!professor1.getUser().state()) {
+            res.status(400);
+            return "Professor not active";
+        }
+        Student student = students.findStudentByUsername(studentUsername);
+        if (student == null) {
+            res.status(400);
+            return "Professor not found";
+        }
+        if (!student.getUser().state()) {
+            res.status(400);
+            return "Professor not active";
+        }
+        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, dto.getTime(), dto.getDate()).get(0);
+        if (lesson == null) {
+            res.status(400);
+            return "Lesson not found";
+        }
+        if (!lesson.getState()) {
+            res.status(400);
+            return "Lesson not active";
+        }
+
+        Set<BookedLesson> bookings = student.getBookings();
+        List<BookedLesson> activeBookings = new ArrayList<>();
+        for (BookedLesson booking: bookings) {
+            if (booking.state()) {
+                activeBookings.add(booking);
+            }
+        }
+        boolean notBooked = true;
+        for (BookedLesson booking: activeBookings) {
+            if (booking.getLesson().equals(lesson)) {
+                notBooked = false;
+            }
+        }
+        if (notBooked) {
+            res.status(400);
+            return "Lesson not booked";
+        }
+        List<BookedLesson> correspondingBookings = lessonBookings.findConcurrentBookings(dto.getTime(), professor, lesson.getName(), lesson.getRoom().getName(), lesson.getActivity().getName(), dto.getDate().getDayOfWeek(), student);
+        List<BookedLesson> concurrentBookings = filterBookings(correspondingBookings, dto.getDate());
+        if (concurrentBookings.size() == 1) {
+            return "Not concurrent lessons";
+        }
+        else {
+            LocalDate minDate = getMinimumBookingDate(concurrentBookings);
+            LocalDate maxDate = getMaximumBookingDate(concurrentBookings);
+            ConcurrentBookingDto concurrentBookingDto = new ConcurrentBookingDto(lesson.getStartDate().getDayOfWeek().toString(), minDate, maxDate);
+            return gson.toJson(concurrentBookingDto);
+        }
+    }
+
+    private LocalDate getMaximumBookingDate(List<BookedLesson> concurrentBookings) {
+        LocalDate max = concurrentBookings.get(0).getLesson().getStartDate();
+        for (BookedLesson bookedLesson: concurrentBookings) {
+            if (bookedLesson.state() && bookedLesson.getLesson().getStartDate().isAfter(max)) {
+                max = bookedLesson.getLesson().getStartDate();
+            }
+        }
+        return max;
+    }
+
+    private LocalDate getMinimumBookingDate(List<BookedLesson> concurrentBookings) {
+        LocalDate min = concurrentBookings.get(0).getLesson().getStartDate();
+        for (BookedLesson booking: concurrentBookings) {
+            if (booking.state() && booking.getLesson().getStartDate().isBefore(min)) {
+                min = booking.getLesson().getStartDate();
+            }
+        }
+        return min;
+    }
+
+    private List<BookedLesson> filterBookings(List<BookedLesson> bookings, LocalDate date) {
+        bookings.sort(Comparator.comparing(booking -> booking.getLesson().getStartDate()));
+
+        List<BookedLesson> bookingsBeforeOrOnDate = new ArrayList<>();
+        List<BookedLesson> bookingsAfterDate = new ArrayList<>();
+
+        for (BookedLesson booking : bookings) {
+            if (booking.getLesson().getStartDate().isBefore(date) || booking.getLesson().getStartDate().isEqual(date)) {
+                bookingsBeforeOrOnDate.add(booking);
+            } else {
+                bookingsAfterDate.add(booking);
+            }
+        }
+
+        List<BookedLesson> filteredBookings = new ArrayList<>();
+
+        filteredBookings.add(bookingsBeforeOrOnDate.get(bookingsBeforeOrOnDate.size()-1));
+
+        for (int i = bookingsBeforeOrOnDate.size()-2; i >= 0 ; i--) {
+            BookedLesson currentBooking = bookingsBeforeOrOnDate.get(i);
+            BookedLesson lastBookingInFiltered = filteredBookings.get(filteredBookings.size() - 1);
+            boolean sevenDaysBetween = lastBookingInFiltered.getLesson().getStartDate().equals(currentBooking.getLesson().getStartDate().plusDays(7));
+            if (sevenDaysBetween) {
+                filteredBookings.add(currentBooking);
+            }
+        }
+
+        filteredBookings.sort(Comparator.comparing(booking -> booking.getLesson().getStartDate()));
+
+        for (int i = 0; i < bookingsAfterDate.size() ; i++) {
+            BookedLesson currentBooking = bookingsAfterDate.get(i);
+            BookedLesson lastBookingInFiltered = filteredBookings.get(filteredBookings.size() - 1);
+            boolean sevenDaysBetween = lastBookingInFiltered.getLesson().getStartDate().equals(currentBooking.getLesson().getStartDate().minusDays(7));
+            if (sevenDaysBetween) {
+                filteredBookings.add(currentBooking);
+            }
+        }
+        return filteredBookings;
     }
 }

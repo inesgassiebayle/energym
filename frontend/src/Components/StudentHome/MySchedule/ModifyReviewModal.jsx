@@ -1,23 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import axios from 'axios';
+import './Booking.css';
 
-const ModifyReviewModal = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate, oldComment, oldRating}) => {
-    const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState( '');
-    setRating(oldRating);
-    setComment(oldComment);
-
+const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rating, comment,  handleRating, handleComment}) => {
     if (!isOpen) return null;
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete('http://localhost:3333/review', {
+                params: {
+                    id: reviewId,
+                    student: username
+                }
+            });
+            console.log(response.data);
+            handleClose();
+        } catch (error) {
+            console.error('Error creating review:', error);
+        }
+    };
+
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:3333/review', {
+            const response = await axios.patch('http://localhost:3333/review', {
                 comment: comment,
                 rating: rating,
-                username: username,
-                professor: lessonProfessor,
-                lessonTime: lessonTime,
-                lessonDate: lessonDate
+                id: reviewId
             });
             console.log(response.data);
             handleClose();
@@ -27,21 +35,20 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
     };
 
     const handleClose = () => {
-        setRating(0);
-        setComment('');
         onClose();
     }
 
     const handleRatingChange = (e) => {
-        setRating(Number(e.target.value));
+        handleRating(Number(e.target.value));
     }
 
     return (
         <div className="modal">
-            <div className="header">
-                <h5 className="title">Create Review for {lessonName}</h5>
+            <div className="modal-header">
+                <h5 className="modal-title">Create Review for {lessonName}</h5>
+                <button onClick={handleClose} className="modal-close-button">&times;</button>
             </div>
-            <div>
+            <div className="modal-body">
                 <div>
                     <label htmlFor="rating">Rating</label>
                     <select id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
@@ -49,12 +56,12 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
                 </div>
                 <div>
                     <label htmlFor="comment">Comment</label>
-                    <textarea id="comment" value={comment} onChange={e => setComment(e.target.value)}/>
+                    <textarea id="comment" value={comment} onChange={e => handleComment(e.target.value)}/>
                 </div>
             </div>
-            <div className="footer">
-                <button onClick={handleClose}>Cancel</button>
-                <button onClick={handleSubmit}>Submit</button>
+            <div className="modal-footer">
+                <button onClick={handleDelete} className="modal-button delete">Delete</button>
+                <button onClick={handleSubmit} className="modal-button submit">Submit</button>
             </div>
         </div>
     )

@@ -1,18 +1,16 @@
 package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
-import org.austral.ing.lab1.dto.LessonDeletionDto;
 import org.austral.ing.lab1.dto.ProfessorDateTimeDto;
 import org.austral.ing.lab1.dto.ReviewCreationDto;
+import org.austral.ing.lab1.dto.ReviewModificationDto;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 
 public class ReviewController {
     private final Users users;
@@ -91,7 +89,7 @@ public class ReviewController {
             return "Cannot rate a class a student did not assist";
         }
         Review review = reviews.findReviewByLessonAndStudent(lesson, student);
-        if (review != null) {
+        if (review != null && review.state()) {
             res.status(400);
             return "Review already exists";
         }
@@ -192,6 +190,64 @@ public class ReviewController {
                 return true;
             }
         }
+    }
+
+    public String modifyReview(Request req, Response res) {
+        ReviewModificationDto reviewModificationDto = gson.fromJson(req.body(), ReviewModificationDto.class);
+        if (reviewModificationDto.getId() == null) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        Review review = reviews.getReviewById(reviewModificationDto.getId());
+        if (review == null) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        if (!review.state()) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        String comment = reviewModificationDto.getComment();
+        if(comment == null){
+            res.status(400);
+            return "Comment is not valid";
+        }
+        Integer rating = reviewModificationDto.getRating();
+        if(rating == null){
+            res.status(400);
+            return "Review is not valid";
+        }
+        if(rating < 0 || rating > 5){
+            res.status(400);
+            return "Review is not valid";
+        }
+        review.setComment(comment);
+        review.setRating(rating);
+        reviews.persist(review);
+
+        res.type("application/json");
+        return review.asJson();
+    }
+
+    public String deleteReview(Request req, Response res) {
+        Long id = req.queryParams("id") == null ? null : Long.parseLong(req.queryParams("id"));
+        if (id == null) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        Review review = reviews.getReviewById(id);
+        if (review == null) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        if (!review.state()) {
+            res.status(400);
+            return "Review does not exists";
+        }
+        review.deactivate();
+        reviews.persist(review);
+        res.type("application/json");
+        return review.asJson();
     }
 
 }

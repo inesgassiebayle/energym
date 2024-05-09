@@ -15,6 +15,10 @@ public class Lesson {
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long classId;
 
+    public Long getId() {
+        return classId;
+    }
+
     @Column()
     private String name;
     public void setName(String name) {

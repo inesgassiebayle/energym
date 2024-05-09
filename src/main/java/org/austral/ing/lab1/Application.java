@@ -14,7 +14,7 @@ import static spark.Spark.*;
 public class Application {
     public static void main(String[] args) {
 
-        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
+        final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energym");
         setFactory(factory);
         final UserController userController = new UserController();
         final ActivityController activityController = new ActivityController();
@@ -79,6 +79,9 @@ public class Application {
 
         Spark.post("/review", reviewController::createReview);
         Spark.get("/review", reviewController::getReview);
+        Spark.patch("/review", reviewController::modifyReview);
+        Spark.delete("/review", reviewController::deleteReview);
+
         Spark.get("/compare-date", lessonController::compareDate);
         //Spark.get("/compareInitialDate", lessonController::compareTodayDate);
 
@@ -86,6 +89,9 @@ public class Application {
         Spark.delete("/student/booking", studentController::deleteBooking);
         Spark.get("/student/classify-lessons", studentController::classifyLessons);
         Spark.get("/lesson/concurrent", studentController::checkConcurrency);
+
+        Spark.get("/booking/concurrent", studentController::checkConcurrentBookings);
+
 
         after((request, response) -> closeEntityManager());
 

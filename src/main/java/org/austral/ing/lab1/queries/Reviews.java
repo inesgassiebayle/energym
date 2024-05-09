@@ -58,9 +58,10 @@ public class Reviews {
     }
 
     public Review findReviewByLessonAndStudent(Lesson lesson, Student student) {
-        List<Review> reviews = entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson = :lesson AND r.student = :student", Review.class)
+        List<Review> reviews = entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson = :lesson AND r.student = :student AND r.state = :state", Review.class)
                 .setParameter("student", student)
                 .setParameter("lesson", lesson)
+                .setParameter("state", true)
                 .getResultList();
         if (reviews.isEmpty()) {
             return null;

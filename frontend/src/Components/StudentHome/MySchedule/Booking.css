@@ -1,12 +1,18 @@
+
+.modal {
+    padding: 20px;
+}
+
 .modal-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    padding: 20px;
 }
 
 .modal-title {
+    padding: 10px 0;
     margin: 0;
     color: black;
 }
@@ -20,17 +26,22 @@
 
 .modal-body {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: center;
     gap: 10px;
-    padding: 10px 0;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: center;
 }
 
 .date-input {
-    width: 90%;
+    width: 100%;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -74,4 +85,24 @@
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
+}
+
+select,
+textarea {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    resize: vertical;
+}
+
+
+textarea {
+    height: 20px;
+}
+
+select:focus,
+textarea:focus {
+    border-color: #0056b3;
 }
