@@ -35,10 +35,11 @@ public class Lessons {
 
     public List<Lesson> findLessonsByProfessorDateAndTime(String professorUsername, LocalTime time, LocalDate date) {
         TypedQuery<Lesson> query = entityManager().createQuery(
-                "SELECT l FROM Lesson l WHERE l.professor.user.username = :username AND l.time = :time AND l.startDate = :date", Lesson.class);
+                "SELECT l FROM Lesson l WHERE l.professor.user.username = :username AND l.time = :time AND l.startDate = :date AND l.state = :state", Lesson.class);
         query.setParameter("username", professorUsername);
         query.setParameter("time", time);
         query.setParameter("date", date);
+        query.setParameter("state", true);
         List<Lesson> results = query.getResultList();
         return results;
     }
