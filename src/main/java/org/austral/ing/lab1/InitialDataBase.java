@@ -97,6 +97,12 @@ public class InitialDataBase {
         lesson2.setActivity(activities.findActivityByName("Yoga"));
         lesson2.setProfessor(professors.findProfessorByUsername("prof1"));
         lessons.persist(lesson2);
+
+        Lesson lesson3 = new Lesson("hoy", LocalTime.parse("12:00:00", DateTimeFormatter.ISO_LOCAL_TIME), LocalDate.parse("2024-05-07", DateTimeFormatter.ISO_LOCAL_DATE));
+        lesson3.setRoom(rooms.findRoomByName("Lounge"));
+        lesson3.setActivity(activities.findActivityByName("Yoga"));
+        lesson3.setProfessor(professors.findProfessorByUsername("prof1"));
+        lessons.persist(lesson3);
     }
 
     public void createStudents(){
@@ -124,6 +130,11 @@ public class InitialDataBase {
         Lesson lesson2 = lessons.findLessonByName("Workout");
         BookedLesson booking2 = new BookedLesson(student2, lesson2);
         lessonBookings.persist(booking2);
+
+        Lesson hoy = lessons.findLessonByName("hoy");
+        BookedLesson booking3 = new BookedLesson(student, hoy);
+        lessonBookings.persist(booking3);
+
     }
 
     public void createInitialDataBase(){
@@ -134,5 +145,16 @@ public class InitialDataBase {
         createLessons();
         createStudents();
         bookClass();
+        createReview();
     }
+
+    public void createReview(){
+        Student student = students.findStudentByUsername("stud1");
+        Lesson lesson = lessons.findLessonByName("Workout");
+        Review review = new Review("Great class", 5, student, lesson);
+        Review review2 = new Review("Great class", 4, student, lesson);
+        reviews.createReview(review);
+
+    }
+
 }

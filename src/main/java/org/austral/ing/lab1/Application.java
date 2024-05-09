@@ -76,11 +76,12 @@ public class Application {
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
+        Spark.get("/professor/lessons2", professorController::getLessons2);
 
         Spark.post("/review", reviewController::createReview);
         Spark.get("/review", reviewController::getReview);
         Spark.get("/compare-date", lessonController::compareDate);
-        //Spark.get("/compareInitialDate", lessonController::compareTodayDate);
+        Spark.get("/compareInitialDate", lessonController::compareTodayDate);
 
         Spark.post("/student/book-lesson", studentController::bookClass);
         Spark.delete("/student/booking", studentController::deleteBooking);

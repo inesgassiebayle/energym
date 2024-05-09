@@ -1,11 +1,12 @@
 package org.austral.ing.lab1;
 
-import org.austral.ing.lab1.model.Lesson;
-import org.austral.ing.lab1.queries.Lessons;
+import org.austral.ing.lab1.model.*;
+import org.austral.ing.lab1.queries.*;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.*;
 
 import static org.austral.ing.lab1.EntityManagerController.entityManager;
 import static org.junit.Assert.assertEquals;
@@ -39,4 +40,18 @@ public class TestFindLesson {
         entityManager().remove(foundLesson);
         entityManager().getTransaction().commit();
     }
+//    public void testFindLessonsByProfessorAfterDate() {
+//        Lessons lessons = new Lessons();
+//        Professors professors = new Professors();
+//
+//        Professor professor = professors.findProfessorByUsername("prof1");
+//
+//        // Method under test
+//        List<Lesson> foundLessons = lessons.findLessonsByProfessorAfterDate(professor, LocalDate.now());
+//
+//        // Assertions
+//        assertNotNull(foundLessons);
+//        assertEquals(4, foundLessons.size());
+//
+//    }
 }
