@@ -106,3 +106,28 @@ select:focus,
 textarea:focus {
     border-color: #0056b3;
 }
+.clickable-text {
+    cursor: pointer;
+    color: blue; /* Optional: if you want it to look like a typical hyperlink */
+    text-decoration: none; /* Removes underline, but you might add it on hover */
+}
+
+.clickable-text:hover {
+    text-decoration: underline; /* Optional: adds underline on hover to indicate it's clickable */
+}
+
+.modal-main-title {
+    font-size: 24px; /* Larger font size for emphasis */
+    font-weight: bold; /* Bold to emphasize importance */
+    margin-bottom: 0.5em; /* Space below the title */
+}
+
+.modal-subtitle {
+    font-size: 18px; /* Smaller than main title */
+    color: #666; /* Subtle color for less emphasis */
+    margin-bottom: 1em; /* Space below the subtitle */
+}
+
+.modal-header {
+    padding-bottom: 0; /* Remove extra padding if not needed */
+}

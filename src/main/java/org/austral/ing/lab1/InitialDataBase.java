@@ -103,6 +103,12 @@ public class InitialDataBase {
         lesson3.setActivity(activities.findActivityByName("Yoga"));
         lesson3.setProfessor(professors.findProfessorByUsername("prof1"));
         lessons.persist(lesson3);
+
+        Lesson lesson4 = new Lesson("hoy2", LocalTime.parse("18:00:00", DateTimeFormatter.ISO_LOCAL_TIME), LocalDate.parse("2024-05-09", DateTimeFormatter.ISO_LOCAL_DATE));
+        lesson4.setRoom(rooms.findRoomByName("Lounge"));
+        lesson4.setActivity(activities.findActivityByName("Yoga"));
+        lesson4.setProfessor(professors.findProfessorByUsername("prof1"));
+        lessons.persist(lesson4);
     }
 
     public void createStudents(){
@@ -154,6 +160,11 @@ public class InitialDataBase {
         Review review = new Review("Great class", 5, student, lesson);
         Review review2 = new Review("Great class", 4, student, lesson);
         reviews.createReview(review);
+
+        Lesson hoy = lessons.findLessonByName("hoy2");
+        Review review3 = new Review("Great class", 5, student, hoy);
+        Review review4 = new Review("Great class", 4, student, hoy);
+        reviews.createReview(review3);
 
     }
 

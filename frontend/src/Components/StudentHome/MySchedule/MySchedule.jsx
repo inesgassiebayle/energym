@@ -6,6 +6,7 @@ import CreateReviewModal from "./CreateReviewModal";
 import ModifyReviewModal from "./ModifyReviewModal";
 import Booking from "./Booking";
 import DeleteBooking from "./DeleteBooking";
+import InfoForStudentModal from "./InfoForStudentModal";
 
 
 const StudentSchedule = () => {
@@ -34,6 +35,7 @@ const StudentSchedule = () => {
     const [endDay, setEndDay] = useState('');
     const [showBookingDelete, setShowBookingDeletion] = useState(false);
     const [reviewId, setReviewId] = useState(0);
+    const [showMoreInfoModal, setShowMoreInfoModal] = useState(false);
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
@@ -103,7 +105,9 @@ const StudentSchedule = () => {
         fetchLessons()
             .then(() => setShowCreateReviewModal(false));
     }
-
+    const closeMoreInfoModal = () => {
+        setShowMoreInfoModal(false);
+    }
 
     const openCreateReviewModal = (lesson) => {
         handleInformation(lesson);
@@ -127,6 +131,11 @@ const StudentSchedule = () => {
         checkBookingConcurrency(lesson);
         setShowBookingDeletion(true);
     }
+    const openSmoreInfoModal = (lesson) => {
+        handleInformation(lesson);
+        setShowMoreInfoModal(true);
+    }
+
 
     const fetchOldReview = async (lesson) => {
         try {
@@ -147,6 +156,7 @@ const StudentSchedule = () => {
             console.error('Error fetching review:', error);
         }
     }
+
 
     function handleRating (e) {
         setRating(e);
@@ -264,6 +274,7 @@ const StudentSchedule = () => {
                             {lessons.sort((a, b) => a.time.localeCompare(b.time)).map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => openSmoreInfoModal(classInfo)}>More</button>
                                     {oldBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
                                     {oldNotBookedClasses.includes(classInfo) && <span className='past-not-booked'>Not Booked</span>}
@@ -283,6 +294,14 @@ const StudentSchedule = () => {
             <Link to={`/student/${username}`}>
                 <button className='staff-button back'>Home</button>
             </Link>
+            <InfoForStudentModal
+                isOpen={showMoreInfoModal}
+                onClose={closeMoreInfoModal}
+                lessonName={lessonName}
+                date={lessonDate}
+                time={lessonTime}
+                username={lessonProfessor}
+            />
             <CreateReviewModal
                 isOpen={showCreateReviewModal}
                 onClose={closeCreateReview}
