@@ -13,6 +13,7 @@ const MySchedule = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [error, setError] = useState('');
     const [lessons, setLessons] = useState([]);
+    const [initialLessons, setInitialLessons] = useState([]);
     const [selectedLesson, setSelectedLesson] = useState('');
     const [showMoreModal, setShowMoreModal] = useState(false);
     const [showReviewsModal, setShowReviewModal] = useState(false);
@@ -22,6 +23,9 @@ const MySchedule = () => {
     const [pastLessons, setPastLessons] = useState([]);
     const [presentLessons, setPresentLessons] = useState([]);
     const [futureLessons, setFutureLessons] = useState([]);
+    const [initialPastLessons, setInitialPastLessons] = useState([]);
+    const [initialPresentLessons, setInitialPresentLessons] = useState([]);
+    const [initialFutureLessons, setInitialFutureLessons] = useState([]);
 
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
@@ -74,8 +78,29 @@ const MySchedule = () => {
     }, [username, selectedDate]);
 
     useEffect(() => {
+        if(!selectedDate){
+            const fetchClasses = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3333/professor/lessons2', {
+                        params: {
+                            username: username
+                        }
+                    });
+                    setInitialLessons(response.data);
+                } catch (error) {
+                    console.error('Error fetching classes:', error);
+                    setError('Failed to fetch classes.');
+                }
+            };
+            fetchClasses();
+        }
+
+    },[username]);
+
+    useEffect(() => {
         classifyClasses(lessons);
-    }, [lessons]);
+        classifyInitialClasses(initialLessons);
+    }, [lessons, initialLessons]);
 
     const classifyClasses = async (classes) => {
         var oldClasses = [];
@@ -108,6 +133,36 @@ const MySchedule = () => {
         setFutureLessons(futureClasses);
     };
 
+    const classifyInitialClasses = async (classes) => {
+        var oldClasses = [];
+        var futureClasses = [];
+        var presentClasses = [];
+
+        for (let cls of classes) {
+            try {
+                const response = await axios.get('http://localhost:3333/compareInitialDate', {
+                    params: {
+                        date: cls.startDate,
+                    }
+                });
+                if (response.data === "Past") {
+                    oldClasses.push(cls);
+                }
+                if (response.data === "Present") {
+                    presentClasses.push(cls);
+                }
+                if (response.data === "Future") {
+                    futureClasses.push(cls);
+                }
+            } catch (error) {
+                console.error('Error comparing date:', error);
+            }
+        }
+        setInitialPastLessons(oldClasses);
+        setInitialPresentLessons(presentClasses);
+        setInitialFutureLessons(futureClasses);
+    };
+
 
     return (
         <div className ="my-schedule-container">
@@ -122,7 +177,35 @@ const MySchedule = () => {
                     onChange={handleDateChange}
                 />
             </div>
-            {selectedDate && (
+            {!selectedDate ? (
+                <>
+                    <h3>Today's Classes:</h3>
+                    {initialPresentLessons.length > 0 ? initialPresentLessons.map((classInfo, index) => (
+                        <div key={index} className='staff-item'>
+                            <span>{classInfo.name} at {classInfo.time}</span>
+                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                            <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance</button>
+                        </div>
+                    )) : <p>No classes today.</p>}
+
+                    <h3>Last Five Lessons:</h3>
+                    {initialPastLessons.length > 0 ? initialPastLessons.slice(0, 5).map((classInfo, index) => (
+                        <div key={index} className='staff-item'>
+                            <span>{classInfo.name} at {classInfo.time}</span>
+                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                            <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews</button>
+                        </div>
+                    )) : <p>No past classes.</p>}
+
+                    <h3>Next Five Lessons:</h3>
+                    {initialFutureLessons.length > 0 ?  initialFutureLessons.slice(0, 5).map((classInfo, index) => (
+                        <div key={index} className='staff-item'>
+                            <span>{classInfo.name} at {classInfo.time}</span>
+                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                        </div>
+                    )) : <p>No future classes.</p>}
+                </>
+            ) : (
                 <div className="schedule-info">
                     <h3>Classes for {selectedDate}:</h3>
                     {lessons.length > 0 ? (
@@ -130,15 +213,19 @@ const MySchedule = () => {
                             {pastLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews
+                                    </button>
                                     <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
-                                    <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews</button>
+
                                 </div>
                             ))}
                             {presentLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
+                                    <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance
+                                    </button>
                                     <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
-                                    <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance</button>
+
                                 </div>
                             ))}
                             {futureLessons.map((classInfo, index) => (

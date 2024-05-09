@@ -8,8 +8,7 @@ import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -143,6 +142,20 @@ public class ProfessorController {
         }
         res.type("application/json");
         return gson.toJson(lessonsInfo);
+    }
+
+    public String getLessons2(Request req, Response res) {
+        String username = req.queryParams("username");
+        Professors professors = new Professors();
+        Professor professor = professors.findProfessorByUsername(username);
+        List<Lesson> lessons = professors.getLessons(professor);
+        List<LessonNameTimeDateDto> lessonsInfo = new ArrayList<>();
+        for(Lesson lesson: lessons){
+            lessonsInfo.add(new LessonNameTimeDateDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+        }
+        res.type("application/json");
+        return gson.toJson(lessonsInfo);
+
     }
 
 

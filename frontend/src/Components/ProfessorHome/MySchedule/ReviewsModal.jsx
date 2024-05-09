@@ -7,7 +7,9 @@ import spinner from "../../Assets/spinning-loading.gif";
 const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [reviews, setReviews] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
     const [loadingReviews, setLoadingReviews] = useState(false);
+    const [loadingAverageRating, setLoadingAverageRating] = useState(false);
 
 
     const fetchReviews = async () => {
@@ -36,6 +38,19 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
         }
     };
 
+    const fetchAverageRating = async () => {
+        setLoadingAverageRating(true);
+        if (reviews.length === 0) {
+            setAverageRating(0); // Puedes establecer el promedio a 0 o a otro valor por defecto.
+            setLoadingAverageRating(false);
+            return; // Salir temprano si no hay reseñas.
+        }
+        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+        const averageRating = totalRating / reviews.length;
+        setAverageRating(averageRating);
+        setLoadingAverageRating(false);
+    };
+
     const ReviewSquare = ({ review }) => (
         <div className="review-square">
             <h4>{review.username}</h4>
@@ -52,10 +67,20 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
         </div>
     );
 
-    useEffect(() => {
-        if (!isOpen) return;
 
+    const resetState = () => {
+        setAverageRating(0);
+    };
+
+    useEffect(() => {
+        if (!isOpen){
+            resetState();
+            return
+        }
         fetchReviews();
+        if (reviews.length > 0) {
+            fetchAverageRating();
+        }
     }, [isOpen, navigate]);
 
     if (!isOpen) return null;
@@ -66,6 +91,9 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
                 <h5 className="modal-title">Reviews for "{lessonName}"</h5>
             </div>
             <div className="modal-body">
+                <p>Average Rating:{loadingAverageRating ?  (
+                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                ) : ( reviews.length > 0 ? (averageRating):  <p></p>)}</p>
                 {loadingReviews ? (
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                 ) : (

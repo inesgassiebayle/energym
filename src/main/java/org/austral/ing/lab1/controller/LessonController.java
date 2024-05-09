@@ -475,30 +475,7 @@ public class LessonController{
         return lesson.asJson();
     }
 
-    public String compareDate(Request req, Response res) {
-        String dateString = req.queryParams("date");
-        String timeString = req.queryParams("time");
-        LocalDate date = LocalDate.parse(dateString);
-        LocalDate nowDate = LocalDate.now();
-        if (date.isBefore(nowDate)) {
-            return "Past";
-        }
-        else if (date.isAfter(nowDate)) {
-            return "Future";
-        }
-        else {
-            LocalTime time = LocalTime.parse(timeString);
-            LocalTime nowTime = LocalTime.now();
 
-            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
-                return "Present";
-            }
-            else if (nowTime.isBefore(time)) {
-                return "Future";
-            }
-            return "Past";
-        }
-    }
 
     public String getStudents(Request req, Response res) {
         ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
@@ -625,6 +602,48 @@ public class LessonController{
                 return false;
             }
             return false;
+        }
+    }
+
+    public String compareTodayDate(Request req, Response res) {
+        String dateString = req.queryParams("date");
+        LocalDate date = LocalDate.parse(dateString);
+        LocalDate nowDate = LocalDate.now();
+        if (date.isBefore(nowDate)) {
+            return "Past";
+        }
+        else if (date.isAfter(nowDate)) {
+            return "Future";
+        }
+        else if (date.equals(nowDate)) {
+            return "Present";
+        }
+        else {
+            return "Error";
+        }
+    }
+    public String compareDate(Request req, Response res) {
+        String dateString = req.queryParams("date");
+        String timeString = req.queryParams("time");
+        LocalDate date = LocalDate.parse(dateString);
+        LocalDate nowDate = LocalDate.now();
+        if (date.isBefore(nowDate)) {
+            return "Past";
+        }
+        else if (date.isAfter(nowDate)) {
+            return "Future";
+        }
+        else {
+            LocalTime time = LocalTime.parse(timeString);
+            LocalTime nowTime = LocalTime.now();
+
+            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
+                return "Present";
+            }
+            else if (nowTime.isBefore(time)) {
+                return "Future";
+            }
+            return "Past";
         }
     }
 }
