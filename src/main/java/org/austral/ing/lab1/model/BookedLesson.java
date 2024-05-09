@@ -9,6 +9,10 @@ public class BookedLesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
 
+    public Long getId() {
+        return reservationId;
+    }
+
     @ManyToOne
     private Student student;
 

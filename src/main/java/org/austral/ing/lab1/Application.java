@@ -25,6 +25,7 @@ public class Application {
         final ReviewController reviewController = new ReviewController();
         final StudentController studentController = new StudentController();
         final InitialDataBase initialDataBase = new InitialDataBase();
+        final EmailSender emailSender = new EmailSender();
 
         initialDataBase.createInitialDataBase();
 
@@ -82,6 +83,7 @@ public class Application {
         Spark.get("/review", reviewController::getReview);
         Spark.patch("/review", reviewController::modifyReview);
         Spark.delete("/review", reviewController::deleteReview);
+
 
         Spark.get("/compare-date", lessonController::compareDate);
         Spark.get("/compareInitialDate", lessonController::compareTodayDate);

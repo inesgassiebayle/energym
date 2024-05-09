@@ -24,6 +24,8 @@ public class StudentController {
     private final LessonBookings lessonBookings;
     private final Reviews reviews;
     private final Gson gson = new Gson();
+    private final EmailSender emailSender = new EmailSender();
+    private final ReminderService reminderService = new ReminderService(emailSender);
 
     public StudentController() {
         this.users = new Users();
@@ -79,6 +81,8 @@ public class StudentController {
                 return "Invalid input";
             }
             lessonBookings.persist(booking.getBooking().get());
+            reminderService.scheduleReminder(booking.getBooking().get().getId(), booking.getBooking().get().getLesson().getStartDate(), booking.getBooking().get().getLesson().getTime(), student1.getUser().getEmail(), "Class reminder", "You have a class with " + professor1.getUser().getUsername() + " on " + booking.getBooking().get().getLesson().getStartDate() + " at " + booking.getBooking().get().getLesson().getTime() + " in room " + booking.getBooking().get().getLesson().getRoom().getName());
+            emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked a " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
             return booking.getBooking().get().asJson();
         }
         else {
@@ -96,8 +100,11 @@ public class StudentController {
                 bookings.add(booking.getBooking().get());
             }
             for (BookedLesson booking: bookings) {
+                reminderService.scheduleReminder(booking.getId(), booking.getLesson().getStartDate(), booking.getLesson().getTime(), student1.getUser().getEmail(), "Class reminder", "You have a class with " + professor1.getUser().getUsername() + " on " + booking.getLesson().getStartDate() + " at " + booking.getLesson().getTime() + " in room " + booking.getLesson().getRoom().getName());
                 lessonBookings.persist(booking);
             }
+            Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, startDate).get(0);
+            emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked the" + lesson.getName() +  "classes with " + professor1.getUser().getUsername() + " between " + startDate + " and " + endDate + " at " + time);
             return "Succesfull bookings";
         }
     }
@@ -274,7 +281,6 @@ public class StudentController {
             res.status(400);
             return "Professor not active";
         }
-
         if(startDate.equals(endDate)) {
             Result booking = deleteSingleBooking(student1, professor1, startDate, time);
             if (booking.getBooking().isEmpty()) {
@@ -282,6 +288,8 @@ public class StudentController {
                 return booking.getMessage().get();
             }
             lessonBookings.persist(booking.getBooking().get());
+            reminderService.cancelReminder(booking.getBooking().get().getId());
+            emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
             return booking.getBooking().get().asJson();
         }
         else {
@@ -299,6 +307,8 @@ public class StudentController {
                 bookings.add(booking.getBooking().get());
             }
             for (BookedLesson booking: bookings) {
+                reminderService.cancelReminder(booking.getId());
+                emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
                 lessonBookings.persist(booking);
             }
             return "Succesfull bookings";
