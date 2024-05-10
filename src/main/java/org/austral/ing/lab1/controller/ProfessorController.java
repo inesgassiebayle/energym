@@ -150,12 +150,18 @@ public class ProfessorController {
         Professor professor = professors.findProfessorByUsername(username);
         List<Lesson> lessons = professors.getLessons(professor);
         List<LessonNameTimeDateActDto> lessonsInfo = new ArrayList<>();
-        for(Lesson lesson: lessons){
-            lessonsInfo.add(new LessonNameTimeDateActDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getActivity().toString()));
+        for (Lesson lesson : lessons) {
+            Set<Review> reviews = lesson.getReviews();
+            if (!(reviews.isEmpty())) {
+                if(lesson.getState()){
+                    int total = reviews.stream().mapToInt(Review::getRating).sum();
+                    double average = (double) total / reviews.size();
+                    String strAvg = String.valueOf(average);
+                    lessonsInfo.add(new LessonNameTimeDateActDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getActivity().toString(), strAvg.toString()));
+                }
+            }
         }
         res.type("application/json");
         return gson.toJson(lessonsInfo);
     }
-
-
 }

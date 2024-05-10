@@ -20,21 +20,34 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
     };
     const fetchProfessorRating = async () => {
         try {
+            setLoadingAverageRating(true);
             const response = await axios.get('http://localhost:3333/professor/lessons2', {
                 params: { username: username }
             });
-            setInitialLessons(response.data);
+            const lessons = response.data;
+            setInitialLessons(lessons);
         } catch (error) {
             console.error('Error fetching classes:', error);
+        }finally {
+            setLoadingAverageRating(false);
         }
     };
 
     const calculateProfessorRating = (lessons) => {
+        console.log('initialLessons');
         let totalRating = 0;
+        let count = 0;
         lessons.forEach(lesson => {
-            totalRating += lesson.rating;
+            console.log(lesson.review);
+            totalRating += Number(lesson.review); // Convert review to number before adding
+            count++;
         });
-        setProfessorRating(totalRating / lessons.length);
+        if (count > 0) {
+            setProfessorRating(totalRating / count);
+        } else {
+            setProfessorRating(0);  // En caso de que no haya reviews
+        }
+
     }
 
     const fetchActivity = async () => {
@@ -94,8 +107,6 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
                 ...review,
                 rating: parseInt(review.rating, 10)
             }));
-
-            console.log(parsedReviews);
             setReviews(parsedReviews);
 
         } catch (error) {
@@ -129,12 +140,16 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
     return (
         <div className="modalStaff" tabIndex="-1" role="dialog">
             <div className="modal-header">
-                <h2 className="modal-title">Average Rating of {username}: {reviews.length > 0 ? averageRating.toFixed(1) : "No ratings yet."}</h2>
+                <h2 className="modal-title">Average Rating of {username}: {loadingAverageRating ? (
+                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                ) : (
+                    professorRating > 0 ? professorRating.toFixed(1) : "No ratings yet."
+                )}</h2>
             </div>
             <div className="modal-subtitle">Reviews for "{activity}"</div>
             <div className="modal-body reviews-container">
                 {loadingReviews ? (
-                    <img src={spinner} alt="Loading..." style={{ width: '50px' }} />
+                    <img src={spinner} alt="Loading..." style={{width: '50px' }} />
                 ) : (
                     reviews.length > 0 ? (
                         reviews.map((review, index) => (

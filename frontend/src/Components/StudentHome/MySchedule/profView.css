@@ -7,10 +7,10 @@
     padding: 10px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: calc(50% - 15px); /* Increased width */
+    width: calc(100% - 10px); /* Increased width */
     max-height: 120vh; /* Maximum height before scrolling */
     overflow-y: auto; /* Enables scrolling */
-    z-index: 100; /* Ensure the modal is above other elements */
+    z-index: 1000; /* Ensure the modal is above other elements */
 }
 
 .modal-header {

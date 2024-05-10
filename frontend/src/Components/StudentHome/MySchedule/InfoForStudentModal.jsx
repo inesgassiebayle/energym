@@ -55,7 +55,7 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
+        <div className="modal" tabIndex="-1" role="dialog">
             <div className="modal-header">
                 <h5 className="modal-title">Details for "{lessonName}"</h5>
             </div>
