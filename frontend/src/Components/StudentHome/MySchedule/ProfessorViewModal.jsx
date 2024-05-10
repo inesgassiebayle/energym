@@ -164,7 +164,7 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
                             </div>
                         ))
                     ) : (
-                        <p>No reviews for the selected class.</p>
+                        <p>No reviews for the selected activity : {activity}.</p>
                     )
                 )}
             </div>
