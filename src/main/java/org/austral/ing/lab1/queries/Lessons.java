@@ -1,13 +1,12 @@
 package org.austral.ing.lab1.queries;
-import org.austral.ing.lab1.model.Lesson;
+import org.austral.ing.lab1.model.*;
 
 import javax.persistence.TypedQuery;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.austral.ing.lab1.EntityManagerController.entityManager;
 
@@ -122,5 +121,17 @@ public class Lessons {
     }
 
 
+    public List<Lesson> findLessonByActivityProfessor(String activity, String professorUsername) {
+        Professors professors = new Professors();
+        Professor professor = professors.findProfessorByUsername(professorUsername);
+        if (professor == null) {
+            // Handle case where professor is not found
+            return Collections.emptyList();
+        }
+        TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.activity.name = :activity AND l.professor = :professor", Lesson.class);
+        query.setParameter("activity", activity);
+        query.setParameter("professor", professor);
+        return query.getResultList();
+    }
 }
 

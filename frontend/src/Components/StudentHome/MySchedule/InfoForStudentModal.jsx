@@ -3,9 +3,10 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
+import ProfessorViewModal from "./ProfessorViewModal";
+
 import './Booking.css';
 import ModifyReviewModal from "./ModifyReviewModal";
-import ProfessorViewModal from "./ProfessorViewModal";
 
 const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -48,7 +49,6 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
 
     useEffect(() => {
         if (!isOpen) return;
-
         fetchLesson();
     }, [isOpen, navigate]);
 
@@ -66,19 +66,21 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
                 <p>Room: {loadingLesson ? <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : room}</p>
                 <p>Activity: {loadingLesson ? <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : activity}</p>
             </div>
+
             <div className="modal-footer">
                 <button className="cancel" onClick={handleClose}>Close</button>
             </div>
-            <ProfessorViewModal
-                isOpen={showProfessorModal}
-                onClose={closeProfessorModal}
-                lessonName={lessonName}
-                date={date}
-                time={time}
-                username={username}
-            />
+            {showProfessorModal && (
+                <ProfessorViewModal
+                    isOpen={showProfessorModal}
+                    onClose={closeProfessorModal}
+                    lessonName={lessonName}
+                    date={date}
+                    time={time}
+                    username={username}
+                />
+            )}
         </div>
     );
 };
-
 export default InfoForStudentModal;

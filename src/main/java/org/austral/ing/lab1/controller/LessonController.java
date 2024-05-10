@@ -433,6 +433,39 @@ public class LessonController{
         return gson.toJson(reviewDtos);
     }
 
+    public String getLessonReviewsByActivity(Request req, Response res){
+        String activityName = req.queryParams("activity");
+        if(activityName == null){
+            res.status(400);
+            return "Invalid activity name";
+        }
+        Activity activity = activities.findActivityByName(activityName);
+        if(activity == null){
+            res.status(400);
+            return "Activity does not exist";
+        }
+        List<Lesson> lessons1 = lessons.findLessonByActivity(activityName);
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+        for(Lesson lesson: lessons1){
+            if(lesson.getState()){
+                Set<Review> reviews = lesson.getReviews();
+                for(Review review: reviews){
+                    Student student = review.getStudent();
+                    if(student==null){
+                        return "Student does not exist";
+                    }
+                    User user = student.getUser();
+                    if(user == null){
+                        return "User does not exist";
+                    }
+                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+                }
+            }
+        }
+        res.type("application/json");
+        return gson.toJson(reviewDtos);
+    }
+
     public String getLesson(Request req, Response res){
         String dateParam = req.queryParams("startDate");
         String usernameParam = req.queryParams("username");
@@ -645,6 +678,46 @@ public class LessonController{
             }
             return "Past";
         }
+    }
+
+    public String getActivity(Request req, Response res) {
+        String dateParam = req.queryParams("startDate");
+        String usernameParam = req.queryParams("username");
+        String timeParam = req.queryParams("time");
+
+        List<Lesson> lessons1 = lessons.findLessonsByProfessorDateAndTime(usernameParam, LocalTime.parse(timeParam), LocalDate.parse(dateParam));
+        if (lessons1.isEmpty()) {
+            res.status(404);  // Set appropriate status code
+            return "Activity not found";
+        }
+        ActivityDto activityDto = new ActivityDto(lessons1.get(0).getActivity().getName());
+        res.type("application/json");
+        return gson.toJson(activityDto);
+    }
+
+    public String getReviewsByActivity(Request request, Response response) {
+        String username = request.queryParams("username");
+        String activity = request.queryParams("activity");
+        List<Lesson> lessons1 = lessons.findLessonByActivityProfessor(activity, username);
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+        for(Lesson lesson: lessons1){
+            if(lesson.getState()){
+                Set<Review> reviews = lesson.getReviews();
+                for(Review review: reviews){
+                    Student student = review.getStudent();
+                    if(student==null){
+                        return "Student does not exist";
+                    }
+                    User user = student.getUser();
+                    if(user == null){
+                        return "User does not exist";
+                    }
+                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+                }
+            }
+        }
+        response.type("application/json");
+        return gson.toJson(reviewDtos);
     }
 }
 

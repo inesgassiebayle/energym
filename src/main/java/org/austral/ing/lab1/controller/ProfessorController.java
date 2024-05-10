@@ -149,13 +149,12 @@ public class ProfessorController {
         Professors professors = new Professors();
         Professor professor = professors.findProfessorByUsername(username);
         List<Lesson> lessons = professors.getLessons(professor);
-        List<LessonNameTimeDateDto> lessonsInfo = new ArrayList<>();
+        List<LessonNameTimeDateActDto> lessonsInfo = new ArrayList<>();
         for(Lesson lesson: lessons){
-            lessonsInfo.add(new LessonNameTimeDateDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+            lessonsInfo.add(new LessonNameTimeDateActDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getActivity().toString()));
         }
         res.type("application/json");
         return gson.toJson(lessonsInfo);
-
     }
 
 
