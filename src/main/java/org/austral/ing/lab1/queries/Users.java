@@ -18,6 +18,12 @@ public class Users {
         return entityManager().find(User.class, id);
     }
 
+    public User findUserByEmail(String mail) {
+        return entityManager().createQuery("SELECT u FROM User u WHERE u.email LIKE :mail", User.class)
+                .setParameter("mail", mail)
+                .getSingleResult();
+    }
+
     public List<User> findAllUsers() {
         TypedQuery<User> query = entityManager().createQuery("SELECT u FROM User u", User.class);
         return query.getResultList();
