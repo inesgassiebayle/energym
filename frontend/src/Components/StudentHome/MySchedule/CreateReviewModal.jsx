@@ -6,6 +6,9 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
 
+    const [assistanceError, setAssistanceError] = useState('');
+
+
     if (!isOpen) return null;
 
     const handleSubmit = async () => {
@@ -21,7 +24,12 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
             console.log(response.data);
             handleClose();
         } catch (error) {
-            console.error('Error creating review:', error);
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            console.error('Error while sending request:', errorMsg);
+            setAssistanceError('');
+            if (errorMsg.includes("Cannot rate a class a student did not assist")) {
+                setAssistanceError("Cannot rate a class if student did not assist");
+            }
         }
     };
 
@@ -55,6 +63,8 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
             <div className="modal-footer">
                 <button onClick={handleClose} className="modal-button cancel">Cancel</button>
                 <button onClick={handleSubmit} className="modal-button submit">Submit</button>
+                {assistanceError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{assistanceError}</div>}
+
             </div>
         </div>
     )
