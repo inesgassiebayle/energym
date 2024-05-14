@@ -25,9 +25,9 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
                 ...review,
                 rating: parseInt(review.rating, 10)
             }));
-
             console.log(parsedReviews);
             setReviews(parsedReviews);
+            fetchAverageRating(parsedReviews);
 
         } catch (error) {
             console.error('Error fetching lesson reviews:', error.response ? error.response.data : error.message);
@@ -36,7 +36,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
         }
     };
 
-    const fetchAverageRating = async () => {
+    const fetchAverageRating = async (reviews) => {
         setLoadingAverageRating(true);
         if (reviews.length === 0) {
             setAverageRating(0); // Puedes establecer el promedio a 0 o a otro valor por defecto.
@@ -48,7 +48,6 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
         setAverageRating(averageRating);
         setLoadingAverageRating(false);
     };
-
     const ReviewSquare = ({ review }) => (
         <div className="review-square">
             <h4>{review.username}</h4>
@@ -76,10 +75,13 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
             return
         }
         fetchReviews();
-        if (reviews.length > 0) {
-            fetchAverageRating();
-        }
     }, [isOpen, navigate]);
+
+    useEffect(() => {
+        return () => {
+            setAverageRating(0); // Reset averageRating when component unmounts or isOpen changes
+        };
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
