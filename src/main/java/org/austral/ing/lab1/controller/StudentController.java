@@ -303,7 +303,7 @@ public class StudentController {
             }
             lessonBookings.persist(booking.getBooking().get());
             reminderService.cancelReminder(booking.getBooking().get().getId());
-            emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
+            CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time));
             return booking.getBooking().get().asJson();
         }
         else {
@@ -322,7 +322,7 @@ public class StudentController {
             }
             for (BookedLesson booking: bookings) {
                 reminderService.cancelReminder(booking.getId());
-                emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
+                CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the booking of the " + booking.getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time));
                 lessonBookings.persist(booking);
             }
             return "Succesfull bookings";

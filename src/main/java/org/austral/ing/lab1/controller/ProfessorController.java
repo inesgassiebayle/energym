@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.austral.ing.lab1.dto.*;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
@@ -148,25 +149,26 @@ public class ProfessorController {
         String username = req.queryParams("username");
         Professor professor = professors.findProfessorByUsername(username);
         List<Lesson> lessons = professors.getLessons(professor);
-        List<LessonIdAvdDto> lessonsInfo = new ArrayList<>();
-
+        int total = 0;
+        int n = 0;
         for (Lesson lesson : lessons) {
-            String id = lesson.getId().toString();
-            String name = lesson.getName();
-            String startDate = lesson.getStartDate().toString();
-            String time = lesson.getTime().toString();
-            String activity = lesson.getActivity().toString();
-            String review = "";
             Set<Review> reviews = lesson.getReviews();
             if (!reviews.isEmpty() && lesson.getState()) {
-                int total = reviews.stream().mapToInt(Review::getRating).sum();
-                double average = (double) total / reviews.size();
-                review = String.valueOf(average);
+                for (Review review1: reviews) {
+                    if (review1.state()) {
+                        total += review1.getRating();
+                        n++;
+                    }
+                }
             }
-            lessonsInfo.add(new LessonIdAvdDto(id, name, startDate, time, activity, review));
         }
+
+        double average = n != 0 ? (double) total / n : 0;
+        JsonObject response = new JsonObject();
+        response.addProperty("average", average);
+
         res.type("application/json");
-        return gson.toJson(lessonsInfo);
+        return gson.toJson(response);
     }
 
 }
