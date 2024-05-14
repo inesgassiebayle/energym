@@ -69,4 +69,5 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
         </div>
     )
 };
+
 export default CreateReviewModal;

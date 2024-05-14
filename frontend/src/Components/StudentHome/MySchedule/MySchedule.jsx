@@ -355,4 +355,5 @@ const StudentSchedule = () => {
     );
 };
 
+
 export default authentication(StudentSchedule);
