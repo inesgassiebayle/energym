@@ -1,6 +1,7 @@
 package org.austral.ing.lab1.controller;
 import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.austral.ing.lab1.dto.PasswordChangeDto;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.*;
@@ -8,6 +9,7 @@ import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -188,5 +190,50 @@ public class UserController {
         res.type("application/json");
         return user.asJson();
     }
+
+    public String sendChangePasswordEmail(Request req, Response res){
+        JsonObject requestBody = gson.fromJson(req.body(), JsonObject.class);
+        String mail = requestBody.get("mail").getAsString();
+        if (mail == null || mail.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        User user = users.findUserByEmail(mail);
+        if (user == null) {
+            res.status(400);
+            return "User does not exist";
+        }
+        if (!user.state()) {
+            res.status(400);
+            return "User is deactivated";
+        }
+        EmailSender emailSender = new EmailSender();
+        String temporaryPassword = generateTemporaryPassword();
+
+        emailSender.sendEmail(mail, "Password change", "This is your temporary password: "+temporaryPassword);
+        user.setPassword(temporaryPassword);
+        users.persist(user);
+
+        return users.toString();
+    }
+
+    private String generateTemporaryPassword() {
+        StringBuilder password = new StringBuilder(20);
+        do {
+            String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String DIGITS = "0123456789";
+            String ALL_CHARACTERS = UPPERCASE_LETTERS + DIGITS;
+            SecureRandom RANDOM = new SecureRandom();
+
+            password = new StringBuilder(20);
+
+            for (int i = 0; i < 20; i++) {
+                int index = RANDOM.nextInt(ALL_CHARACTERS.length());
+                password.append(ALL_CHARACTERS.charAt(index));
+            }
+        } while (!isValidPassword(password.toString()));
+        return password.toString();
+    }
+
 
 }

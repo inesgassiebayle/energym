@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ChangePassword.css';
 import logo from "../../../Assets/Logo.png";
-import password_icon from "../../../Assets/password.png";
 import person_icon from "../../../Assets/person.png";
 import axios from "axios";
 
@@ -12,9 +11,8 @@ const ChangePassword = () => {
 
     const handleChange = async () => {
         try {
-            const response = await axios.post(`http://localhost:3333/user/change-password`, {
-                mail: mail
-            });
+            const response = await axios.patch('http://localhost:3333/user/forgot-password', { mail });
+            console.log(response.data);
             navigate("/login");
         } catch (error) {
             console.error("Password change error:", error);
