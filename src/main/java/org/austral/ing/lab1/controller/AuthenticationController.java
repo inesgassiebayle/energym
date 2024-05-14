@@ -121,7 +121,7 @@ public class AuthenticationController {
         }
 
         res.type("application/json");
-        return gson.toJson(user);
+        return user.asJson();
     }
 
     public String deleteAccount(Request req, Response res){

@@ -242,7 +242,12 @@ public class StudentController {
                         if(review != null) {
                             return "Past class booked and reviewed";
                         }
-                        return "Past class booked";
+                        if (booking.hasAssisted()) {
+                            return "Past class booked";
+                        }
+                        else {
+                            return "Past class not booked";
+                        }
                     }
                     bookings.add(booking);
                 }
