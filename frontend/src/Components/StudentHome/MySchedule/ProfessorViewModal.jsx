@@ -12,7 +12,6 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [loadingAverageRating, setLoadingAverageRating] = useState(false);
     const [professorRating, setProfessorRating] = useState(0);
-    const [initialLessons, setInitialLessons] = useState([]);
     const [activity, setActivity] = useState(''); // Added activity state
 
     const handlePClose = () => {
@@ -24,31 +23,14 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
             const response = await axios.get('http://localhost:3333/professor/lessons2', {
                 params: { username: username }
             });
-            const lessons = response.data;
-            setInitialLessons(lessons);
+            setProfessorRating(response.data.average);
+            console.log(response.data.average);
         } catch (error) {
             console.error('Error fetching classes:', error);
         }finally {
             setLoadingAverageRating(false);
         }
     };
-
-    const calculateProfessorRating = (lessons) => {
-        console.log('initialLessons');
-        let totalRating = 0;
-        let count = 0;
-        lessons.forEach(lesson => {
-            console.log(lesson.review);
-            totalRating += Number(lesson.review); // Convert review to number before adding
-            count++;
-        });
-        if (count > 0) {
-            setProfessorRating(totalRating / count);
-        } else {
-            setProfessorRating(0);  // En caso de que no haya reviews
-        }
-
-    }
 
     const fetchActivity = async () => {
         try {
@@ -69,28 +51,11 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
             }
         } catch (error) {
             console.error('Error fetching activity:', error);
-            setActivity('No activity found');  // Set a default or error state for activity
+            setActivity('No activity found');
         } finally {
             setLoadingReviews(false);
         }
     };
-
-    const ReviewPSquare = ({ review }) => (
-        <div className="review-square">
-            <h4>{review.username}</h4>
-            <p>{review.comment}</p>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-                {Number.isInteger(review.rating) && (
-                    <p>
-                        {Array.from({length: review.rating}).map((_, index) => (
-                            <img key={index} src={star} alt="rating"/>
-                        ))}
-                    </p>
-                )}
-            </div>
-        </div>
-    );
-
 
     const fetchReviews = async () => {
         try {
@@ -123,11 +88,6 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
         }
     }, [isOpen, username]);
 
-    useEffect(() => {
-        if (initialLessons.length > 0) {
-            calculateProfessorRating(initialLessons);
-        }
-    }, [initialLessons]);
 
     useEffect(() => {
         if (activity && activity !== 'No activity found') { // Ensuring activity is set and valid
@@ -155,10 +115,11 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
                         reviews.map((review, index) => (
                             <div key={index} className="review-square">
                                 <h4>{review.username}</h4>
-                                <p>{review.comment}</p>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    {Number.isInteger(review.rating) && Array.from({ length: review.rating }).map((_, i) => (
-                                        <img key={i} src={star} alt="rating" />
+                                <p>Lesson: {review.lessonName} on {review.lessonDate} at {review.lessonTime}</p>
+                                <p>Comment: {review.comment}</p>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    {Number.isInteger(review.rating) && Array.from({length: review.rating}).map((_, i) => (
+                                        <img key={i} src={star} alt="rating"/>
                                     ))}
                                 </div>
                             </div>

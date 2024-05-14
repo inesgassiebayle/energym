@@ -51,6 +51,13 @@ public class InitialDataBase {
         Professor prof2 = new Professor();
         prof2.setUser(professor2);
         professors.persist(prof2);
+
+        User professor3 = new User("Ines", "Gassiebayle", "inegassiebayle@gmail.com", "inegassiebayle", "Boulogne1430");
+        professor3.setType(UserType.PROFESSOR);
+        users.persist(professor3);
+        Professor prof3 = new Professor();
+        prof3.setUser(professor3);
+        professors.persist(prof3);
     }
 
     public void createActivities(){
@@ -159,11 +166,6 @@ public class InitialDataBase {
         Lesson lesson = lessons.findLessonByName("Workout");
         Review review = new Review("Great class", 5, student, lesson);
         reviews.persist(review);
-
-        Lesson hoy = lessons.findLessonByName("hoy2");
-        Review review3 = new Review("Great class", 5, student, hoy);
-        Review review4 = new Review("Great class", 4, student, hoy);
-        reviews.createReview(review3);
 
     }
 

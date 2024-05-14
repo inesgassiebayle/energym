@@ -21,6 +21,7 @@ const LessonAddition = () => {
     const [professorError, setProfessorUnavailableError] = useState('');
     const [roomError, setRoomUnavailableError] = useState('');
     const [activityError, setActivityUnsupported] = useState('');
+    const [dateError, setDateError] = useState('');
 
 
     const navigate = useNavigate();
@@ -73,6 +74,10 @@ const LessonAddition = () => {
                 setRoomUnavailableError("Room is unavailable at that time")
             } else if (errorMsg.includes('Activity not supported in the selected room')){
                 setActivityUnsupported("Activity not supported in the selected room")
+            } else if (errorMsg.includes("Invalid date")) {
+                setDateError("Cannot schedule a class in the past");
+            } else if (errorMsg.includes("Invalid time")) {
+                setDateError("Cannot schedule a class in the past");
             }
         }
     };
@@ -103,7 +108,7 @@ const LessonAddition = () => {
                 <select value={lessonTime} onChange={(e) => {
                     setLessonTime(e.target.value)
                     setProfessorUnavailableError('');
-
+                    setDateError('')
                 }} required>
                     <option value="">Select Lesson Time</option>
                     {generateHourOptions().map((hour, index) => (
@@ -144,8 +149,10 @@ const LessonAddition = () => {
                 </select>
                 {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
 
-                <input type='date' value={lessonStartDate} onChange={(e) => setLessonStartDate(e.target.value)}
-                       placeholder='Lesson Start Date' required />
+                <input type='date' value={lessonStartDate} onChange={(e) => {
+                    setLessonStartDate(e.target.value);
+                    setDateError('');
+                }} placeholder='Lesson Start Date' required />
                 {isRecurring && (
                     <input type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)}
                            placeholder='End Date' required />
@@ -160,6 +167,7 @@ const LessonAddition = () => {
                     {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
                     {professorError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{professorError}</div>}
                     {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
+                    {dateError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{dateError}</div>}
 
 
                 </div>

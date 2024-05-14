@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class LessonController{
     private final Lessons lessons;
@@ -44,6 +45,15 @@ public class LessonController{
         }
 
         Lesson lesson = new Lesson(name, time, date);
+
+        if (date.isBefore(LocalDate.now())) {
+            res.status(400);
+            return "Invalid date";
+        }
+        if (date.equals(LocalDate.now()) && time.isBefore(LocalTime.now())) {
+            res.status(400);
+            return "Invalid time";
+        }
 
         //get activity
         Activity activity = getActivityByName(lessonDto.getActivity());
@@ -113,6 +123,10 @@ public class LessonController{
             res.status(409);
             return "Room is not available at the specified time";
         }
+
+        EmailSender emailSender = new EmailSender();
+
+        CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ lesson.getName()+ "' scheduled for " + date.toString() + " at " + time.toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
 
         lessons.persist(lesson);
         res.type("application/json");
@@ -199,6 +213,10 @@ public class LessonController{
 
         // Persist all the lessons
         lessonsToAdd.forEach(lesson -> lessons.persist(lesson));
+
+        EmailSender emailSender = new EmailSender();
+
+        CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ lessonDto.getName() + "' scheduled on the " + lessonDto.getStartDate().getDayOfWeek().toString()+"'s'" + "in between" + lessonDto.getStartDate().toString() + " and "+ lessonDto.getEndDate() + " at " + lessonDto.getTime().toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
 
         res.type("application/json");
         return "lesson.asJson()";
@@ -415,7 +433,7 @@ public class LessonController{
             if(user == null){
                 return "User does not exist";
             }
-            reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+            reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
         }
         res.type("application/json");
         return gson.toJson(reviewDtos);
@@ -446,7 +464,7 @@ public class LessonController{
                     if(user == null){
                         return "User does not exist";
                     }
-                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
                 }
             }
         }
@@ -700,7 +718,7 @@ public class LessonController{
                     if(user == null){
                         return "User does not exist";
                     }
-                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString()));
+                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), review.getLesson().getName(), review.getLesson().getStartDate().toString(), review.getLesson().getTime().toString()));
                 }
             }
         }
