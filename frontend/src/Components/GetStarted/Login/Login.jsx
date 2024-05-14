@@ -75,10 +75,18 @@ const Login = ()=>{
                     />
 
                 </div>
-                {loginError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{loginError}</div>}
+                {loginError &&
+                    <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{loginError}</div>}
 
             </div>
-            <div className='forgot-password'>Forgot your password? <Link to={"/change-password"}><button>Click Here!</button></Link></div>
+            <div className='forgot-password'>Forgot your password? <Link to={"/change-password"}>
+                <button>Click Here!</button>
+            </Link></div>
+
+            <div className='forgot-password'>Are you new here? <Link to={"/signUp"}>
+                <button>Sign up</button>
+            </Link></div>
+
             <button className='login-button' onClick={login}>Login</button>
 
         </div>
