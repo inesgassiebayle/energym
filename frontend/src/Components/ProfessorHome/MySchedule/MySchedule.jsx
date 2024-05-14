@@ -89,7 +89,13 @@ const MySchedule = () => {
                             username: username
                         }
                     });
+                    console.log(response.data);
                     setInitialLessons(response.data);
+
+                    response.data.forEach(lesson => {
+                        console.log(lesson.name);
+                        console.log(lesson.id);
+                    })
                 } catch (error) {
                     console.error('Error fetching classes:', error);
                     setError('Failed to fetch classes.');
@@ -97,12 +103,13 @@ const MySchedule = () => {
             };
             fetchClasses();
         }
+    }, [username, selectedDate]);
 
-    },[username]);
 
     useEffect(() => {
         classifyClasses(lessons);
         classifyInitialClasses(initialLessons);
+
     }, [lessons, initialLessons]);
 
     const classifyClasses = async (classes) => {
@@ -164,8 +171,8 @@ const MySchedule = () => {
         setInitialPastLessons(oldClasses);
         setInitialPresentLessons(presentClasses);
         setInitialFutureLessons(futureClasses);
-    };
 
+    };
 
     return (
         <div className ="my-schedule-container">

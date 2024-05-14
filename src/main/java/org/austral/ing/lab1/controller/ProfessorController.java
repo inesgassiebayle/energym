@@ -146,22 +146,27 @@ public class ProfessorController {
 
     public String getLessons2(Request req, Response res) {
         String username = req.queryParams("username");
-        Professors professors = new Professors();
         Professor professor = professors.findProfessorByUsername(username);
         List<Lesson> lessons = professors.getLessons(professor);
-        List<LessonNameTimeDateActDto> lessonsInfo = new ArrayList<>();
+        List<LessonIdAvdDto> lessonsInfo = new ArrayList<>();
+
         for (Lesson lesson : lessons) {
+            String id = lesson.getId().toString();
+            String name = lesson.getName();
+            String startDate = lesson.getStartDate().toString();
+            String time = lesson.getTime().toString();
+            String activity = lesson.getActivity().toString();
+            String review = "";
             Set<Review> reviews = lesson.getReviews();
-            if (!(reviews.isEmpty())) {
-                if(lesson.getState()){
-                    int total = reviews.stream().mapToInt(Review::getRating).sum();
-                    double average = (double) total / reviews.size();
-                    String strAvg = String.valueOf(average);
-                    lessonsInfo.add(new LessonNameTimeDateActDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getActivity().toString(), strAvg.toString()));
-                }
+            if (!reviews.isEmpty() && lesson.getState()) {
+                int total = reviews.stream().mapToInt(Review::getRating).sum();
+                double average = (double) total / reviews.size();
+                review = String.valueOf(average);
             }
+            lessonsInfo.add(new LessonIdAvdDto(id, name, startDate, time, activity, review));
         }
         res.type("application/json");
         return gson.toJson(lessonsInfo);
     }
+
 }
