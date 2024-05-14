@@ -4,7 +4,7 @@ import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
 
-const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
+const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
@@ -17,9 +17,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
             setLoadingReviews(true)
             const response = await axios.get('http://localhost:3333/lesson/reviews', {
                 params: {
-                    username: username,
-                    startDate: date,
-                    time: time
+                    lessonId: lessonId
                 }
             });
 

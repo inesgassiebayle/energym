@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './MySchedule.css';
 import {Link, useNavigate, useParams} from 'react-router-dom';
@@ -26,25 +26,28 @@ const MySchedule = () => {
     const [initialPastLessons, setInitialPastLessons] = useState([]);
     const [initialPresentLessons, setInitialPresentLessons] = useState([]);
     const [initialFutureLessons, setInitialFutureLessons] = useState([]);
+    const [selectedLessonId, setSelectedLessonId] = useState('');
 
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
     };
 
-    const handleInformation = (lesson) => {
+    const handleInformation = useCallback((lesson) => {
         setSelectedLesson(lesson.name);
         console.log(lesson.name);
         setSelectedLessonDate(lesson.startDate);
         console.log(lesson.startDate);
         setSelectedLessonTime(lesson.time);
         console.log(lesson.time);
-    }
+        setSelectedLessonId(lesson.id);
+        console.log(lesson.id);
+    }, []);
 
-    const openMoreModal = (lesson) => {
+    const openMoreModal = useCallback((lesson) => {
         handleInformation(lesson);
         setShowMoreModal(true);
-    }
+    }, [handleInformation]);
 
     const openReviewsModal = (lesson) => {
         handleInformation(lesson);
@@ -258,9 +261,7 @@ const MySchedule = () => {
                 isOpen={showReviewsModal}
                 onClose={() => setShowReviewModal(false)}
                 lessonName={selectedLesson}
-                date={selectedLessonDate}
-                time={selectedLessonTime}
-                username ={username}
+                lessonId={selectedLessonId}
             />
 
             <Assistance

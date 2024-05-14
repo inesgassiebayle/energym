@@ -158,8 +158,7 @@ public class InitialDataBase {
         Student student = students.findStudentByUsername("stud1");
         Lesson lesson = lessons.findLessonByName("Workout");
         Review review = new Review("Great class", 5, student, lesson);
-        Review review2 = new Review("Great class", 4, student, lesson);
-        reviews.createReview(review);
+        reviews.persist(review);
 
         Lesson hoy = lessons.findLessonByName("hoy2");
         Review review3 = new Review("Great class", 5, student, hoy);

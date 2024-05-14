@@ -17,7 +17,10 @@ const ProfessorView = () => {
     const [selectedLessonDate, setSelectedLessonDate] = useState('');
     const [selectedLessonTime, setSelectedLessonTime] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
-
+    const [selectedLessonId, setSelectedLessonId] = useState('');
+    const [lessonName, setLessonName] = useState('');
+    const [lessonRoom, setLessonRoom] = useState('');
+    const [lessonActivity, setLessonActivity] = useState('');
 
     const trainerFullname = async () => {
         try {
@@ -33,12 +36,13 @@ const ProfessorView = () => {
     };
 
     const handleInformation = (lesson) => {
-        setSelectedLesson(lesson.name);
-        console.log(lesson.name);
-        setSelectedLessonDate(lesson.startDate);
-        console.log(lesson.startDate);
+        setSelectedLessonDate(lesson.date);
         setSelectedLessonTime(lesson.time);
-        console.log(lesson.time);
+        setSelectedLessonId(lesson.id);
+        setLessonName(lesson.name);
+        setLessonActivity(lesson.activity);
+        setLessonRoom(lesson.room);
+        console.log(lesson);
         setShowModifyModal(true);
     };
 
@@ -114,9 +118,12 @@ const ProfessorView = () => {
             <MoreModal
                 isOpen={showModifyModal}
                 onClose={() => setShowModifyModal(false)}
-                trainer={trainer}
-                date={selectedLessonDate}
-                time={selectedLessonTime}
+                lessonId={selectedLessonId}
+                lessonDate={selectedLessonDate}
+                lessonTime={selectedLessonTime}
+                lessonName={lessonName}
+                lessonRoom={lessonRoom}
+                lessonActivity={lessonActivity}
             />
         </div>
     );

@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
 import './Booking.css';
 
-const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
+const ProfessorViewModal = ({ isOpen, onClose, lessonName, lessonId, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
@@ -41,9 +41,7 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
             setLoadingReviews(true)
             const response = await axios.get('http://localhost:3333/lesson/reviews', {
                 params: {
-                    username: username,
-                    startDate: date,
-                    time: time
+                    lessonId: lessonId
                 }
             });
 

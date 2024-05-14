@@ -135,6 +135,7 @@ public class Lesson {
 
     public String asJson() {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.classId);
         jsonObject.addProperty("name", this.name);
         jsonObject.addProperty("time", String.valueOf(this.time));
         jsonObject.addProperty("date", String.valueOf(this.startDate));

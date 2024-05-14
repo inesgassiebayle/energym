@@ -7,7 +7,7 @@ import './Booking.css';
 import ModifyReviewModal from "./ModifyReviewModal";
 import ProfessorViewModal from "./ProfessorViewModal";
 
-const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
+const InfoForStudentModal = ({ isOpen, onClose, lessonId, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [room, setRoom] = useState('');
     const [activity, setActivity] = useState('');
@@ -73,8 +73,7 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
                 isOpen={showProfessorModal}
                 onClose={closeProfessorModal}
                 lessonName={lessonName}
-                date={date}
-                time={time}
+                lessonId={lessonId}
                 username={username}
             />
         </div>

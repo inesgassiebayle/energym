@@ -6,47 +6,17 @@ import {useNavigate} from "react-router-dom";
 import authentication from "../Hoc/Hoc";
 import spinner from "../../Assets/spinning-loading.gif";
 
-const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
-    let navigate = useNavigate(); // Added useNavigate hook
-    const [room, setRoom] = useState('');
-    const [activity, setActivity] = useState('');
-    const [reviews, setReviews] = useState([]);
-    const [lesson, setName] = useState('');
-    const [loadingLesson, setLoadingLesson] = useState(false);
+const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonName, lessonRoom, lessonActivity}) => {
+    let navigate = useNavigate();
     const [loadingReviews, setLoadingReviews] = useState(false);
-
-
-    const fetchLesson = async () => {
-        try {
-            setLoadingLesson(true)
-            const response = await axios.get('http://localhost:3333/lesson', {
-                params: {
-                    username: trainer,
-                    startDate: date,
-                    time: time
-                }
-            })
-
-            console.log(response.data);
-            setRoom(response.data.room);
-            setActivity(response.data.activity);
-            setName(response.data.name);
-
-        } catch (error) {
-            console.error('Error fetching lesson details:', error);
-        } finally {
-            setLoadingLesson(false);
-        }
-    };
+    const [reviews, setReviews] = useState([]);
 
     const fetchReviews = async () => {
         try {
             setLoadingReviews(true)
             const response = await axios.get('http://localhost:3333/lesson/reviews', {
                 params: {
-                    username: trainer,
-                    startDate: date,
-                    time: time
+                    lessonId: lessonId
                 }
             });
 
@@ -83,9 +53,8 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
 
     useEffect(() => {
         if (!isOpen) return;
-
-        fetchLesson();
         fetchReviews();
+
     }, [isOpen, navigate]);
 
     if (!isOpen) return null;
@@ -93,14 +62,13 @@ const MoreModal = ({ isOpen, onClose, trainer, date, time}) => {
     return (
         <div className="modalStaff" tabIndex="-1" role="dialog">
                 <div className="modal-header">
-                        <h5 className="modal-title">Details for "{lesson}"</h5>
+                        <h5 className="modal-title">Details for "{lessonName}"</h5>
                     </div>
                     <div className="modal-body">
-                        <p>Start Date: {date}</p>
-                        <p>Time: {time}</p>
-                        <p>Room: {loadingLesson ?
-                            <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : room}</p>
-                        <p>Activity: {activity}</p>
+                        <p>Start Date: {lessonDate}</p>
+                        <p>Time: {lessonTime}</p>
+                        <p>Room: {lessonRoom}</p>
+                        <p>Activity: {lessonActivity}</p>
                         <div className="reviews-container">
                             <p>Class reviews: </p>
                             {loadingReviews ? (

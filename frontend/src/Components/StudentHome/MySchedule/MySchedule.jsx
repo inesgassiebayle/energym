@@ -36,6 +36,7 @@ const StudentSchedule = () => {
     const [showBookingDelete, setShowBookingDeletion] = useState(false);
     const [reviewId, setReviewId] = useState(0);
     const [showMoreInfoModal, setShowMoreInfoModal] = useState(false);
+    const [lessonId, setLessonId] = useState('');
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
@@ -176,6 +177,7 @@ const StudentSchedule = () => {
         setLessonProfessor(lesson.professor);
         setLessonTime(lesson.time);
         setLessonDate(selectedDate);
+        setLessonId(lesson.id);
     }
 
     const fetchLessons = async () => {
@@ -297,6 +299,7 @@ const StudentSchedule = () => {
             <InfoForStudentModal
                 isOpen={showMoreInfoModal}
                 onClose={closeMoreInfoModal}
+                lessonId={lessonId}
                 lessonName={lessonName}
                 date={lessonDate}
                 time={lessonTime}

@@ -68,10 +68,10 @@ public class ProfessorController {
         }
 
         List<Lesson> lessons = professors.getLessons(professor);
-        List<LessonNameTimeDateDto> lessonsInfo = new ArrayList<>();
+        List<LessonDto> lessonsInfo = new ArrayList<>();
         for(Lesson lesson: lessons){
             if(lesson.getStartDate().equals(date) && lesson.getState()){
-                lessonsInfo.add(new LessonNameTimeDateDto(lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+                lessonsInfo.add(new LessonDto(lesson.getId().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getRoom().getName(), lesson.getActivity().getName(), lesson.getProfessor().getUser().getUsername()));
             }
         }
         res.type("application/json");

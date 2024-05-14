@@ -390,24 +390,12 @@ public class LessonController{
     }
 
     public String getLessonReviews(Request req, Response res){
-        ProfessorDateTimeDto dto = new ProfessorDateTimeDto(req.queryParams("username"), req.queryParams("startDate"), req.queryParams("time"));
-        String username = dto.getName();
-        LocalDate date = dto.getDate();
-        LocalTime time = dto.getTime();
-        if(username == null){
-            res.status(400);
-            return "Invalid lesson name";
-        }
-        if(date==null || time == null){
-            res.status(400);
-            return "Invalid date or time";
-        }
-        Professor professor = professors.findProfessorByUsername(username);
-        if(professor == null){
+        String id = req.queryParams("lessonId");
+        if (id == null || id.isBlank()) {
             res.status(400);
             return "Invalid input";
         }
-        Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, time, date).get(0);
+        Lesson lesson = lessons.findLessonById(Long.parseLong(id));
         if(lesson == null){
             res.status(400);
             return "Lesson does not exist";
