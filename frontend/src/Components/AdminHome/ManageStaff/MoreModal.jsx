@@ -4,12 +4,13 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import authentication from "../Hoc/Hoc";
-import spinner from "../../Assets/spinning-loading.gif";
+import spinner from "../../Assets/spinner.svg";
 
 const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonName, lessonRoom, lessonActivity}) => {
     let navigate = useNavigate();
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [reviews, setReviews] = useState([]);
+
 
     const fetchReviews = async () => {
         try {

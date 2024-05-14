@@ -116,8 +116,14 @@ public class User{
     }
 
     public String asJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", this.userId);
+        jsonObject.addProperty("firstName", this.firstName);
+        jsonObject.addProperty("lastName", this.lastName);
+        jsonObject.addProperty("username", this.username);
+        jsonObject.addProperty("type", String.valueOf(this.type));
+        jsonObject.addProperty("email", this.email);
+        return jsonObject.toString();
     }
 
 }
