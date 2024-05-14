@@ -68,6 +68,16 @@ public class Reviews {
         }
         return reviews.get(0);
     }
+    public Integer sumOfRatingsByLesson(Lesson lesson){
+        List<Review> reviews = entityManager().createQuery("SELECT r FROM Review r WHERE r.lesson = :lesson", Review.class)
+                .setParameter("lesson", lesson)
+                .getResultList();
+        Integer total = 0;
+        for (Review review: reviews){
+            total += review.getRating();
+        }
+        return total;
+    }
 
     public void persist(Review review) {
         entityManager().getTransaction().begin();

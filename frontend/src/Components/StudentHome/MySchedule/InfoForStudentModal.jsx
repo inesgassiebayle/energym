@@ -3,11 +3,12 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
-import './Booking.css';
-import ModifyReviewModal from "./ModifyReviewModal";
 import ProfessorViewModal from "./ProfessorViewModal";
 
-const InfoForStudentModal = ({ isOpen, onClose, lessonId, lessonName, date, time, username}) => {
+import './Booking.css';
+import ModifyReviewModal from "./ModifyReviewModal";
+
+const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [room, setRoom] = useState('');
     const [activity, setActivity] = useState('');
@@ -48,14 +49,13 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonId, lessonName, date, time
 
     useEffect(() => {
         if (!isOpen) return;
-
         fetchLesson();
     }, [isOpen, navigate]);
 
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
+        <div className="modal" tabIndex="-1" role="dialog">
             <div className="modal-header">
                 <h5 className="modal-title">Details for "{lessonName}"</h5>
             </div>
@@ -66,18 +66,21 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonId, lessonName, date, time
                 <p>Room: {loadingLesson ? <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : room}</p>
                 <p>Activity: {loadingLesson ? <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : activity}</p>
             </div>
+
             <div className="modal-footer">
                 <button className="cancel" onClick={handleClose}>Close</button>
             </div>
-            <ProfessorViewModal
-                isOpen={showProfessorModal}
-                onClose={closeProfessorModal}
-                lessonName={lessonName}
-                lessonId={lessonId}
-                username={username}
-            />
+            {showProfessorModal && (
+                <ProfessorViewModal
+                    isOpen={showProfessorModal}
+                    onClose={closeProfessorModal}
+                    lessonName={lessonName}
+                    date={date}
+                    time={time}
+                    username={username}
+                />
+            )}
         </div>
     );
 };
-
 export default InfoForStudentModal;
