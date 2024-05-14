@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
-import spinner from "../../Assets/spinning-loading.gif";
+import spinner from "../../Assets/spinner.svg";
 import './profView.css'
 
 const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}) => {

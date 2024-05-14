@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Booking.css';
+import spinner from "../../Assets/spinner.svg";
 
 const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate, concurrency, day, startDay, endDay}) => {
     const [isRecurring, setIsRecurring] = useState(false);
     const [validDates, setValidDates] = useState([]);
     const [selectedStartDate, setSelectedStartDate] = useState('');
     const [selectedEndDate, setSelectedEndDate] = useState('');
+    const [loading, setLoading] = useState(false); // New loading state
+
 
     if (!isOpen) return null;
 
@@ -32,6 +35,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 
     const handleDelete = async () => {
         try {
+            setLoading(true);
             if (isRecurring) {
                 const response =  await axios.delete('http://localhost:3333/student/booking', {
                     params: {
@@ -60,6 +64,9 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
             }
         } catch (error) {
             console.error('Error booking lesson:', error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -148,7 +155,11 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                 </div>
                 <div className="modal-footer">
                     <button onClick={handleClose} className="modal-button cancel">Cancel</button>
-                    <button onClick={handleDelete} className="modal-button cancel">Delete</button>
+                    {loading ? (
+                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                    ) : (
+                        <button onClick={handleDelete} className="modal-button cancel">Delete</button>
+                    )}
                 </div>
             </div>
         </div>

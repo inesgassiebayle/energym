@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Booking.css';
+import spinner from "../../Assets/spinner.svg";
 
 const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate, concurrency, day, startDay, endDay}) => {
     const [isRecurring, setIsRecurring] = useState(false);
     const [validDates, setValidDates] = useState([]);
     const [selectedStartDate, setSelectedStartDate] = useState('');
     const [selectedEndDate, setSelectedEndDate] = useState('');
+    const [loading, setLoading] = useState(false); // New loading state
 
     if (!isOpen) return null;
 
@@ -32,6 +34,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 
     const handleSubmit = async () => {
         try {
+            setLoading(true);
             if (isRecurring) {
                 const response = await axios.post('http://localhost:3333/student/book-lesson', {
                     professor: lessonProfessor,
@@ -58,6 +61,8 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
             }
         } catch (error) {
             console.error('Error booking lesson:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -146,7 +151,11 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                 </div>
                 <div className="modal-footer">
                     <button onClick={handleClose} className="modal-button cancel">Cancel</button>
-                    <button onClick={handleSubmit} className="modal-button submit">Book</button>
+                    {loading ? (
+                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                    ) : (
+                        <button onClick={handleSubmit} className="modal-button submit">Book</button>
+                    )}
                 </div>
             </div>
         </div>

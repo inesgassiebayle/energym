@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
-import spinner from "../../Assets/spinning-loading.gif";
+import spinner from "../../Assets/spinner.svg";
 
 const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -41,7 +41,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
         if (reviews.length === 0) {
             setAverageRating(0); // Puedes establecer el promedio a 0 o a otro valor por defecto.
             setLoadingAverageRating(false);
-            return; // Salir temprano si no hay reseñas.
+            return;
         }
         const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
         const averageRating = totalRating / reviews.length;
