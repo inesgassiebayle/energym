@@ -51,24 +51,27 @@ const SignUp = () => {
         <div className="signup-container">
             <div className="signup-header">
                 <div className="signup-title">
-                    <div className="text"> Sign Up </div>
+                    <div className="text"> Sign Up</div>
                 </div>
                 <div className="logo">
-                    <img src={logo} alt="" />
+                    <img src={logo} alt=""/>
                 </div>
             </div>
             <div className="signup-inputs">
                 <div className="signup-input">
-                    <img src={person_icon} alt="" />
-                    <input type="text" name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" />
+                    <img src={person_icon} alt=""/>
+                    <input type="text" name="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)}
+                           placeholder="First name"/>
                 </div>
                 <div className="signup-input">
-                    <img src={person_icon} alt="" />
-                    <input type="text" name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" />
+                    <img src={person_icon} alt=""/>
+                    <input type="text" name="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)}
+                           placeholder="Last name"/>
                 </div>
                 <div className="signup-input">
-                    <img src={person_icon} alt="" />
-                    <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
+                    <img src={person_icon} alt=""/>
+                    <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)}
+                           placeholder="Username"/>
                 </div>
                 <div className="signup-input">
                     <img src={email_icon} alt="Email"/>
@@ -102,6 +105,10 @@ const SignUp = () => {
             </div>
 
             {generalError && <div className="general-error-message">{generalError}</div>}
+
+            <div className='forgot-password'>Already have an account? <Link to={"/login"}>
+                <button>Login</button>
+            </Link></div>
 
             <button className="signup-button" onClick={handleSignUp}>Sign Up</button>
         </div>
