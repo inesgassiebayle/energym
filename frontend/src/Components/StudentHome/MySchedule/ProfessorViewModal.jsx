@@ -135,4 +135,5 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
         </div>
     );
 };
+
 export default ProfessorViewModal;

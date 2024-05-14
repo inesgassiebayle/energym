@@ -66,4 +66,5 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rat
         </div>
     )
 };
+
 export default ModifyReviewModal;

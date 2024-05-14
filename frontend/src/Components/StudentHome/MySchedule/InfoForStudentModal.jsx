@@ -83,4 +83,5 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
         </div>
     );
 };
+
 export default InfoForStudentModal;
