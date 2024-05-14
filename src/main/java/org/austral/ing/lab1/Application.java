@@ -1,9 +1,8 @@
 package org.austral.ing.lab1;
 import org.austral.ing.lab1.controller.*;
 
-import org.austral.ing.lab1.model.Room;
 import spark.Spark;
-import javax.persistence.EntityManager;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -80,7 +79,7 @@ public class Application {
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
-        Spark.get("/professor/lessons2", professorController::getLessons2);
+        Spark.get("/professor/lessons2", professorController::getProfessorAverageRating);
 
         Spark.post("/review", reviewController::createReview);
         Spark.get("/review", reviewController::getReview);

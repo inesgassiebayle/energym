@@ -8,7 +8,6 @@ import org.austral.ing.lab1.queries.*;
 import spark.Request;
 import spark.Response;
 
-import javax.persistence.EntityManager;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +144,7 @@ public class ProfessorController {
         return gson.toJson(lessonsInfo);
     }
 
-    public String getLessons2(Request req, Response res) {
+    public String getProfessorAverageRating(Request req, Response res) {
         String username = req.queryParams("username");
         Professor professor = professors.findProfessorByUsername(username);
         List<Lesson> lessons = professors.getLessons(professor);
