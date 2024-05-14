@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class StudentController {
     private final Users users;
@@ -82,7 +83,7 @@ public class StudentController {
             }
             lessonBookings.persist(booking.getBooking().get());
             reminderService.scheduleReminder(booking.getBooking().get().getId(), booking.getBooking().get().getLesson().getStartDate(), booking.getBooking().get().getLesson().getTime(), student1.getUser().getEmail(), "Class reminder", "You have a class with " + professor1.getUser().getUsername() + " on " + booking.getBooking().get().getLesson().getStartDate() + " at " + booking.getBooking().get().getLesson().getTime() + " in room " + booking.getBooking().get().getLesson().getRoom().getName());
-            emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked a " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time);
+            sendEmail(student1, booking, professor1, startDate, time);
             return booking.getBooking().get().asJson();
         }
         else {
@@ -104,9 +105,17 @@ public class StudentController {
                 lessonBookings.persist(booking);
             }
             Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, time, startDate).get(0);
-            emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked the" + lesson.getName() +  "classes with " + professor1.getUser().getUsername() + " between " + startDate + " and " + endDate + " at " + time);
+            sendConcurrentEmail(student1, lesson, professor1, startDate, endDate, time);
             return "Succesfull bookings";
         }
+    }
+
+    private void sendConcurrentEmail(Student student1, Lesson lesson, Professor professor1, LocalDate startDate, LocalDate endDate, LocalTime time) {
+        CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked the" + lesson.getName() +  "classes with " + professor1.getUser().getUsername() + " between " + startDate + " and " + endDate + " at " + time));
+    }
+
+    private void sendEmail(Student student1, Result booking, Professor professor1, LocalDate startDate, LocalTime time) {
+        CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked a " + booking.getBooking().get().getLesson().getName() + " class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time));
     }
 
 
