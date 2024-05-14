@@ -48,4 +48,5 @@ const ModifyReviewModal = ({isOpen, onClose, lessonId, lessonName}) => {
         </div>
     )
 };
+
 export default ModifyReviewModal;
