@@ -33,7 +33,7 @@ const ProfessorHome = () => {
             </div>
             <div className='professor-actions'>
                 <button className='professor-button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My Schedule</button>
-                <button className='professor-button' onClick={() => navigate('/my-account')}>My Account</button>
+                <button className='professor-button' onClick={() => navigate(`/trainer/${username}/my-account`)}>My Account</button>
                 <button className='professor-button logout' onClick={handleLogout}>Log Out</button>
             </div>
         </div>
