@@ -36,8 +36,8 @@ const MySchedule = () => {
     const handleInformation = useCallback((lesson) => {
         setSelectedLesson(lesson.name);
         console.log(lesson.name);
-        setSelectedLessonDate(lesson.startDate);
-        console.log(lesson.startDate);
+        setSelectedLessonDate(lesson.date);
+        console.log(lesson.date);
         setSelectedLessonTime(lesson.time);
         console.log(lesson.time);
         setSelectedLessonId(lesson.id);
@@ -70,6 +70,11 @@ const MySchedule = () => {
                         }
                     });
                     setLessons(response.data);
+                    response.data.forEach(lesson => {
+                        console.log(lesson.name);
+                        console.log(lesson.date);
+                        console.log(lesson.id);
+                    })
                 } catch (error) {
                     console.error('Error fetching classes:', error);
                     setError('Failed to fetch classes.');
@@ -84,18 +89,12 @@ const MySchedule = () => {
         if(!selectedDate){
             const fetchClasses = async () => {
                 try {
-                    const response = await axios.get('http://localhost:3333/professor/lessons2', {
+                    const response = await axios.get('http://localhost:3333/professor/lessonsByUser', {
                         params: {
                             username: username
                         }
                     });
-                    console.log(response.data);
                     setInitialLessons(response.data);
-
-                    response.data.forEach(lesson => {
-                        console.log(lesson.name);
-                        console.log(lesson.id);
-                    })
                 } catch (error) {
                     console.error('Error fetching classes:', error);
                     setError('Failed to fetch classes.');
@@ -121,7 +120,7 @@ const MySchedule = () => {
             try {
                 const response = await axios.get('http://localhost:3333/compare-date', {
                     params: {
-                        date: cls.startDate,
+                        date: cls.date,
                         time: cls.time
                     }
                 });
@@ -147,12 +146,12 @@ const MySchedule = () => {
         var oldClasses = [];
         var futureClasses = [];
         var presentClasses = [];
-
+        console.log(classes);
         for (let cls of classes) {
             try {
                 const response = await axios.get('http://localhost:3333/compareInitialDate', {
                     params: {
-                        date: cls.startDate,
+                        date: cls.date,
                     }
                 });
                 if (response.data === "Past") {

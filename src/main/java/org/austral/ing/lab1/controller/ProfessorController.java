@@ -170,4 +170,32 @@ public class ProfessorController {
         return gson.toJson(response);
     }
 
+    public String getLessonsOnlyUsername(Request req, Response res){
+        String username = req.queryParams("username");
+        Professor professor = professors.findProfessorByUsername(username);
+        if(username == null || username.isBlank()){
+            res.status(400);
+            return "Invalid username";
+        }
+
+        if(professor == null){
+            res.status(404);
+            return "Professor does not exist";
+        }
+
+        if(!professor.getUser().state()){
+            res.status(404);
+            return "Professor does not exist";
+        }
+
+        List<Lesson> lessons = professors.getLessons(professor);
+        List<LessonDto> lessonsInfo = new ArrayList<>();
+        for(Lesson lesson: lessons){
+            if(lesson.getState()){
+                lessonsInfo.add(new LessonDto(lesson.getId().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getRoom().getName(), lesson.getActivity().getName(), lesson.getProfessor().getUser().getUsername()));
+            }
+        }
+        res.type("application/json");
+        return gson.toJson(lessonsInfo);
+    }
 }

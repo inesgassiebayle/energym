@@ -6,15 +6,15 @@ import java.time.format.*;
 public class LessonIdAvdDto {
   String id;
   String name;
-  String startDate;
+  String date;
   String time;
   String activity;
   String review;
 
-  public LessonIdAvdDto(String id, String name, String startDate, String time , String activity, String review){
+  public LessonIdAvdDto(String id, String name, String date, String time , String activity, String review){
     this.id = id;
     this.name = name;
-    this.startDate = startDate;
+    this.date = date;
     this.time = time;
     this.activity = activity;
     this.review = review;
@@ -25,7 +25,7 @@ public class LessonIdAvdDto {
   }
 
   public LocalDate getDate(){
-    return LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+    return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
   }
 
   public LocalTime getTime() { return LocalTime.parse(time, DateTimeFormatter.ISO_LOCAL_TIME);

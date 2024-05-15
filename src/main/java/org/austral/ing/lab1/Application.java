@@ -80,6 +80,7 @@ public class Application {
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
         Spark.get("/professor/lessons2", professorController::getProfessorAverageRating);
+        Spark.get("/professor/lessonsByUser", professorController::getLessonsOnlyUsername);
 
         Spark.post("/review", reviewController::createReview);
         Spark.get("/review", reviewController::getReview);
