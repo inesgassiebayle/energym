@@ -39,7 +39,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
     const fetchAverageRating = async (reviews) => {
         setLoadingAverageRating(true);
         if (reviews.length === 0) {
-            setAverageRating(0); // Puedes establecer el promedio a 0 o a otro valor por defecto.
+            setAverageRating(0);
             setLoadingAverageRating(false);
             return;
         }
@@ -79,21 +79,22 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
 
     useEffect(() => {
         return () => {
-            setAverageRating(0); // Reset averageRating when component unmounts or isOpen changes
+            setAverageRating(0);
         };
     }, [isOpen]);
 
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
+        <div className="modal">
             <div className="modal-header">
-                <h5 className="modal-title">Reviews for "{lessonName}"</h5>
+                <h5 className="modal-title">Reviews for {lessonName}</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
             </div>
             <div className="modal-body">
-                <p>Average Rating:{loadingAverageRating ?  (
+                <p>Average Rating:{loadingAverageRating ? (
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                ) : ( reviews.length > 0 ? (averageRating):  <p></p>)}</p>
+                ) : (reviews.length > 0 ? (averageRating) : <p></p>)}</p>
                 {loadingReviews ? (
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                 ) : (
@@ -108,11 +109,11 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
                     )
                 )}
             </div>
-
             <div className="modal-footer">
                 <button className="cancel" onClick={onClose}>Close</button>
             </div>
         </div>
+
     );
 };
 

@@ -105,7 +105,7 @@ public class InitialDataBase {
         lesson2.setProfessor(professors.findProfessorByUsername("prof1"));
         lessons.persist(lesson2);
 
-        Lesson lesson3 = new Lesson("hoy", LocalTime.parse("11:00:00", DateTimeFormatter.ISO_LOCAL_TIME), LocalDate.parse("2024-05-14", DateTimeFormatter.ISO_LOCAL_DATE));
+        Lesson lesson3 = new Lesson("hoy", LocalTime.parse("11:00:00", DateTimeFormatter.ISO_LOCAL_TIME), LocalDate.parse("2024-05-21", DateTimeFormatter.ISO_LOCAL_DATE));
         lesson3.setRoom(rooms.findRoomByName("Lounge"));
         lesson3.setActivity(activities.findActivityByName("Yoga"));
         lesson3.setProfessor(professors.findProfessorByUsername("prof1"));
@@ -143,11 +143,6 @@ public class InitialDataBase {
         Lesson lesson2 = lessons.findLessonByName("Workout");
         BookedLesson booking2 = new BookedLesson(student2, lesson2);
         lessonBookings.persist(booking2);
-
-        Lesson hoy = lessons.findLessonByName("hoy");
-        BookedLesson booking3 = new BookedLesson(student, hoy);
-        lessonBookings.persist(booking3);
-
     }
 
     public void createInitialDataBase(){
