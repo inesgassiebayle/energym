@@ -45,11 +45,9 @@ const ProfessorHome = () => {
                 </button>
                 {showChangePasswordModal && (
                     <div className="modal-overlay">
-                        <div className="modal-content">
                             <ChangeProfessorPasswordModal
                                 onClose={() => setShowChangePasswordModal(false)}
                             />
-                        </div>
                     </div>
                 )}
                 <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>

@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import logo from "../Assets/Logo.png";
 import '../Home.css';
 import axios from "axios";
 import authentication from "./Common/Hoc/Authentication";
+import deleteIcon from "../Assets/person.png";
+import ChangeStudentPasswordModal from "./ChangeStudentPasswordModal";
 
 const StudentHome = () => {
     const {username} = useParams();
     const navigate = useNavigate();
+    const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+
+    const handleDeleteAccountClick = () => {
+        setShowChangePasswordModal(true);
+    };
 
     console.log(username);
     const handleLogout = async () => {
@@ -33,8 +40,18 @@ const StudentHome = () => {
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='home-actions'>
-                <button className='button' onClick={() => navigate(`/student/${username}/schedule`)}>My Schedule</button>
-                <button className='button' onClick={() => navigate(`/student/${username}/my-account`)}>My Account</button>
+                <button className='button' onClick={() => navigate(`/student/${username}/schedule`)}>My Schedule
+                </button>
+                {showChangePasswordModal && (
+                    <div className="modal-overlay">
+                            <ChangeStudentPasswordModal
+                                onClose={() => setShowChangePasswordModal(false)}
+                            />
+                    </div>
+                )}
+                <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>
+                    <img src={deleteIcon} alt="Delete account"/>
+                </button>
                 <button className='button logout' onClick={handleLogout}>Log Out</button>
             </div>
         </div>
