@@ -12,9 +12,12 @@ import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static java.time.LocalTime.*;
 
 public class ActivityController {
     private final Activities activities;
@@ -68,28 +71,25 @@ public class ActivityController {
 
         List<Room> rooms2 = rooms.findRoomsByActivity(name);
         for(Room room: rooms2){
-            boolean state = false;
             Set<Activity> activities1 = room.getActivities();
             for(Activity activity1: activities1){
                 if(activity1.state()){
-                    state = true;
-                }
-            }
-            if(!state){
-                room.deactivate();
-                rooms.persist(room);
-                Set<Lesson> lessons1 = room.getClasses();
-                for(Lesson lesson1: lessons1){
-                    lesson1.deactivate();
-                    lessons.persist(lesson1);
+                    rooms.persist(room);
                 }
             }
         }
-        List<Lesson> lesson2 = lessons.findLessonByActivity(name);
-        for(Lesson lesson: lesson2){
-            lesson.deactivate();
-            lessons.persist(lesson);
+
+        LocalDate now = LocalDate.now();
+
+        // Deactivate future lessons only
+        List<Lesson> lessonsAssociated = lessons.findLessonByActivity(name);
+        for(Lesson lesson: lessonsAssociated){
+            if(!lesson.getStartDate().isBefore(now)) {
+                lesson.deactivate();
+                lessons.persist(lesson);
+            }
         }
+
         res.type("application/json");
         return activity.asJson();
     }
