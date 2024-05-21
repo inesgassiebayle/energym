@@ -35,7 +35,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
     const handleDelete = async () => {
         try {
             setLoading(true);
-            if (isRecurring) {
+            if (isRecurring && concurrency) {
                 const response =  await axios.delete('http://localhost:3333/student/booking', {
                     params: {
                         professor: lessonProfessor,
@@ -100,66 +100,64 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 
     return (
         <div className="modal">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title">Book {lessonName}</h5>
-                    <button onClick={handleClose} className="modal-close-button">&times;</button>
-                </div>
-                <div className="modal-body">
-                    <label className="modal-label">
-                        Cancel booking for more than one week:
-                        <input type="checkbox" checked={isRecurring} onChange={handleRecurring}
-                               className="modal-checkbox"/>
-                    </label>
+            <div className="modal-header">
+                <h5 className="modal-title">Book {lessonName}</h5>
+                <button onClick={handleClose} className="modal-close-button">&times;</button>
+            </div>
+            <div className="modal-body">
+                <label className="modal-label">
+                    Cancel booking for more than one week:
+                    <input type="checkbox" checked={isRecurring} onChange={handleRecurring}
+                           className="modal-checkbox"/>
+                </label>
 
-                    {isRecurring && concurrency && (
-                        <>
-                            <div className="date-container">
-                                <label className="modal-label">
-                                    Start Date:
-                                    <input
-                                        type="date"
-                                        value={selectedStartDate}
-                                        onChange={handleStartDateChange}
-                                        min={`${startDay.year}-${String(startDay.month).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`}
-                                        max={`${endDay.year}-${String(endDay.month).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`}
-                                        list="validDates"
-                                        className="date-input"
-                                    />
-                                </label>
-                                <label className="label">
-                                    End Date:
-                                    <input
-                                        type="date"
-                                        value={selectedEndDate}
-                                        onChange={handleEndDateChange}
-                                        min={`${startDay.year}-${String(startDay.month).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`}
-                                        max={`${endDay.year}-${String(endDay.month).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`}
-                                        list="validDates"
-                                        className="date-input"
-                                    />
-                                </label>
-                                <datalist id="validDates">
-                                    {validDates.map(date => (
-                                        <option key={date} value={date}/>
-                                    ))}
-                                </datalist>
-                            </div>
-                        </>
-                    )}
+                {isRecurring && concurrency && (
+                    <>
+                        <div className="date-container">
+                            <label className="modal-label">
+                                Start Date:
+                                <input
+                                    type="date"
+                                    value={selectedStartDate}
+                                    onChange={handleStartDateChange}
+                                    min={`${startDay.year}-${String(startDay.month).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`}
+                                    max={`${endDay.year}-${String(endDay.month).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`}
+                                    list="validDates"
+                                    className="date-input"
+                                />
+                            </label>
+                            <label className="label">
+                                End Date:
+                                <input
+                                    type="date"
+                                    value={selectedEndDate}
+                                    onChange={handleEndDateChange}
+                                    min={`${startDay.year}-${String(startDay.month).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`}
+                                    max={`${endDay.year}-${String(endDay.month).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`}
+                                    list="validDates"
+                                    className="date-input"
+                                />
+                            </label>
+                            <datalist id="validDates">
+                                {validDates.map(date => (
+                                    <option key={date} value={date}/>
+                                ))}
+                            </datalist>
+                        </div>
+                    </>
+                )}
 
-                    {isRecurring && !concurrency && (
-                        <p>Lesson is not concurrent</p>
-                    )}
-                </div>
-                <div className="modal-footer">
-                    <button onClick={handleClose} className="modal-button cancel">Cancel</button>
-                    {loading ? (
-                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                    ) : (
-                        <button onClick={handleDelete} className="modal-button cancel">Delete</button>
-                    )}
-                </div>
+                {isRecurring && !concurrency && (
+                    <p>Lesson is not booked concurrently</p>
+                )}
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="cancel" onClick={handleClose}>Cancel</button>
+                {loading ? (
+                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                ) : (
+                    <button type="submit" className="cancel" onClick={handleDelete}>Delete</button>
+                )}
             </div>
         </div>
     );

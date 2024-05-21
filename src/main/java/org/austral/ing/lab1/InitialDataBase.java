@@ -162,6 +162,14 @@ public class InitialDataBase {
         Review review = new Review("Great class", 5, student, lesson);
         reviews.persist(review);
 
+        Student student2 = students.findStudentByUsername("stud2");
+        Review review2 = new Review("Bad class", 3, student2, lesson);
+        reviews.persist(review2);
+
+        Review review3 = new Review("Regular class", 4, student2, lesson);
+        reviews.persist(review3);
+
+
     }
 
 }

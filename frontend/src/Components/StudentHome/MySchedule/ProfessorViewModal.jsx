@@ -4,7 +4,7 @@ import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinner.svg";
 
-const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
+const ProfessorViewModal = ({ isOpen, onClose, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
@@ -89,49 +89,52 @@ const ProfessorViewModal = ({ isOpen, onClose, lessonName, date, time, username}
 
 
     useEffect(() => {
-        if (activity && activity !== 'No activity found') { // Ensuring activity is set and valid
+        if (activity && activity !== 'No activity found') {
             fetchReviews();
         }
-    }, [activity, username]); // Added username in case it impacts fetched data
+    }, [activity, username]);
 
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
-            <div className="modal-header">
-                <h2 className="modal-title">Average Rating of {username}: {loadingAverageRating ? (
-                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                ) : (
-                    professorRating > 0 ? professorRating.toFixed(1) : "No ratings yet."
-                )}</h2>
-            </div>
-            <div className="modal-subtitle">Reviews for "{activity}"</div>
-            <div className="modal-body reviews-container">
-                {loadingReviews ? (
-                    <img src={spinner} alt="Loading..." style={{width: '50px' }} />
-                ) : (
-                    reviews.length > 0 ? (
-                        reviews.map((review, index) => (
-                            <div key={index} className="review-square">
-                                <h4>{review.username}</h4>
-                                <p>Lesson: {review.lessonName} on {review.lessonDate} at {review.lessonTime}</p>
-                                <p>Comment: {review.comment}</p>
-                                <div style={{display: 'flex', alignItems: 'center'}}>
-                                    {Number.isInteger(review.rating) && Array.from({length: review.rating}).map((_, i) => (
-                                        <img key={i} src={star} alt="rating"/>
-                                    ))}
-                                </div>
-                            </div>
-                        ))
+            <div className="modal large">
+                <div className="modal-header">
+                    <h2 className="modal-title">Average Rating of {username}: {loadingAverageRating ? (
+                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                     ) : (
-                        <p>No reviews for the selected activity : {activity}.</p>
-                    )
-                )}
+                        professorRating > 0 ? professorRating.toFixed(1) : "No ratings yet."
+                    )}</h2>
+                    <button onClick={onClose} className="modal-close-button">&times;</button>
+                </div>
+                <div className="modal-subtitle">Reviews for "{activity}"</div>
+                <div className="modal-body">
+                    <div className="reviews-container">
+                        {loadingReviews ? (
+                            <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                        ) : (
+                            reviews.length > 0 ? (
+                                reviews.map((review, index) => (
+                                    <div key={index} className="review-square">
+                                        <h4>{review.username}</h4>
+                                        <p>Lesson: {review.lessonName} on {review.lessonDate} at {review.lessonTime}</p>
+                                        <p>Comment: {review.comment}</p>
+                                        <div style={{display: 'flex', alignItems: 'center'}}>
+                                            {Number.isInteger(review.rating) && Array.from({length: review.rating}).map((_, i) => (
+                                                <img key={i} src={star} alt="rating"/>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No reviews for the selected activity : {activity}.</p>
+                            )
+                        )}
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    <button className="cancel" onClick={handlePClose}>Close</button>
+                </div>
             </div>
-            <div className="modal-footer">
-                <button className="cancel" onClick={handlePClose}>Close</button>
-            </div>
-        </div>
     );
 };
 
