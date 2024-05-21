@@ -183,7 +183,14 @@ public class LessonController{
         LocalDate endDate = lessonDto.getEndDate();
 
         while (!startDate.isAfter(endDate)) {
-
+            if (startDate.isBefore(LocalDate.now())) {
+                res.status(409);
+                return "Cannot create a class in a past date";
+            }
+            if (startDate.equals(LocalDate.now()) && lessonDto.getTime().isBefore(LocalTime.now())) {
+                res.status(409);
+                return "Cannot create a class in a past date";
+            }
             if (!isProfessorAvailable(lessonDto.getProfessor(), lessonDto.getTime(), startDate)) {
                 res.status(409);
                 return "Professor is not available at " + startDate.toString();
@@ -192,8 +199,6 @@ public class LessonController{
                 res.status(409);
                 return "Room is not available at " + startDate.toString();
             }
-
-
 
             Lesson lesson = new Lesson(
                     lessonDto.getName(),
