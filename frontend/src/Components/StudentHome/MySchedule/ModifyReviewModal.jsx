@@ -44,23 +44,21 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rat
     return (
         <div className="modal">
             <div className="modal-header">
-                <h5 className="modal-title">Create Review for {lessonName}</h5>
+                <h5 className="modal-title">Modify Review for {lessonName}</h5>
                 <button onClick={handleClose} className="modal-close-button">&times;</button>
             </div>
             <div className="modal-body">
-                <div>
-                    <label htmlFor="rating">Rating</label>
-                    <select id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
-                        <option key={r} value={r}>{r}</option>))}</select>
-                </div>
-                <div>
-                    <label htmlFor="comment">Comment</label>
-                    <textarea id="comment" value={comment} onChange={e => handleComment(e.target.value)}/>
-                </div>
+                <form onSubmit={handleSubmit} className="modal-form">
+                    <select value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
+                        <option key={r} value={r}>{r}</option>))} required>
+                    </select>
+                    <input className="modal-input" type="text" value={comment} placeholder="Comment"
+                           onChange={e => handleComment(e.target.value)} required/>
+                </form>
             </div>
             <div className="modal-footer">
-                <button onClick={handleDelete} className="modal-button delete">Delete</button>
-                <button onClick={handleSubmit} className="modal-button submit">Submit</button>
+                <button type="button" className="cancel" onClick={handleDelete}>Cancel</button>
+                <button type="submit" className="submit" onClick={handleSubmit}>Submit</button>
             </div>
         </div>
     )
