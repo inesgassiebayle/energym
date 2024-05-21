@@ -91,7 +91,7 @@ const Assistance = ({ isOpen, onClose, lessonName, date, time, username}) => {
 
             <div className="modal-footer">
                 <button className="cancel" onClick={onClose}>Close</button>
-                <button className="cancel" onClick={handleConfirm}>Confirm</button>
+                <button className="submit" onClick={handleConfirm}>Confirm</button>
             </div>
         </div>
     );

@@ -42,9 +42,10 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
+        <div className="modal">
             <div className="modal-header">
-                <h5 className="modal-title">Details for "{lessonName}"</h5>
+                <h5 className="modal-title">Details for {lessonName}</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
             </div>
             <div className="modal-body">
                 <p>Start Date: {date}</p>
@@ -54,7 +55,6 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, date, time, username}) =>
                 <p>Activity: {loadingLesson ?
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/> : activity}</p>
             </div>
-
             <div className="modal-footer">
                 <button className="cancel" onClick={onClose}>Close</button>
             </div>

@@ -21,8 +21,6 @@ import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
 import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
 import StudentSchedule from "./Components/StudentHome/MySchedule/MySchedule";
 import MyAccount from "./Components/StudentHome/MyAccount/MyAccount";
-import MyAccountPage from "./Components/ProfessorHome/MyAccount/ProfessorAccount";
-import ProfessorAccount from "./Components/ProfessorHome/MyAccount/ProfessorAccount";
 
 
 function App() {
@@ -47,7 +45,6 @@ function App() {
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
             <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
-            <Route path="/trainer/:username/my-account" element={<ProfessorAccount/>}/>
             <Route path="/student/:username" element={<StudentHome/>}/>
                 <Route path="/student/:username/schedule" element={<StudentSchedule/>}/>
             <Route path="/student/:username/my-account" element={<MyAccount/>}/>
