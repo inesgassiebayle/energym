@@ -53,7 +53,7 @@ public class Application {
         Spark.patch("/user/forgot-password", userController::sendChangePasswordEmail);
 
         Spark.post("/activity/add", activityController::addActivity);
-        Spark.post("/activity/delete", activityController::deleteActivity);
+        Spark.delete("/activity/:name/delete", activityController::deleteActivity);
         Spark.get("/activity/get", activityController::getActivities);
 
         Spark.post("/room/create", roomController::addRoom);

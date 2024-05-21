@@ -55,8 +55,7 @@ public class ActivityController {
     }
 
     public String deleteActivity(Request req, Response res){
-        ActivityDto activityDto = gson.fromJson(req.body(), ActivityDto.class);
-        String name = activityDto.getName();
+        String name = req.params(":name");
         Activity activity = activities.findActivityByName(name);
         if(activity == null){
             res.status(404);
