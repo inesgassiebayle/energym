@@ -52,12 +52,12 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
             <div className="modal-body">
                 <div>
                     <label htmlFor="rating">Rating</label>
-                    <select id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
+                    <select className="modal-select" id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
                         <option key={r} value={r}>{r}</option>))}</select>
                 </div>
                 <div>
                     <label htmlFor="comment">Comment</label>
-                    <textarea id="comment" value={comment} onChange={e => setComment(e.target.value)}/>
+                    <textarea className="modal-textarea" id="comment" value={comment} onChange={e => setComment(e.target.value)}/>
                 </div>
             </div>
             <div className="modal-footer">

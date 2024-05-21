@@ -3,15 +3,15 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-width: 600px; /* Ancho máximo del contenedor principal */
-    margin: auto; /* Centrar el formulario horizontalmente */
-    position: relative; /* Añadir posicionamiento relativo */
+    max-width: 600px;
+    margin: auto;
+    position: relative;
 }
 
 .create-activity-container .form-actions {
     display: flex;
-    justify-content: center; /* Centrar los elementos horizontalmente */
-    gap: 10px; /* Espacio entre los botones */
+    justify-content: center;
+    gap: 10px;
 }
 
 .create-activity-container button {

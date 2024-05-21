@@ -87,8 +87,8 @@
     margin-bottom: 5px;
 }
 
-select,
-textarea {
+modal-select select,
+modal-textarea textarea {
     width: 300px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -108,28 +108,28 @@ textarea:focus {
 }
 .clickable-text {
     cursor: pointer;
-    color: blue; /* Optional: if you want it to look like a typical hyperlink */
-    text-decoration: none; /* Removes underline, but you might add it on hover */
+    color: blue;
+    text-decoration: none;
 }
 
 .clickable-text:hover {
-    text-decoration: underline; /* Optional: adds underline on hover to indicate it's clickable */
+    text-decoration: underline;
 }
 
 .modal-main-title {
-    font-size: 24px; /* Larger font size for emphasis */
-    font-weight: bold; /* Bold to emphasize importance */
-    margin-bottom: 0.5em; /* Space below the title */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0.5em;
 }
 
 .modal-subtitle {
-    font-size: 18px; /* Smaller than main title */
-    color: #666; /* Subtle color for less emphasis */
-    margin-bottom: 1em; /* Space below the subtitle */
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 1em;
 }
 
 .modal-header {
-    padding-bottom: 0; /* Remove extra padding if not needed */
+    padding-bottom: 0;
 }
 
 
