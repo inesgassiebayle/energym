@@ -25,6 +25,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [professorError, setProfessorUnavailableError] = useState('');
     const [roomError, setRoomUnavailableError] = useState('');
     const [activityError, setActivityUnsupported] = useState('');
+    const [dateError, setDateError] = useState('');
 
 
     const fetchDetails = async () => {
@@ -63,6 +64,11 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         }
     };
 
+    const isPastDate = (date) => {
+        const today = new Date();
+        return new Date(date + 'T' + time) <= today;  // Se añade 'T' para combinar fecha con hora en formato ISO
+    };
+
     useEffect(() => {
         if (isOpen && lesson) {
             setOldName(lesson.name);
@@ -77,6 +83,11 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
 
 
     const handleSubmit = async (e) => {
+        if (isPastDate(startDate)) {
+            setDateError('Cannot modify classes from past dates');
+            return;
+        }
+
         e.preventDefault();
         const updateData = {
             oldName: oldName,
@@ -181,9 +192,10 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
                         ))}
                     </select>
                     {roomError && <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{roomError}</div>}
-
+                    {dateError && <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{dateError}</div>}
                     <input className="modal-date-picker" type="date" value={startDate} onChange={e => {
                         setStartDate(e.target.value);
+                        setDateError('')
                         setProfessorUnavailableError('');
                         setRoomUnavailableError('');
                     }}
@@ -192,6 +204,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             </div>
             <div className="modal-footer">
                 <button type="submit" className="submit" onClick={handleSubmit}>Save Changes</button>
+
                 <button type="button" className="cancel" onClick={onClose}>Cancel</button>
             </div>
         </div>
