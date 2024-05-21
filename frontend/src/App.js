@@ -13,7 +13,6 @@ import ProfessorView from "./Components/AdminHome/ManageStaff/ProfessorView";
 import StudentHome from "./Components/StudentHome/StudentHome";
 import ManageActivities from "./Components/AdminHome/ManageActivities/ManageActivities";
 import ActivityAddition from "./Components/AdminHome/ManageActivities/AddActivity/ActivityAddition";
-import ActivityDeletion from "./Components/AdminHome/ManageActivities/DeleteActivity/ActivityDeletion";
 import ManageRooms from "./Components/AdminHome/ManageRooms/ManageRooms";
 import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom";
 import AddLesson from "./Components/AdminHome/ManageSchelude/AddLesson/AddLesson";
@@ -21,7 +20,6 @@ import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
 import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
 import StudentSchedule from "./Components/StudentHome/MySchedule/MySchedule";
 import MyAccount from "./Components/StudentHome/MyAccount/MyAccount";
-import MyAccountPage from "./Components/ProfessorHome/MyAccount/ProfessorAccount";
 import ProfessorAccount from "./Components/ProfessorHome/MyAccount/ProfessorAccount";
 
 
@@ -41,7 +39,6 @@ function App() {
             <Route path="/StudentHome" element={<StudentHome/>}/>
             <Route path="/AdministratorHome/ManageActivities" element={<ManageActivities/>}/>
             <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>
-            <Route path="/AdministratorHome/ManageActivities/DeleteActivity" element={<ActivityDeletion/>}/>
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
