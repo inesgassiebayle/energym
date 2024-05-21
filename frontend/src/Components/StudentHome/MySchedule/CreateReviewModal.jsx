@@ -47,22 +47,22 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
         <div className="modal">
             <div className="modal-header">
                 <h5 className="modal-title">Create Review for {lessonName}</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
             </div>
             <div className="modal-body">
-                <div>
-                    <label htmlFor="rating">Rating</label>
-                    <select className="modal-select" id="rating" value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
-                        <option key={r} value={r}>{r}</option>))}</select>
-                </div>
-                <div>
-                    <label htmlFor="comment">Comment</label>
-                    <textarea className="modal-textarea" id="comment" value={comment} onChange={e => setComment(e.target.value)}/>
-                </div>
+                <form onSubmit={handleSubmit} className="modal-form">
+                    <select value={rating} onChange={handleRatingChange}>{[0, 1, 2, 3, 4, 5].map(r => (
+                        <option key={r} value={r}>{r}</option>))} required>
+                    </select>
+                    <input className="modal-input" type="text" value={comment} placeholder="Comment"
+                           onChange={e => setComment(e.target.value)} required/>
+                </form>
             </div>
             <div className="modal-footer">
-                <button onClick={handleClose} className="modal-button cancel">Cancel</button>
-                <button onClick={handleSubmit} className="modal-button submit">Submit</button>
-                {assistanceError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{assistanceError}</div>}
+                <button type="button" className="cancel" onClick={handleClose}>Cancel</button>
+                <button type="submit" className="submit" onClick={handleSubmit}>Submit</button>
+                {assistanceError &&
+                    <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{assistanceError}</div>}
 
             </div>
         </div>

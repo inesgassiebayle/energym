@@ -34,7 +34,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            if (isRecurring) {
+            if (isRecurring && concurrency) {
                 const response = await axios.post('http://localhost:3333/student/book-lesson', {
                     professor: lessonProfessor,
                     student: username,
@@ -96,7 +96,6 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 
     return (
         <div className="modal">
-            <div className="modal-content">
                 <div className="modal-header">
                     <h5 className="modal-title">Book {lessonName}</h5>
                     <button onClick={handleClose} className="modal-close-button">&times;</button>
@@ -148,14 +147,13 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                         <p>Not concurrent lesson</p>
                     )}
                 </div>
-                <div className="modal-footer">
-                    <button onClick={handleClose} className="modal-button cancel">Cancel</button>
-                    {loading ? (
-                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                    ) : (
-                        <button onClick={handleSubmit} className="modal-button submit">Book</button>
-                    )}
-                </div>
+            <div className="modal-footer">
+                <button type="button" className="cancel" onClick={handleClose}>Cancel</button>
+                {loading ? (
+                    <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                ) : (
+                    <button type="submit" className="submit" onClick={handleSubmit}>Submit</button>
+                )}
             </div>
         </div>
     );
