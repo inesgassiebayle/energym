@@ -59,8 +59,9 @@ const AdminHome = () => {
                 {showChangePasswordModal && (
                     <div className="modal-overlay">
                         <div className="modal-content">
-                            <ChangePasswordModal />
-                            <button className="button-close" onClick={() => setShowChangePasswordModal(false)}>✖</button>
+                            <ChangePasswordModal
+                                onClose={() => setShowChangePasswordModal(false)}
+                            />
                         </div>
                     </div>
                 )}

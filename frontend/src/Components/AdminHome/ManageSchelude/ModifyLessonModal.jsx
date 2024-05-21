@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './ModifyLessonModal.css';
+import '../../Modal.css';
 import authentication from "../Hoc/Hoc";
 
 const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
@@ -123,69 +123,77 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modify-lesson-modal">
-            <form onSubmit={handleSubmit}>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name"/>
+        <div className="modal">
+            <div className="modal-header">
+                <h5 className="modal-title">Modify Lesson {lesson.name}</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
+            </div>
+            <div className="modal-body">
+                <form onSubmit={handleSubmit} className="modal-form">
+                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name"/>
 
-                <select value={time} onChange={(e) => {
-                    setTime(e.target.value);
-                    setProfessorUnavailableError('');
-                    setRoomUnavailableError('');
+                    <select value={time} onChange={(e) => {
+                        setTime(e.target.value);
+                        setProfessorUnavailableError('');
+                        setRoomUnavailableError('');
 
-                }} required>
-                    <option value="">Select Lesson Time</option>
-                    {generateHourOptions().map((hour, index) => (
-                        <option key={index} value={hour}>{hour}</option>
-                    ))}
-                </select>
-
-
-                <select value={activity} onChange={(e) => {
-                    setActivity(e.target.value);
-                    setActivityUnsupported('');
-                }} required>
-                    <option value="">Select Activity</option>
-                    {activities.map((activity, index) => (
-                        <option key={index} value={activity}>{activity}</option>
-                    ))}
-                </select>
-                <select value={professor}
-                        onChange={(e) => {
-                            setProfessor(e.target.value);
-                            setProfessorUnavailableError(''); //limpiar el error
-
-                        }} required>
-                    <option value="">Select Professor</option>
-                    {professors.map((professor, index) => (
-                        <option key={index} value={professor}>{professor}</option>
-                    ))}
-                </select>
-
-                <select value={roomName} onChange={(e) => {
-                    setRoomName(e.target.value);
-                    setRoomUnavailableError('');
-                }} required>
-
-                    <option value="">Select Room</option>
-                    {rooms.map((room, index) => (
-                        <option key={index} value={room}>{room}</option>
-                    ))}
-                </select>
-
-                <input type="date" value={startDate} onChange={e => {
-                    setStartDate(e.target.value);
-                    setProfessorUnavailableError('');
-                    setRoomUnavailableError('');
-                }}
-                       placeholder="Start Date (YYYY-MM-DD)"/>
-                <button type="submit">Save Changes</button>
-                <button type="button" onClick={onClose}>Cancel</button>
-                {professorError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{professorError}</div>}
-                {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
-                {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
+                    }} required>
+                        <option value="">Select Lesson Time</option>
+                        {generateHourOptions().map((hour, index) => (
+                            <option key={index} value={hour}>{hour}</option>
+                        ))}
+                    </select>
 
 
-            </form>
+                    <select value={activity} onChange={(e) => {
+                        setActivity(e.target.value);
+                        setActivityUnsupported('');
+                    }} required>
+                        <option value="">Select Activity</option>
+                        {activities.map((activity, index) => (
+                            <option key={index} value={activity}>{activity}</option>
+                        ))}
+                    </select>
+                    {activityError &&
+                        <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{activityError}</div>}
+                    <select value={professor}
+                            onChange={(e) => {
+                                setProfessor(e.target.value);
+                                setProfessorUnavailableError(''); //limpiar el error
+
+                            }} required>
+                        <option value="">Select Professor</option>
+                        {professors.map((professor, index) => (
+                            <option key={index} value={professor}>{professor}</option>
+                        ))}
+                    </select>
+                    {professorError &&
+                        <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{professorError}</div>}
+
+                    <select value={roomName} onChange={(e) => {
+                        setRoomName(e.target.value);
+                        setRoomUnavailableError('');
+                    }} required>
+
+                        <option value="">Select Room</option>
+                        {rooms.map((room, index) => (
+                            <option key={index} value={room}>{room}</option>
+                        ))}
+                    </select>
+                    {roomError && <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{roomError}</div>}
+
+                    <input className="modal-date-picker" type="date" value={startDate} onChange={e => {
+                        setStartDate(e.target.value);
+                        setProfessorUnavailableError('');
+                        setRoomUnavailableError('');
+                    }}
+                           placeholder="Start Date (YYYY-MM-DD)"/>
+                </form>
+            </div>
+            <div className="modal-footer">
+                <button type="submit" className="submit" onClick={handleSubmit}>Save Changes</button>
+                <button type="button" className="cancel" onClick={onClose}>Cancel</button>
+            </div>
         </div>
     );
 };

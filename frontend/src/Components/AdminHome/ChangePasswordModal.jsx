@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import password_icon from "../Assets/password.png";
 import axios from "axios";
-import './ChangePasswordModal.css'
+import './ManagePassword.css'
 
-const ChangePasswordModal = () => {
+const ChangePasswordModal = ({onClose}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmation, setConfirmation] = useState('');
@@ -85,21 +85,41 @@ const ChangePasswordModal = () => {
     }, []);
 
     return (
-        <div className="change-password-container">
+        <div className="modal">
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             {successMessage && <div className="success-message">{successMessage}</div>}
-            <div className='inputs'>
-                <div className='password-input'>
-                    <img src={password_icon} alt="Password"/>
-                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='New Password'/>
-                </div>
-                <div className='password-input'>
-                    <img src={password_icon} alt="Confirm"/>
-                    <input type='password' value={confirmation} onChange={(e) => setConfirmation(e.target.value)} placeholder='Confirm Password'/>
-                </div>
+            <div className="modal-header">
+                <h5 className="modal-title">Manage Account</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
             </div>
-            <button className='change' onClick={handleChange}>Change Password</button>
-            <button className='delete' onClick={handleDelete}>Delete account</button>
+            <div className="modal-body">
+                <form className="modal-form">
+                    <div className="password-input">
+                        <img src={password_icon} alt="Password"/>
+                        <input
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Password"
+                        />
+                    </div>
+                    <div className="password-input">
+                        <img src={password_icon} alt="Password"/>
+                        <input
+                            type="password"
+                            name="password"
+                            value={confirmation}
+                            onChange={(e) => setConfirmation(e.target.value)}
+                            placeholder='Confirm Password'
+                        />
+                    </div>
+                </form>
+            </div>
+            <div className="modal-footer">
+                <button type="submit" className="submit" onClick={handleChange}>Change Password</button>
+                <button type="button" className="cancel" onClick={handleDelete}>Delete account</button>
+            </div>
         </div>
     )
 }

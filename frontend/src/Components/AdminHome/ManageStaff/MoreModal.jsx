@@ -4,6 +4,8 @@ import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import authentication from "../Hoc/Hoc";
 import spinner from "../../Assets/spinner.svg";
+import "../../Reviews.css"
+import "../../Modal.css"
 
 const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonName, lessonRoom, lessonActivity}) => {
     let navigate = useNavigate();
@@ -60,35 +62,35 @@ const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonNa
     if (!isOpen) return null;
 
     return (
-        <div className="modalStaff" tabIndex="-1" role="dialog">
-                <div className="modal-header">
-                        <h5 className="modal-title">Details for "{lessonName}"</h5>
-                    </div>
-                    <div className="modal-body">
-                        <p>Start Date: {lessonDate}</p>
-                        <p>Time: {lessonTime}</p>
-                        <p>Room: {lessonRoom}</p>
-                        <p>Activity: {lessonActivity}</p>
-                        <div className="reviews-container">
-                            <p>Class reviews: </p>
-                            {loadingReviews ? (
-                                <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                            ) : (
-                                reviews.length > 0 ? (
-                                    <ul>
-                                        {reviews.map((review, index) => (
-                                            <ReviewSquare key={index} review={review}/>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>No reviews for the selected class.</p>
-                                )
-                            )}
-                        </div>
-                    </div>
-
+        <div className="modal">
+            <div className="modal-header">
+                <h5 className="modal-title">Details for {lessonName}</h5>
+                <button onClick={onClose} className="modal-close-button">&times;</button>
+            </div>
+            <div className="modal-body">
+                <p>Start Date: {lessonDate}</p>
+                <p>Time: {lessonTime}</p>
+                <p>Room: {lessonRoom}</p>
+                <p>Activity: {lessonActivity}</p>
+                <div className="reviews-container">
+                    <p>Class reviews: </p>
+                    {loadingReviews ? (
+                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
+                    ) : (
+                        reviews.length > 0 ? (
+                            <ul>
+                                {reviews.map((review, index) => (
+                                    <ReviewSquare key={index} review={review}/>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No reviews for the selected class.</p>
+                        )
+                    )}
+                </div>
+            </div>
             <div className="modal-footer">
-                <button className="cancel" onClick={onClose}>Close</button>
+                <button  type="button" className="cancel" onClick={onClose}>Close</button>
             </div>
         </div>
     );
