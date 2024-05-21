@@ -133,4 +133,13 @@ textarea:focus {
 }
 
 
-
+.modal-form input[type="text"],
+.modal-form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+}

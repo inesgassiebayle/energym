@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import './Booking.css';
 
 const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate}) => {
     const [rating, setRating] = useState(0);

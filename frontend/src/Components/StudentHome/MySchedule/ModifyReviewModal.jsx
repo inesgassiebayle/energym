@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import './Booking.css';
 
 const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rating, comment,  handleRating, handleComment}) => {
     if (!isOpen) return null;

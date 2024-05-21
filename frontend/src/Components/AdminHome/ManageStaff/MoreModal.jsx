@@ -1,4 +1,3 @@
-import './MoreModal.css';
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import star from '../../Assets/star2.png';

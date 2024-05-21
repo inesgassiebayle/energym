@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
 import ProfessorViewModal from "./ProfessorViewModal";
-
-import './Booking.css';
-import ModifyReviewModal from "./ModifyReviewModal";
 
 const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
