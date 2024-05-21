@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ManageActivities.css';
 import authentication from "../Hoc/Hoc";
-import ActivityDeletion from "./DeleteActivity/ActivityDeletion";
 import logo from "../../Assets/Logo.png";
 
 const ManageActivities = () => {
