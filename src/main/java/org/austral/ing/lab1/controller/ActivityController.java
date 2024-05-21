@@ -68,16 +68,6 @@ public class ActivityController {
         activity.deactivate();
         activities.persist(activity);
 
-        List<Room> rooms2 = rooms.findRoomsByActivity(name);
-        for(Room room: rooms2){
-            Set<Activity> activities1 = room.getActivities();
-            for(Activity activity1: activities1){
-                if(activity1.state()){
-                    rooms.persist(room);
-                }
-            }
-        }
-
         LocalDate now = LocalDate.now();
 
         // Deactivate future lessons only
