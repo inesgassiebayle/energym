@@ -67,8 +67,9 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
             setDateError('')
             if (errorMsg.includes("Invalid input")){
                 setDateError("End date must be after start date")
+            } else if (errorMsg.includes("Invalid date")){
+                setDateError("Invalid start date")
             }
-
         } finally {
             setLoading(false);
         }
