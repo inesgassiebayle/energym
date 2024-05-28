@@ -1,11 +1,11 @@
 package org.austral.ing.lab1.model;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.austral.ing.lab1.queries.Lessons;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +42,11 @@ public class Room {
     @Column
     private boolean state;
     public boolean state(){return state;}
-    public void deactivate(){this.state=false;}
+
+    public void deactivate(){
+        this.state=false;
+    }
+
     public void activate(){this.state=true;}
 
     @ManyToMany

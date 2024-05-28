@@ -6,10 +6,13 @@ import org.austral.ing.lab1.dto.PasswordChangeDto;
 import org.austral.ing.lab1.dto.SignUpDto;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
+import org.austral.ing.lab1.service.BookingService;
+import org.austral.ing.lab1.service.LessonService;
 import spark.Request;
 import spark.Response;
 import javax.persistence.EntityManager;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,15 +25,21 @@ public class UserController {
     private final Professors professsors;
     private final Administrators administrators;
     private final Lessons lessons;
+    private final LessonBookings lessonBookings;
+    private final BookingService bookingService;
+    private final LessonService lessonService;
 
     private final Gson gson = new Gson();
 
-    public UserController() {
+    public UserController(ReminderService reminderService, EmailSender emailSender) {
         this.users = new Users();
         this.students = new Students();
         this.professsors = new Professors();
         this.administrators = new Administrators();
         this.lessons = new Lessons();
+        this.lessonBookings = new LessonBookings();
+        this.lessonService = new LessonService(emailSender, reminderService);
+        this.bookingService = new BookingService(emailSender, reminderService);
     }
 
     public String studentSignup(Request req, Response res) {
@@ -150,8 +159,18 @@ public class UserController {
             Professor professor = professsors.findProfessorByUsername(username);
             Set<Lesson> lessons2 = professor.getClasses();
             for(Lesson lesson: lessons2){
-                lesson.deactivate();
-                lessons.persist(lesson);
+                lessonService.deleteLesson(lesson);
+            }
+        }
+        if (user.getType().equals(UserType.STUDENT)) {
+            Student student = students.findStudentByUsername(username);
+            Set<BookedLesson> bookings = student.getBookings();
+            for (BookedLesson booking: bookings) {
+                if (LocalDate.now().isBefore(booking.getLesson().getStartDate())) {
+                    if (booking.state()) {
+                        bookingService.deleteBooking(booking);
+                    }
+                }
             }
         }
         res.type("application/json");
