@@ -152,6 +152,7 @@ const MySchedule = () => {
                 const response = await axios.get('http://localhost:3333/compareInitialDate', {
                     params: {
                         date: cls.date,
+                        time: cls.time
                     }
                 });
                 if (response.data === "Past") {

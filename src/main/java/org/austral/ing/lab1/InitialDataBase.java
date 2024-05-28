@@ -66,7 +66,6 @@ public class InitialDataBase {
         activities.persist(activity5);
     }
 
-
     public void createInitialDataBase(){
         createAdministrator();
         createProfessors();

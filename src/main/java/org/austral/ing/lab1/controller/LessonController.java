@@ -400,6 +400,7 @@ public class LessonController{
 
     public String compareTodayDate(Request req, Response res) {
         String dateString = req.queryParams("date");
+        String timeString = req.queryParams("time");
         LocalDate date = LocalDate.parse(dateString);
         LocalDate nowDate = LocalDate.now();
         if (date.isBefore(nowDate)) {
@@ -409,7 +410,16 @@ public class LessonController{
             return "Future";
         }
         else if (date.equals(nowDate)) {
-            return "Present";
+            LocalTime time = LocalTime.parse(timeString);
+            LocalTime nowTime = LocalTime.now();
+
+            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
+                return "Present";
+            }
+            else if (nowTime.isBefore(time)) {
+                return "Future";
+            }
+            return "Past";
         }
         else {
             return "Error";
