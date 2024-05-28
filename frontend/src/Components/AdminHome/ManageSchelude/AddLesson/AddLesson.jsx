@@ -75,7 +75,7 @@ const LessonAddition = () => {
             } else if (errorMsg.includes('Activity not supported in the selected room')){
                 setActivityUnsupported("Activity not supported in the selected room")
             } else if (errorMsg.includes("Invalid date")) {
-                setDateError("Cannot schedule a class in the past");
+                setDateError("Cannot create a class in a past date");
             } else if (errorMsg.includes("Invalid time")) {
                 setDateError("Cannot schedule a class in the past");
             }
