@@ -286,7 +286,7 @@ const StudentSchedule = () => {
                                     {oldBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
                                     {oldNotBookedClasses.includes(classInfo) &&
-                                        <button className='past-not-booked'onClick={() => openReviewsModal(classInfo)}>View Review</button>}
+                                        <button className='more'onClick={() => openReviewsModal(classInfo)}>View Review</button>}
                                     {futureBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openBookingDelete(classInfo)}>Cancel booking</button>}
                                     {futureFullClasses.includes(classInfo) && <span className='future-full'>Full capacity</span>}
