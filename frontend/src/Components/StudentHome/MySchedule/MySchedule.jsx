@@ -7,6 +7,7 @@ import ModifyReviewModal from "./ModifyReviewModal";
 import Booking from "./Booking";
 import DeleteBooking from "./DeleteBooking";
 import InfoForStudentModal from "./InfoForStudentModal";
+import ShowReviewsModal from "./ShowReviewsModal";
 
 
 const StudentSchedule = () => {
@@ -37,6 +38,7 @@ const StudentSchedule = () => {
     const [reviewId, setReviewId] = useState(0);
     const [showMoreInfoModal, setShowMoreInfoModal] = useState(false);
     const [lessonId, setLessonId] = useState('');
+    const [showReviews , setShowReviews] = useState(false)
     const handleDateChange = (e) => {
         const selectDate = e.target.value;
         setSelectedDate(selectDate);
@@ -110,6 +112,10 @@ const StudentSchedule = () => {
         setShowMoreInfoModal(false);
     }
 
+    const closeReviewsModal = () => {
+        setShowReviews(false)
+    }
+
     const openCreateReviewModal = (lesson) => {
         handleInformation(lesson);
         setShowCreateReviewModal(true);
@@ -135,6 +141,11 @@ const StudentSchedule = () => {
     const openSmoreInfoModal = (lesson) => {
         handleInformation(lesson);
         setShowMoreInfoModal(true);
+    }
+
+    const openReviewsModal = (lesson) => {
+        handleInformation(lesson);
+        setShowReviews(true);
     }
 
 
@@ -164,11 +175,6 @@ const StudentSchedule = () => {
     }
 
     function handleComment (e) {
-        setComment(e);
-    }
-
-
-    const handleCommentChange = (e) => {
         setComment(e);
     }
 
@@ -279,7 +285,8 @@ const StudentSchedule = () => {
                                     <button className='more' onClick={() => openSmoreInfoModal(classInfo)}>More</button>
                                     {oldBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
-                                    {oldNotBookedClasses.includes(classInfo) && <span className='past-not-booked'>Not Booked</span>}
+                                    {oldNotBookedClasses.includes(classInfo) &&
+                                        <button className='more'onClick={() => openReviewsModal(classInfo)}>View Review</button>}
                                     {futureBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openBookingDelete(classInfo)}>Cancel booking</button>}
                                     {futureFullClasses.includes(classInfo) && <span className='future-full'>Full capacity</span>}
@@ -350,6 +357,15 @@ const StudentSchedule = () => {
                 comment = {comment}
                 handleRating={handleRating}
                 handleComment={handleComment}
+                />
+            <ShowReviewsModal
+                isOpen={showReviews}
+                onClose={closeReviewsModal}
+                date={lessonDate}
+                time={lessonTime}
+                username={lessonProfessor}
+                id={lessonId}
+                lessonName={lessonName}
                 />
         </div>
     );

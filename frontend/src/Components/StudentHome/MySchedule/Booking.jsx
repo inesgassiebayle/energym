@@ -9,6 +9,9 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
     const [selectedEndDate, setSelectedEndDate] = useState('');
     const [loading, setLoading] = useState(false); // New loading state
 
+    const [dateError, setDateError] = useState('');
+
+
     if (!isOpen) return null;
 
     const handleClose = () => {
@@ -59,7 +62,13 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                 onClose();
             }
         } catch (error) {
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error booking lesson:', error);
+            setDateError('')
+            if (errorMsg.includes("Invalid input")){
+                setDateError("End date must be after start date")
+            }
+
         } finally {
             setLoading(false);
         }
@@ -80,6 +89,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
         const selectedDate = e.target.value;
         if (validateDate(selectedDate)) {
             setSelectedStartDate(selectedDate);
+            setDateError('');
         } else {
             setSelectedStartDate(''); // Reset if invalid
         }
@@ -89,6 +99,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
         const selectedDate = e.target.value;
         if (validateDate(selectedDate)) {
             setSelectedEndDate(selectedDate);
+            setDateError('');
         } else {
             setSelectedEndDate(''); // Reset if invalid
         }
@@ -114,7 +125,6 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                                     Start Date:
                                     <input
                                         type="date"
-                                        value={selectedStartDate}
                                         onChange={handleStartDateChange}
                                         min={`${startDay.year}-${String(startDay.month).padStart(2, '0')}-${String(startDay.day).padStart(2, '0')}`}
                                         max={`${endDay.year}-${String(endDay.month).padStart(2, '0')}-${String(endDay.day).padStart(2, '0')}`}
@@ -153,8 +163,9 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
                     <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                 ) : (
                     <button type="submit" className="submit" onClick={handleSubmit}>Submit</button>
-                )}
+            )}
             </div>
+            {dateError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{dateError}</div>}
         </div>
     );
 };
