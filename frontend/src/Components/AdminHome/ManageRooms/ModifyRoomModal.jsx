@@ -13,6 +13,8 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
     const [name, setName] = useState('');
     const [capacity, setCapacity] = useState('');
 
+    const [capacityError, setCapacityInvalid] = useState('');
+
 
     useEffect(() => {
         if (!isOpen) return;
@@ -66,7 +68,11 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
             onClose(true);
             onSave();
         } catch (error) {
-            console.error('Error al enviar solicitud:', error);
+            const errorMsg = error.response?.data || 'An unexpected error occurred.';
+            setCapacityInvalid('');
+            if (errorMsg.includes("Invalid capacity")) {
+                setCapacityInvalid("Invalid capacity");
+            }
         }
     };
 
@@ -98,24 +104,28 @@ const ModifyRoomModal = ({ isOpen, onClose, roomName, onSave }) => {
                                             />
                                             <label>{activityName}</label>
                                         </div>
-                                        ))}
+                                    ))}
                                 </div>
                             )}
                         </div>
                         <input
-                            className="modal-input"
                             type='number'
                             value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
+                            onChange={(e) => {
+                                setCapacity(e.target.value)
+                                setCapacityInvalid("");
+                            }}
                             placeholder='Capacity'
                             required
                         />
+                        {capacityError && <div className="error-message"
+                                               style={{color: 'red', textAlign: 'center'}}>{capacityError}</div>}
                     </form>
                 </div>
-                <div className="modal-footer">
-                    <button type="submit" className="submit" onClick={handleSubmit}>Save changes</button>
-                    <button type="button" className="cancel" onClick={onClose}>Cancel</button>
-                </div>
+            <div className="modal-footer">
+                <button type="submit" className="submit" onClick={handleSubmit}>Save changes</button>
+                <button type="button" className="cancel" onClick={onClose}>Cancel</button>
+            </div>
         </div>
 
     );
