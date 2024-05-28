@@ -3,7 +3,6 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinner.svg";
-import {wait} from "@testing-library/user-event/dist/utils";
 
 const ShowReviewsModal = ({ isOpen, onClose, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
