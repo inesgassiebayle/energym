@@ -79,6 +79,11 @@ public class ActivityController {
             if(!lesson.getStartDate().isBefore(now)) {
                 lessonService.deleteLesson(lesson);
             }
+            if (lesson.getStartDate().equals(now)) {
+                if (!lesson.getTime().isBefore(LocalTime.now())) {
+                    lessonService.deleteLesson(lesson);
+                }
+            }
         }
 
         res.type("application/json");

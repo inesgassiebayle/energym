@@ -39,6 +39,7 @@ public class LessonService {
       return new ServiceResult(false, "Lesson not found");
     }
     lesson.deactivate();
+    lessons.persist(lesson);
     Professor professor = lesson.getProfessor();
     CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "Cancelled lesson", "Your lesson :'"+ lesson.getName() + "' scheduled on the " + lesson.getStartDate().getDayOfWeek().toString()+"'s'" + "in between" + lesson.getStartDate().toString() + " at " + lesson.getTime().toString() + " in room " + lesson.getRoom().getName() + " for the activity " + lesson.getActivity().getName() + "has been canceled."));
     Set<BookedLesson> bookings = lesson.getBookings();
