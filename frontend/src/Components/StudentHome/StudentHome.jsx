@@ -49,7 +49,7 @@ const StudentHome = () => {
                             />
                     </div>
                 )}
-                <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>
+                <button className='button' onClick={handleDeleteAccountClick}>
                     <img src={deleteIcon} alt="Delete account"/>
                 </button>
                 <button className='button logout' onClick={handleLogout}>Log Out</button>

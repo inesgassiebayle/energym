@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import './ProfessorHome.css';
+import '../Home.css';
 import logo from "../Assets/Logo.png";
 import authentication from "./Common/Hoc/Authentication";
 import axios from "axios";
@@ -35,12 +35,12 @@ const ProfessorHome = () => {
     };
 
     return (
-        <div className='professor-home-container'>
-            <div className='logo-professor'>
+        <div className='home-container'>
+            <div className='home-logo'>
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
-            <div className='professor-actions'>
-                <button className='professor-button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My
+            <div className='home-actions'>
+                <button className='button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My
                     Schedule
                 </button>
                 {showChangePasswordModal && (
@@ -50,10 +50,10 @@ const ProfessorHome = () => {
                             />
                     </div>
                 )}
-                <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>
+                <button className='button' onClick={handleDeleteAccountClick}>
                     <img src={deleteIcon} alt="Delete account"/>
                 </button>
-                <button className='professor-button logout' onClick={handleLogout}>Log Out</button>
+                <button className='button logout' onClick={handleLogout}>Log Out</button>
             </div>
         </div>
     );

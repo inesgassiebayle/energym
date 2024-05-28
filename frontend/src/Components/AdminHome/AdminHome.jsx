@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AdminHome.css';
+import '../Home.css';
 import logo from "../Assets/Logo.png";
 import deleteIcon from "../Assets/person.png"
 import axios from "axios";
@@ -33,26 +33,26 @@ const AdminHome = () => {
     };
 
     return (
-        <div className='admin-home-container'>
-            <div className='logo-admin'>
+        <div className='home-container'>
+            <div className='home-logo'>
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
-            <div className='admin-actions'>
-                <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageStaff')}>Manage
+            <div className='home-actions'>
+                <button className='button' onClick={() => navigate('/AdministratorHome/ManageStaff')}>Manage
                     Staff
                 </button>
-                <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageSchedule')}>Manage
+                <button className='button' onClick={() => navigate('/AdministratorHome/ManageSchedule')}>Manage
                     Schedule
                 </button>
-                <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Manage
+                <button className='button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Manage
                     Rooms
                 </button>
-                <button className='admin-button' onClick={() => navigate('/AdministratorHome/ManageActivities')}>Manage
+                <button className='button' onClick={() => navigate('/AdministratorHome/ManageActivities')}>Manage
                     Activities
                 </button>
-                <button className='admin-button logout' onClick={handleLogout}>Log Out</button>
+                <button className='button logout' onClick={handleLogout}>Log Out</button>
 
-                <button className='admin-button delete-account' onClick={handleDeleteAccountClick}>
+                <button className='button' onClick={handleDeleteAccountClick}>
                     <img src={deleteIcon} alt="Delete account" />
                 </button>
 
