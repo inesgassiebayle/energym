@@ -1,12 +1,15 @@
 package org.austral.ing.lab1.controller;
 import com.google.gson.Gson;
+import org.austral.ing.lab1.ServiceResult;
 import org.austral.ing.lab1.dto.*;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
+import org.austral.ing.lab1.service.LessonService;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,208 +26,62 @@ public class LessonController{
     private final Students students4;
     private final LessonBookings lessonBookings;
     private final Gson gson = new Gson();
+    private final ReminderService reminderService;
+    private final EmailSender emailSender;
+    private final LessonService lessonService;
 
-    public LessonController() {
+    public LessonController(ReminderService reminderService, EmailSender emailSender) {
         this.lessons = new Lessons();
         this.activities = new Activities();
         this.professors = new Professors();
         this.rooms = new Rooms();
         this.students4 = new Students();
         this.lessonBookings = new LessonBookings();
+        this.reminderService = reminderService;
+        this.emailSender = emailSender;
+        this.lessonService = new LessonService(emailSender, reminderService);
     }
+
     public String addSingleLesson(Request req, Response res) {
         LessonCreationDto lessonDto = gson.fromJson(req.body(), LessonCreationDto.class);
 
         String name = lessonDto.getName();
         LocalDate date = lessonDto.getStartDate();
         LocalTime time = lessonDto.getTime();
-
-        if(name == null || date == null || time == null){
-            res.status(400);
-            return "Invalid input";
-        }
-
-        Lesson lesson = new Lesson(name, time, date);
-
-        if (date.isBefore(LocalDate.now())) {
-            res.status(400);
-            return "Invalid date";
-        }
-        if (date.equals(LocalDate.now()) && time.isBefore(LocalTime.now())) {
-            res.status(400);
-            return "Invalid time";
-        }
-
-        //get activity
-        Activity activity = getActivityByName(lessonDto.getActivity());
-        if (activity != null) {
-            if(activity.state()){
-                lesson.setActivity(activity);
-            }
-            else{
-                res.status(404);
-                return "Activity not found";
-            }
-        } else {
-            // Handle case where activity is not found
-            res.status(404);
-            return "Activity not found";
-        }
-
-        //get professor
-        Professor professor = getProfessorByUsername(lessonDto.getProfessor());
-        if (professor != null) {
-            if(professor.getUser().state()){
-                lesson.setProfessor(professor);
-            }
-            else{
-                // Handle case where professor is not found
-                res.status(404);
-                return "Professor not found";
-            }
-        } else {
-            // Handle case where professor is not found
-            res.status(404);
-            return "Professor not found";
-        }
-
-        //get room
+        Professor professor = professors.findProfessorByUsername(lessonDto.getProfessor());
+        Activity activity = activities.findActivityByName(lessonDto.getActivity());
         Room room = rooms.findRoomByName(lessonDto.getRoomName());
-
-        if (room != null) {
-            if(room.state()){
-                lesson.setRoom(room);
-            }
-            else{
-                // Handle case where professor is not found
-                res.status(404);
-                return "Room not found";
-            }
-        } else {
-            // Handle case where professor is not found
-            res.status(404);
-            return "Room not found";
+        ServiceResult serviceResult = lessonService.addLesson(name, date, time, room, activity, professor);
+        if (serviceResult.isValid()) {
+            res.type("application/json");
+            return serviceResult.getMessage();
         }
-
-
-        //fijarme que la activity de pueda realizar en el room especificado
-        if (!room.getActivities().contains(activity)) {
-            res.status(409);
-            return "Activity not supported in the selected room";
+        else {
+            res.status(400);
+            return serviceResult.getMessage();
         }
-
-        //fijarme que el profesor no este ocupado en el horiario definido
-        if (!isProfessorAvailable(lessonDto.getProfessor(), lessonDto.getTime(), lessonDto.getStartDate())) {
-            res.status(409);
-            return "Professor is not available at the specified time";
-        }
-        //fijarme que el room no este en uso por otra actividad a la hora de la lesson
-        if (!isRoomAvailable(lessonDto.getRoomName(), lessonDto.getTime(), lessonDto.getStartDate())) {
-            res.status(409);
-            return "Room is not available at the specified time";
-        }
-
-        EmailSender emailSender = new EmailSender();
-
-        CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ lesson.getName()+ "' scheduled for " + date.toString() + " at " + time.toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
-
-        lessons.persist(lesson);
-        res.type("application/json");
-        return lesson.asJson();
     }
 
     public String addConcurrentLessons(Request req, Response res) {
         // Parse the JSON body to the ConcurrentLessonDto
         ConcurrentLessonCreationDto lessonDto = gson.fromJson(req.body(), ConcurrentLessonCreationDto.class);
-
-        // Fetch and set Activity
-        Activity activity = getActivityByName(lessonDto.getActivity());
-        if (activity == null) {
-            res.status(404);
-            return "Activity not found";
-        }
-
-        if(!activity.state()){
-            res.status(404);
-            return "Activity not found";
-        }
-
-        // Fetch and set Professor
-        Professor professor = getProfessorByUsername(lessonDto.getProfessor());
-        if (professor == null) {
-            res.status(404);
-            return "Professor not found";
-        }
-
-        if(!professor.getUser().state()){
-            res.status(404);
-            return "Professor not found";
-        }
-
-        //get room
-        Room room = rooms.findRoomByName(lessonDto.getRoomName());
-        if (room == null) {
-            res.status(404);
-            return "Room not found";
-        }
-        if(!room.state()){
-            res.status(404);
-            return "Room not found";
-        }
-
-        if (!room.getActivities().contains(activity)) {
-            res.status(409);
-            return "Activity not supported in the selected room";
-        }
-
-        // Create multiple lesson instances
-        Set<Lesson> lessonsToAdd = new HashSet<>();
         LocalDate startDate = lessonDto.getStartDate();
         LocalDate endDate = lessonDto.getEndDate();
-
-        while (!startDate.isAfter(endDate)) {
-            if (startDate.isBefore(LocalDate.now())) {
-                res.status(409);
-                return "Cannot create a class in a past date";
-            }
-            if (startDate.equals(LocalDate.now()) && lessonDto.getTime().isBefore(LocalTime.now())) {
-                res.status(409);
-                return "Cannot create a class in a past date";
-            }
-            if (!isProfessorAvailable(lessonDto.getProfessor(), lessonDto.getTime(), startDate)) {
-                res.status(409);
-                return "Professor is not available at " + startDate.toString();
-            }
-            if (!isRoomAvailable(lessonDto.getRoomName(), lessonDto.getTime(), startDate)) {
-                res.status(409);
-                return "Room is not available at " + startDate.toString();
-            }
-
-            Lesson lesson = new Lesson(
-                    lessonDto.getName(),
-                    lessonDto.getTime(),
-                    startDate
-            );
-
-            // Set the fetched Activity and Professor to each Lesson
-            lesson.setActivity(activity);
-            lesson.setProfessor(professor);
-            lesson.setRoom(room);
-
-
-            lessonsToAdd.add(lesson);
-            startDate = startDate.plusWeeks(1);
+        LocalTime time = lessonDto.getTime();
+        String name = lessonDto.getName();
+        Room room = rooms.findRoomByName(lessonDto.getRoomName());
+        Professor professor = professors.findProfessorByUsername(lessonDto.getProfessor());
+        Activity activity = activities.findActivityByName(lessonDto.getActivity());
+        ServiceResult serviceResult = lessonService.addConcurrentLessons(startDate, endDate, time, name, professor, room, activity);
+        if (serviceResult.isValid()) {
+            res.type("application/json");
+            return serviceResult.getMessage();
+        }
+        else {
+            res.status(400);
+            return serviceResult.getMessage();
         }
 
-        // Persist all the lessons
-        lessonsToAdd.forEach(lesson -> lessons.persist(lesson));
-
-        EmailSender emailSender = new EmailSender();
-
-        CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ lessonDto.getName() + "' scheduled on the " + lessonDto.getStartDate().getDayOfWeek().toString()+"'s'" + "in between" + lessonDto.getStartDate().toString() + " and "+ lessonDto.getEndDate() + " at " + lessonDto.getTime().toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
-
-        res.type("application/json");
-        return "lesson.asJson()";
     }
 
 
@@ -236,65 +93,27 @@ public class LessonController{
         return professors.findProfessorByUsername(username);
     }
 
-    public boolean isProfessorAvailable(String professorUsername, LocalTime time, LocalDate date) {
-        List<Lesson> conflictingLessons = lessons.findLessonsByProfessorDateAndTime(professorUsername, time, date);
-        if (conflictingLessons == null) return true;
-        List<Lesson> aliveLessons = new ArrayList<>();
-        for(Lesson lesson: conflictingLessons){
-            if(lesson.getState()){
-                aliveLessons.add(lesson);
-            }
-        }
-        return aliveLessons.isEmpty();
-    }
-
-    public boolean isRoomAvailable(String roomName, LocalTime time, LocalDate date) {
-        List<Lesson> conflictingLessons = lessons.findLessonsByRoomAndTime(roomName, time, date);
-        if (conflictingLessons == null) return true;
-        List<Lesson> aliveLessons = new ArrayList<>();
-        for(Lesson lesson: conflictingLessons){
-            if(lesson.getState()){
-                aliveLessons.add(lesson);
-            }
-        }
-        return aliveLessons.isEmpty();
-    }
-
 
     public String deleteLesson(Request req, Response res) {
         ProfessorDateTimeDto deletionDto = gson.fromJson(req.body(), ProfessorDateTimeDto.class);
         String username = deletionDto.getName();
         LocalDate lessonDate = deletionDto.getDate();
         LocalTime lessonTime = deletionDto.getTime();
-
         if(username == null || lessonDate == null || lessonTime == null){
             res.status(400);
             return "Invalid input";
         }
-
         Professor professor = professors.findProfessorByUsername(username);
-        if(professor == null){
-            res.status(400);
-            return "Professor does not exist";
-        }
-
         Lesson lesson = lessons.findLessonsByProfessorDateAndTime(username, lessonTime, lessonDate).get(0);
-
-        if (lesson == null ) {
-            res.status(404);
-            return "Lesson not found";
+        ServiceResult result = lessonService.deleteLesson(lesson);
+        if (result.isValid()) {
+            res.type("application/json");
+            return result.getMessage();
         }
-
-        if (!lesson.getState()){
-            res.status(404);
-            return "Lesson state false";
+        else {
+            res.status(400);
+            return result.getMessage();
         }
-
-        lesson.deactivate();
-        this.lessons.persist(lesson);
-
-        res.type("application/json");
-        return gson.toJson("Deactivated lesson(s) by: " + username + " and date: " + lessonDate + " and time: " + lessonTime);
     }
 
 
@@ -319,7 +138,6 @@ public class LessonController{
     public String lessonModify(Request req, Response res) {
         LessonModifyDto modifyDto =  gson.fromJson(req.body(), LessonModifyDto.class);
         String oldProfessor = modifyDto.getOldProfessor();
-        String oldName = modifyDto.getOldName();
         LocalDate oldDate = modifyDto.getOldDate();
         LocalTime oldTime = modifyDto.getOldTime();
         Lesson oldLesson = lessons.findLessonsByProfessorDateAndTime(oldProfessor, oldTime, oldDate).get(0);
@@ -330,86 +148,16 @@ public class LessonController{
         Professor newProfessor = getProfessorByUsername(modifyDto.getProfessor());
         Room newRoom = rooms.findRoomByName(modifyDto.getRoomName());
 
-        if(oldLesson == null){
-            res.status(404);
-            return "Lesson not found";
+        ServiceResult result = lessonService.modifyLesson(oldLesson, newActivity, newRoom, newProfessor, newName, newTime, newDate);
+
+        if (result.isValid()) {
+            res.type("application/json");
+            return result.getMessage();
         }
-        if(!oldLesson.getState()){
-            res.status(404);
-            return "Lesson not found";
+        else {
+            res.status(400);
+            return result.getMessage();
         }
-
-        if(newActivity == null || newRoom == null || newProfessor == null){
-            res.status(404);
-            return "Activity, Professor or Room not found";
-        }
-
-        if(!newActivity.state() || !newRoom.state() || !newProfessor.getUser().state()){
-            res.status(404);
-            return "Activity, Professor or Room not found";
-        }
-
-        boolean professorChanged = !oldLesson.getProfessor().equals(newProfessor);
-        boolean roomChanged = !oldLesson.getRoom().equals(newRoom);
-        boolean activityChanged = !oldLesson.getActivity().equals(newActivity);
-        boolean dateChanged = !oldLesson.getStartDate().equals(newDate);
-        boolean timeChanged = !oldLesson.getTime().equals(newTime);
-
-
-        if (professorChanged && !isProfessorAvailable(newProfessor.getUser().getUsername(), newTime, newDate)) {
-            res.status(409);
-            return "Professor is not available";
-        }
-
-        if (roomChanged && (!isRoomAvailable(newRoom.getName(), newTime, newDate) ||
-                !newRoom.getActivities().contains(newActivity))) {
-            res.status(409);
-            return "Room is not available or does not support the activity";
-        }
-
-        if (activityChanged && !newRoom.getActivities().contains(newActivity)) {
-            res.status(409);
-            return "New activity not supported in the selected room";
-        }
-
-        if (dateChanged || timeChanged) {
-
-            // Si el profesor no cambió pero la fecha/hora sí, verificar la disponibilidad del profesor en el nuevo horario
-            if (!professorChanged && !isProfessorAvailable(oldLesson.getProfessor().getUser().getUsername(), newTime, newDate)) {
-                res.status(409);
-                return "Professor is not available at the new time/date";
-            }
-
-            // Si la sala no cambió pero la fecha/hora sí, verificar la disponibilidad de la sala en el nuevo horario
-            if (!roomChanged && !isRoomAvailable(oldLesson.getRoom().getName(), newTime, newDate)) {
-                res.status(409);
-                return "Room is not available at the new time/date";
-            }
-
-            // Si el profesor cambió, y también la fecha/hora, verificar la disponibilidad del nuevo profesor
-            if (professorChanged && !isProfessorAvailable(newProfessor.getUser().getUsername(), newTime, newDate)) {
-                res.status(409);
-                return "New professor is not available at the new time/date";
-            }
-
-            // Si la sala cambió, y también la fecha/hora, verificar la disponibilidad de la nueva sala
-            if (roomChanged && (!isRoomAvailable(newRoom.getName(), newTime, newDate) || !newRoom.getActivities().contains(newActivity))) {
-                res.status(409);
-                return "New room is not available or does not support the activity at the new time/date";
-            }
-        }
-
-        oldLesson.setName(newName);
-        oldLesson.setRoom(newRoom);
-        oldLesson.setActivity(newActivity);
-        oldLesson.setProfessor(newProfessor);
-        oldLesson.setTime(newTime);
-        oldLesson.setStartDate(newDate);
-
-        lessons.persist(oldLesson);
-
-        return "exito! " +  oldLesson.asJson();
-
     }
 
     public String getLessonReviews(Request req, Response res){

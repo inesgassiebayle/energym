@@ -5,16 +5,22 @@ import org.austral.ing.lab1.dto.RoomCreationDto;
 import org.austral.ing.lab1.dto.RoomDeletionDto;
 import org.austral.ing.lab1.dto.RoomModifyDto;
 import org.austral.ing.lab1.model.Activity;
+import org.austral.ing.lab1.model.BookedLesson;
 import org.austral.ing.lab1.model.Lesson;
 import org.austral.ing.lab1.model.Room;
 import org.austral.ing.lab1.queries.Activities;
 import org.austral.ing.lab1.queries.Lessons;
 import org.austral.ing.lab1.queries.Rooms;
+import org.austral.ing.lab1.service.LessonService;
 import spark.Request;
 import spark.Response;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,10 +29,14 @@ public class RoomController {
     private final Activities activities;
     private final Lessons lessons;
     private final Gson gson = new Gson();
-    public RoomController() {
+    private final LessonService lessonService;
+
+
+    public RoomController(EmailSender emailSender, ReminderService reminderService) {
         this.rooms = new Rooms();
         this.activities = new Activities();
         this.lessons = new Lessons();
+        this.lessonService = new LessonService(emailSender, reminderService);
     }
 
     public String addRoom(Request req, Response res){
@@ -75,10 +85,6 @@ public class RoomController {
             res.status(400);
             return "Invalid capacity";
         }
-        if(activities1.length == 0){
-            res.status(400);
-            return "No activities selected";
-        }
         room = new Room(name, capacity);
         for(String activity: activities1){
             Activity activity1 = activities.findActivityByName(activity);
@@ -108,11 +114,20 @@ public class RoomController {
             res.status(404);
             return "Room does not exist";
         }
-        Set<Lesson> lessons2 = room.getClasses();
-        for(Lesson lesson: lessons2){
-            lesson.deactivate();
-            lessons.persist(lesson);
+
+        Set<Lesson> lessons1 = room.getClasses();
+        for (Lesson lesson: lessons1) {
+            if (LocalDate.now().isBefore(lesson.getStartDate())) {
+                lessonService.deleteLesson(lesson);
+            }
+            if (LocalDate.now().equals(lesson.getStartDate())) {
+                if (LocalTime.now().isBefore(lesson.getTime())) {
+                    lessonService.deleteLesson(lesson);
+                }
+            }
         }
+
+
         room.deactivate();
         rooms.persist(room);
         res.type("application/json");
@@ -185,6 +200,7 @@ public class RoomController {
             }
             room.setName(newName);
         }
+
         return fill(res, room, capacity, activities1);
     }
 
@@ -196,10 +212,7 @@ public class RoomController {
             return "Invalid capacity";
         }
 
-        if(activities1.length==0){
-            res.status(400);
-            return "Invalid activities";
-        }
+        final Set<Activity> oldActivities = new HashSet<>(room.getActivities());
 
         room.getActivities().clear();
         for(String activityName: activities1){
@@ -217,7 +230,20 @@ public class RoomController {
                 return "Activity named " + activityName + " does not exist";
             }
         }
+        Set<Activity> newActivities = room.getActivities();
+
+        for (Activity activity: oldActivities){
+            if (!newActivities.contains(activity)){
+                for (Lesson lesson: lessons.findLessonByActivity(activity.getName())){
+                    if (lesson.getRoom().getRoomId().equals(room.getRoomId())){
+                        lessonService.deleteLesson(lesson);
+                    }
+                }
+            }
+        }
+
         rooms.persist(room);
+
         res.type("application/json");
         return room.asJson();
     }

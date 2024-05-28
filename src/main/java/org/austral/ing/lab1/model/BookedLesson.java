@@ -1,7 +1,10 @@
 package org.austral.ing.lab1.model;
 import com.google.gson.JsonObject;
+import org.austral.ing.lab1.controller.EmailSender;
+import org.austral.ing.lab1.controller.ReminderService;
 
 import javax.persistence.*;
+import java.util.concurrent.CompletableFuture;
 
 @Entity
 public class BookedLesson {
@@ -29,6 +32,12 @@ public class BookedLesson {
 
     @Column
     private boolean assistance = false;
+
+    @Transient
+    private EmailSender emailSender;
+
+    @Transient
+    private ReminderService reminderService;
 
     public BookedLesson() {
 
@@ -60,11 +69,12 @@ public class BookedLesson {
         state = true;
     }
 
-    public BookedLesson(Student student, Lesson lesson) {
+    public BookedLesson(EmailSender emailSender, ReminderService reminderService, Student student, Lesson lesson) {
         this.student = student;
         this.lesson = lesson;
         student.addBooking(this);
         lesson.addBooking(this);
+
     }
 
     public String asJson() {

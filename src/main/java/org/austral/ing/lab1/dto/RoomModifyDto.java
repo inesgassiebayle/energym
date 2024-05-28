@@ -23,6 +23,10 @@ public class RoomModifyDto {
         return Integer.parseInt(capacity);
     }
     public String[] getActivities(){
-        return activities.split(",");
+        String[] activities1 =  activities.split(",");
+        if (activities1.length == 1) {
+            return new String[0];
+        }
+        return activities1;
     }
 }

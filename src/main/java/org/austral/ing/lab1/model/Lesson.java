@@ -1,12 +1,15 @@
 package org.austral.ing.lab1.model;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.austral.ing.lab1.controller.EmailSender;
+import org.austral.ing.lab1.queries.LessonBookings;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @Entity
 public class Lesson {
@@ -108,6 +111,12 @@ public class Lesson {
     @Column()
     private boolean state;
 
+    @Transient
+    private EmailSender emailSender;
+
+    @Transient
+    private LessonBookings lessonBookings;
+
     public boolean getState(){
         return state;
     }
@@ -126,7 +135,7 @@ public class Lesson {
         this.time = time;
         this.startDate = startDate;
         this.reviews = new HashSet<>();
-        activate();
+        this.state = true;
     }
 
     public Lesson() {

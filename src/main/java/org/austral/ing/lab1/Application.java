@@ -15,19 +15,18 @@ public class Application {
 
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("energymdb");
         setFactory(factory);
+        final EmailSender emailSender = new EmailSender();
+        final ReminderService reminderService = new ReminderService(emailSender);
         final UserController userController = new UserController();
-        final ActivityController activityController = new ActivityController();
-        final RoomController roomController = new RoomController();
-        final LessonController lessonController = new LessonController();
+        final ActivityController activityController = new ActivityController(emailSender, reminderService);
         final ProfessorController professorController = new ProfessorController();
         final AuthenticationController authenticationController = new AuthenticationController();
         final ReviewController reviewController = new ReviewController();
-        final StudentController studentController = new StudentController();
+        final LessonController lessonController = new LessonController(reminderService, emailSender);
+        final StudentController studentController = new StudentController(reminderService, emailSender);
+        final RoomController roomController = new RoomController(emailSender, reminderService);
         final InitialDataBase initialDataBase = new InitialDataBase();
-        final EmailSender emailSender = new EmailSender();
-
         initialDataBase.createInitialDataBase();
-
         Spark.port(3333);
 
         before((req, resp) -> {

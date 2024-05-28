@@ -8,6 +8,7 @@ import org.austral.ing.lab1.model.Room;
 import org.austral.ing.lab1.queries.Activities;
 import org.austral.ing.lab1.queries.Lessons;
 import org.austral.ing.lab1.queries.Rooms;
+import org.austral.ing.lab1.service.LessonService;
 import spark.Request;
 import spark.Response;
 
@@ -24,11 +25,13 @@ public class ActivityController {
     private final Rooms rooms;
     private final Lessons lessons;
     private final Gson gson = new Gson();
+    private final LessonService lessonService;
 
-    public ActivityController() {
+    public ActivityController(EmailSender emailSender, ReminderService reminderService) {
         this.activities = new Activities();
         this.rooms = new Rooms();
         this.lessons = new Lessons();
+        this.lessonService = new LessonService(emailSender, reminderService);
     }
 
     public String addActivity(Request req, Response res){
@@ -74,8 +77,7 @@ public class ActivityController {
         List<Lesson> lessonsAssociated = lessons.findLessonByActivity(name);
         for(Lesson lesson: lessonsAssociated){
             if(!lesson.getStartDate().isBefore(now)) {
-                lesson.deactivate();
-                lessons.persist(lesson);
+                lessonService.deleteLesson(lesson);
             }
         }
 
