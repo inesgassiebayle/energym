@@ -17,8 +17,8 @@ public class Application {
         setFactory(factory);
         final EmailSender emailSender = new EmailSender();
         final ReminderService reminderService = new ReminderService(emailSender);
-        final UserController userController = new UserController();
         final ActivityController activityController = new ActivityController(emailSender, reminderService);
+        final UserController userController = new UserController(reminderService, emailSender);
         final ProfessorController professorController = new ProfessorController();
         final AuthenticationController authenticationController = new AuthenticationController();
         final ReviewController reviewController = new ReviewController();
