@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import password_icon from "../Assets/password.png";
 import axios from "axios";
 import '../../Components/AdminHome/ManagePassword.css'
+import DeleteConfirmAdmin from "../AdminHome/DeleteConfirmAdmin";
+import DeleteConfirmProfessor from "./DeleteConfirmProfessor";
 
 const ChangePasswordModal = ({onClose}) => {
     const [username, setUsername] = useState('');
@@ -11,6 +13,8 @@ const ChangePasswordModal = ({onClose}) => {
 
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false); // State to control delete modal visibility
+
     let navigate = useNavigate();
 
     const getUsername = async () => {
@@ -59,26 +63,6 @@ const ChangePasswordModal = ({onClose}) => {
         }
     }
 
-    const handleDelete = async () => {
-        const confirmation = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
-
-        if (confirmation) {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    await axios.delete('http://localhost:3333/user/delete', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                } catch (error) {
-                    console.error('Failed to delete the account:', error);
-                }
-            }
-        }
-    };
 
     useEffect(() => {
         getUsername();
@@ -118,8 +102,13 @@ const ChangePasswordModal = ({onClose}) => {
             </div>
             <div className="modal-footer">
                 <button type="submit" className="submit" onClick={handleChange}>Change Password</button>
-                <button type="button" className="cancel" onClick={handleDelete}>Delete account</button>
+                <button type="button" className="cancel" onClick={() => setShowDeleteModal(true)}>Delete account
+                </button>
             </div>
+            <DeleteConfirmProfessor
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+            />
         </div>
     )
 }
