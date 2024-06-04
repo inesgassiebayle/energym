@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import authentication from "../Common/Hoc/Authentication";
+
 
 const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rating, comment,  handleRating, handleComment}) => {
     if (!isOpen) return null;
@@ -65,4 +67,4 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rat
     )
 };
 
-export default ModifyReviewModal;
+export default authentication(ModifyReviewModal);

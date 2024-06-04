@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import spinner from "../../Assets/spinner.svg";
+import authentication from "../Common/Hoc/Authentication";
 
 const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate, concurrency, day, startDay, endDay}) => {
     const [isRecurring, setIsRecurring] = useState(false);
@@ -173,4 +174,4 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 };
 
 
-export default Booking;
+export default authentication(Booking);

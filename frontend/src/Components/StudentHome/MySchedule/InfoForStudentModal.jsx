@@ -3,6 +3,7 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
 import ProfessorViewModal from "./ProfessorViewModal";
+import authentication from "../Common/Hoc/Authentication";
 
 const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -81,4 +82,4 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
     );
 };
 
-export default InfoForStudentModal;
+export default authentication(InfoForStudentModal);

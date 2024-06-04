@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import '../Modal.css';
+import authentication from "./Common/Hoc/Authentication";
+
 
 const DeleteConfirmationModal = ({ isOpen, onClose }) => {
     let navigate = useNavigate();
@@ -43,4 +45,4 @@ const DeleteConfirmationModal = ({ isOpen, onClose }) => {
     );
 };
 
-export default DeleteConfirmationModal;
+export default authentication(DeleteConfirmationModal);

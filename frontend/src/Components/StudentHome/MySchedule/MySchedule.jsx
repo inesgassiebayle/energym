@@ -281,7 +281,7 @@ const StudentSchedule = () => {
                         <ul>
                             {lessons.sort((a, b) => a.time.localeCompare(b.time)).map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
+                                    <span>{classInfo.name} at {classInfo.time} by {classInfo.professor}</span>
                                     <button className='more' onClick={() => openSmoreInfoModal(classInfo)}>More</button>
                                     {oldBookedClasses.includes(classInfo) &&
                                         <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}

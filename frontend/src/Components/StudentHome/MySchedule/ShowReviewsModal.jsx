@@ -3,6 +3,7 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinner.svg";
+import authentication from "../Common/Hoc/Authentication";
 
 const ShowReviewsModal = ({ isOpen, onClose, date, time, username}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -153,4 +154,4 @@ const ShowReviewsModal = ({ isOpen, onClose, date, time, username}) => {
     );
 };
 
-export default ShowReviewsModal;
+export default authentication(ShowReviewsModal);

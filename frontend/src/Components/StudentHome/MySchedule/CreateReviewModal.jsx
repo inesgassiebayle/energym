@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import authentication from "../Common/Hoc/Authentication";
 
 const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfessor, lessonTime, lessonDate}) => {
     const [rating, setRating] = useState(0);
@@ -69,4 +70,4 @@ const CreateReviewModal = ({isOpen, onClose, username, lessonName, lessonProfess
     )
 };
 
-export default CreateReviewModal;
+export default authentication(CreateReviewModal);

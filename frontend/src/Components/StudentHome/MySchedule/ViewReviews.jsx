@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import './Booking.css';
+import authentication from "../Common/Hoc/Authentication";
+
 
 const ModifyReviewModal = ({isOpen, onClose, lessonId, lessonName}) => {
     if (!isOpen) return null;
@@ -48,4 +50,4 @@ const ModifyReviewModal = ({isOpen, onClose, lessonId, lessonName}) => {
     )
 };
 
-export default ModifyReviewModal;
+export default authentication(ModifyReviewModal);

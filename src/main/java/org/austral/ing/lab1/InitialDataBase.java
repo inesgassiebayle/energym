@@ -91,6 +91,14 @@ public class InitialDataBase {
         lesson.setProfessor(professors.findProfessorByUsername("prof1"));
         lesson.setRoom(rooms.findRoomByName("Room1"));
         lessons.persist(lesson);
+
+        LocalTime time1 = LocalTime.parse("09:00", DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate date1 = LocalDate.parse("2024-06-04", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Lesson lesson1 = new Lesson("Workout", time1, date1);
+        lesson1.setActivity(activities.findActivityByName("Functional"));
+        lesson1.setProfessor(professors.findProfessorByUsername("prof1"));
+        lesson1.setRoom(rooms.findRoomByName("Room1"));
+        lessons.persist(lesson1);
     }
 
     public void createBooking() {
@@ -99,6 +107,11 @@ public class InitialDataBase {
         BookedLesson booking = new BookedLesson(student, lesson);
         booking.assisted();
         lessonBookings.persist(booking);
+
+        Lesson lesson1 = lessons.findLessonByName("Workout");
+        Student student1 = students.findStudentByUsername("stud1");
+        BookedLesson booking1 = new BookedLesson(student1, lesson1);
+        lessonBookings.persist(booking1);
     }
 
 
