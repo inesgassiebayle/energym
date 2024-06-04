@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import password_icon from "../Assets/password.png";
 import axios from "axios";
+import authentication from "./Common/Hoc/Authentication";
 import '../../Components/AdminHome/ManagePassword.css'
 
 const ChangePasswordModal = ({onClose}) => {
@@ -124,4 +125,4 @@ const ChangePasswordModal = ({onClose}) => {
     )
 }
 
-export default ChangePasswordModal;
+export default authentication(ChangePasswordModal);

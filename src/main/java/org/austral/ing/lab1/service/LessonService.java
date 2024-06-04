@@ -110,7 +110,6 @@ public class LessonService {
     if (!isRoomAvailable(room, time, date)) {
       return new ServiceResult(false, "Room is not available at the specified time");
     }
-    EmailSender emailSender = new EmailSender();
     CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ lesson.getName()+ "' scheduled for " + date.toString() + " at " + time.toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
     lessons.persist(lesson);
     return new ServiceResult(true, lesson.asJson());
@@ -189,7 +188,6 @@ public class LessonService {
     }
     // Persist all the lessons
     lessonsToAdd.forEach(lesson -> lessons.persist(lesson));
-    EmailSender emailSender = new EmailSender();
     CompletableFuture.runAsync(()-> emailSender.sendEmail(professor.getUser().getEmail(), "New scheduled lesson", "You have a new lesson :'"+ name + "' scheduled on the " + finalStartDate.getDayOfWeek().toString() +"'s'" + "in between" + finalStartDate.toString() + " and "+ endDate + " at " + time.toString() + " in room " + room.getName() + " for the activity " + activity.getName() + "."));
     return new ServiceResult(true, "You have a new lesson :'"+ name + "' scheduled on the " + finalStartDate.getDayOfWeek().toString()+"'s'" + "in between" + finalStartDate.toString() + " and "+ endDate + " at " + time.toString() + " in room " + room.getName() + " for the activity " + activity.getName() + ".");
   }

@@ -3,6 +3,7 @@ import axios from "axios";
 import star from '../../Assets/star2.png';
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinner.svg";
+import authentication from "../Common/Hoc/Authentication";
 
 const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
     let navigate = useNavigate(); // Added useNavigate hook
@@ -118,4 +119,4 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
     );
 };
 
-export default ClassInfoModal;
+export default authentication(ClassInfoModal);
