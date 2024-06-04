@@ -21,6 +21,7 @@ const ClassInfoModal = ({ isOpen, onClose, lessonName, lessonId}) => {
                 }
             });
 
+
             const parsedReviews = response.data.map(review => ({
                 ...review,
                 rating: parseInt(review.rating, 10)

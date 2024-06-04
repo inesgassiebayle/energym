@@ -54,8 +54,8 @@ const ManageActivities = () => {
     }
 
     return (
-        <div className='manage-activities-container'>
-            <div className="manage-activities-header">
+        <div className='home-container'>
+            <div className="modal-header">
                 <div className="manage-activities-title">
                     <div className="text">Manage Activities</div>
                 </div>
@@ -63,18 +63,18 @@ const ManageActivities = () => {
                     <img src={logo} alt=""/>
                 </div>
             </div>
-            <div className='activities-actions'>
-                <button className='activities-button'
+            <div className='home-actions'>
+                <button className='button'
                         onClick={() => navigate('/AdministratorHome/ManageActivities/AddActivity')}>Add Activity
                 </button>
                 {activityNames.map((activity, index) => (
                     <div key={index} className="activity-item">
                         {activity}
-                        <button className='modification-button'
+                        <button className='modal-button'
                                 onClick={() => handleDelete(activity)}>Delete</button>
                     </div>
                 ))}
-                <Link to={"/AdministratorHome"}><button className='activities-button back'>Home</button></Link>
+                <Link to={"/AdministratorHome"}><button className='button logout'>Home</button></Link>
             </div>
             {confirmDelete && (
                 <div className='confirmation-message'>

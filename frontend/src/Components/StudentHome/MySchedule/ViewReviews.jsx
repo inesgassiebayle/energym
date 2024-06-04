@@ -7,7 +7,6 @@ const ModifyReviewModal = ({isOpen, onClose, lessonId, lessonName}) => {
     const [loadingReviews, setLoadingReviews] = useState(false);
 
 
-
     const fetchReviews = async () => {
         try {
             setLoadingReviews(true)

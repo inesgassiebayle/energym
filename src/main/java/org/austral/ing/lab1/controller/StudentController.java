@@ -22,6 +22,7 @@ public class StudentController {
     private final Students students;
     private final Lessons lessons;
     private final Professors professors;
+
     private final LessonBookings lessonBookings;
     private final Reviews reviews;
     private final Gson gson = new Gson();

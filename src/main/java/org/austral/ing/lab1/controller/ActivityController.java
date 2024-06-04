@@ -27,6 +27,7 @@ public class ActivityController {
     private final Gson gson = new Gson();
     private final LessonService lessonService;
 
+
     public ActivityController(EmailSender emailSender, ReminderService reminderService) {
         this.activities = new Activities();
         this.rooms = new Rooms();

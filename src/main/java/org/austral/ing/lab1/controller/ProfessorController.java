@@ -26,6 +26,7 @@ public class ProfessorController {
     }
 
 
+
     public String getProfessors(Request req, Response res){
         List<Professor> professors1 = professors.findAllProfessors();
         List<String> names = new ArrayList<>();

@@ -21,6 +21,7 @@ const InfoForStudentModal = ({ isOpen, onClose, lessonName, date, time, username
         setShowProfessorModal(false);
     }
 
+
     const fetchLesson = async () => {
         try {
             setLoadingLesson(true)

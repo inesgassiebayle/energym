@@ -16,6 +16,7 @@ const ProfessorViewModal = ({ isOpen, onClose, date, time, username}) => {
     const handlePClose = () => {
         onClose();
     };
+
     const fetchProfessorRating = async () => {
         try {
             setLoadingAverageRating(true);

@@ -135,6 +135,7 @@ public class LessonController{
         return gson.toJson(lessonInfo);
     }
 
+
     public String lessonModify(Request req, Response res) {
         LessonModifyDto modifyDto =  gson.fromJson(req.body(), LessonModifyDto.class);
         String oldProfessor = modifyDto.getOldProfessor();
