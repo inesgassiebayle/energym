@@ -111,7 +111,7 @@ public class StudentController {
                 reminderService.scheduleReminder(lesson.getId(), lesson.getStartDate(), lesson.getTime(), student2.getUser().getEmail(), "Class reminder", "You have a class with " + lesson.getProfessor().getUser().getUsername() + " on " + lesson.getStartDate() + " at " + lesson.getTime() + " in room " + lesson.getRoom().getName());
                 lessonBookings.persist(booking);
             }
-            CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "New lesson booked", "You have succesfully booked a concurrent lessons" + " on " + startDate.getDayOfWeek().toString() + " between " + startDate + " and " + endDate +" class with " + professor1.getUser().getUsername() + " on " + startDate + " at " + time));
+            CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "New lesson booked", "You have succesfully booked a concurrent lessons" + " on " + startDate.getDayOfWeek().toString() + " between " + startDate + " and " + endDate +" class with " + professor1.getUser().getUsername() + " at " + time));
             return "Succesfull bookings";
         }
     }
@@ -301,8 +301,8 @@ public class StudentController {
                 return booking.getMessage().get();
             }
             lessonBookings.persist(booking.getBooking().get());
-            reminderService.scheduleReminder(booking.getBooking().get().getId(), booking.getBooking().get().getLesson().getStartDate(), booking.getBooking().get().getLesson().getTime(), booking.getBooking().get().getStudent().getUser().getEmail(), "Class reminder", "You have a class with " + booking.getBooking().get().getLesson().getProfessor().getUser().getUsername() + " on " + booking.getBooking().get().getLesson().getStartDate() + " at " + booking.getBooking().get().getLesson().getTime() + " in room " + booking.getBooking().get().getLesson().getRoom().getName());
-            CompletableFuture.runAsync(()-> emailSender.sendEmail(booking.getBooking().get().getStudent().getUser().getEmail(), "Booking confirmation", "You have successfully booked a " + booking.getBooking().get().getLesson().getName() + " class with " + booking.getBooking().get()
+            reminderService.cancelReminder(booking.getBooking().get().getId());
+            CompletableFuture.runAsync(()-> emailSender.sendEmail(booking.getBooking().get().getStudent().getUser().getEmail(), "Booking cancellation", "You have successfully cancelled your booking for " + booking.getBooking().get().getLesson().getName() + " class with " + booking.getBooking().get()
               .getLesson().getProfessor().getUser().getUsername() + " on " + booking.getBooking().get().getLesson().getStartDate() + " at " + booking.getBooking().get().getLesson().getTime()));
             return booking.getBooking().get().asJson();
         }
@@ -322,9 +322,9 @@ public class StudentController {
             }
             for (BookedLesson booking: bookings) {
                 lessonBookings.persist(booking);
-                reminderService.scheduleReminder(booking.getId(), booking.getLesson().getStartDate(), booking.getLesson().getTime(), booking.getStudent().getUser().getEmail(), "Class reminder", "You have a class with " + booking.getLesson().getProfessor().getUser().getUsername() + " on " + booking.getLesson().getStartDate() + " at " + booking.getLesson().getTime() + " in room " + booking.getLesson().getRoom().getName());
+                reminderService.cancelReminder(booking.getId());
             }
-            CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking confirmation", "You have successfully booked concurrent lessons " + "with " + professor1.getUser().getUsername() + " on " + startDate.getDayOfWeek().toString() + " between " + startDate.toString() + " and " + endDate.toString() + " at " + time));
+            CompletableFuture.runAsync(()-> emailSender.sendEmail(student1.getUser().getEmail(), "Booking cancellation", "You have successfully cancelled the concurrent lessons " + "with " + professor1.getUser().getUsername() + " on " + startDate.getDayOfWeek().toString() + " between " + startDate.toString() + " and " + endDate.toString() + " at " + time));
             return "Succesfull bookings";
         }
     }

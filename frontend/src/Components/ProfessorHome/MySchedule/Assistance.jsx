@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
+import authentication from "../Common/Hoc/Authentication";
 import './CheckList.css'
 
 const Assistance = ({ isOpen, onClose, lessonName, date, time, username}) => {
@@ -97,4 +98,4 @@ const Assistance = ({ isOpen, onClose, lessonName, date, time, username}) => {
     );
 };
 
-export default Assistance;
+export default authentication(Assistance);
