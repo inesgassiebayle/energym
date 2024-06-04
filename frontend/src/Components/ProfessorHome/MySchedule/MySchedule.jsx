@@ -193,8 +193,8 @@ const MySchedule = () => {
                     {initialPresentLessons.length > 0 ? initialPresentLessons.map((classInfo, index) => (
                         <div key={index} className='staff-item'>
                             <span>{classInfo.name} at {classInfo.time}</span>
-                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
-                            <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance</button>
+                            <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
+                            <button className='home-components-modification-button' onClick={() => openAssistanceModal(classInfo)}>Assistance</button>
                         </div>
                     )) : <p>No classes today.</p>}
 
@@ -202,8 +202,8 @@ const MySchedule = () => {
                     {initialPastLessons.length > 0 ? initialPastLessons.slice(0, 5).map((classInfo, index) => (
                         <div key={index} className='staff-item'>
                             <span>{classInfo.name} at {classInfo.time}</span>
-                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
-                            <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews</button>
+                            <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
+                            <button className='home-components-modification-button' onClick={() => openReviewsModal(classInfo)}>Reviews</button>
                         </div>
                     )) : <p>No past classes.</p>}
 
@@ -211,7 +211,7 @@ const MySchedule = () => {
                     {initialFutureLessons.length > 0 ?  initialFutureLessons.slice(0, 5).map((classInfo, index) => (
                         <div key={index} className='staff-item'>
                             <span>{classInfo.name} at {classInfo.time}</span>
-                            <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                            <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
                         </div>
                     )) : <p>No future classes.</p>}
                 </>
@@ -223,25 +223,25 @@ const MySchedule = () => {
                             {pastLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => openReviewsModal(classInfo)}>Reviews
+                                    <button className='home-components-modification-button' onClick={() => openReviewsModal(classInfo)}>Reviews
                                     </button>
-                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
 
                                 </div>
                             ))}
                             {presentLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => openAssistanceModal(classInfo)}>Assistance
+                                    <button className='home-components-modification-button' onClick={() => openAssistanceModal(classInfo)}>Assistance
                                     </button>
-                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
 
                                 </div>
                             ))}
                             {futureLessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => openMoreModal(classInfo)}>More</button>
+                                    <span>{classInfo.name} at {classInfo.time} </span>
+                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
                                 </div>
                             ))}
                         </ul>

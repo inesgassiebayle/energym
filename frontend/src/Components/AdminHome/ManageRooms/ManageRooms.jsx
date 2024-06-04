@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './ManageRooms.css';
+import '../../HomeComponents.css';
 import ModifyRoomModal from './ModifyRoomModal';
 import authentication from "../Hoc/Hoc";
 
@@ -61,35 +61,35 @@ const ManageRooms = () => {
 
     return (
         <>
-            <div className='manage-rooms-container'>
-                <div className="manage-rooms-header">
-                    <div className="manage-rooms-title">
-                        <div className="text">Manage Rooms</div>
+            <div className='home-components-container'>
+                <div className="home-components-header">
+                    <div className="home-components-title">
+                        <div className="home-components-text">Manage Rooms</div>
                     </div>
                 </div>
-                <div className='rooms-actions'>
-                    <button className='rooms-button'
+                <div className='home-components-actions'>
+                    <button className='home-components-button'
                             onClick={() => navigate('/AdministratorHome/ManageRooms/CreateRoom')}>New Room
                     </button>
-                    <div className='room-list'>
+                    <div className='home-components-subtitle'>
                         {roomNames.map((roomName, index) => (
-                            <div key={index} className='room-item'>
+                            <div key={index} className='home-components-item'>
                                 <span>{roomName}</span>
-                                <button className='modification-button' onClick={() => handleDelete(roomName)}>Delete</button>
-                                <button className='modification-button' onClick={() => handleModify(roomName)}>Modify</button>
+                                <button className='home-components-modification-button' onClick={() => handleDelete(roomName)}>Delete</button>
+                                <button className='home-components-modification-button' onClick={() => handleModify(roomName)}>Modify</button>
                             </div>
                         ))}
                     </div>
                     <Link to={"/AdministratorHome"}>
-                        <button className='rooms-button back'>Home</button>
+                        <button className='home-components-button back'>Home</button>
                     </Link>
                 </div>
                 {confirmDelete && (
-                    <div className='confirmation-message'>
+                    <div className='home-components-confirmation-message'>
                         <p>Are you sure you want to delete the room "{selectedRoom}"?</p>
-                        <div className='confirmation-actions'>
-                            <button onClick={confirmDeleteHandler}>Yes</button>
-                            <button onClick={() => setConfirmDelete(false)} className='cancel'>No</button>
+                        <div className='home-components-confirmation-actions'>
+                            <button onClick={confirmDeleteHandler} className='modal-button cancel'>Yes</button>
+                            <button onClick={() => setConfirmDelete(false)} className='modal-button'>No</button>
                         </div>
                     </div>
                 )}

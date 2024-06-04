@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './ManageActivities.css';
+import '../../HomeComponents.css';
 import authentication from "../Hoc/Hoc";
 import logo from "../../Assets/Logo.png";
 
@@ -54,34 +54,34 @@ const ManageActivities = () => {
     }
 
     return (
-        <div className='home-container'>
-            <div className="modal-header">
-                <div className="manage-activities-title">
-                    <div className="text">Manage Activities</div>
+        <div className='home-components-container'>
+            <div className="home-components-header">
+                <div className="home-components-title">
+                    <div className="home-components-text">Manage Activities</div>
                 </div>
                 <div className="logo">
                     <img src={logo} alt=""/>
                 </div>
             </div>
-            <div className='home-actions'>
-                <button className='button'
+            <div className='home-components-actions'>
+                <button className='home-components-button'
                         onClick={() => navigate('/AdministratorHome/ManageActivities/AddActivity')}>Add Activity
                 </button>
                 {activityNames.map((activity, index) => (
-                    <div key={index} className="activity-item">
+                    <div key={index} className="home-components-subtitle">
                         {activity}
-                        <button className='modal-button'
+                        <button className='home-components-modification-button'
                                 onClick={() => handleDelete(activity)}>Delete</button>
                     </div>
                 ))}
                 <Link to={"/AdministratorHome"}><button className='button logout'>Home</button></Link>
             </div>
             {confirmDelete && (
-                <div className='confirmation-message'>
+                <div className='modal'>
                     <p>Are you sure you want to delete the activity : "{selectedActivity}"?</p>
-                    <div className='confirmation-actions'>
-                        <button onClick={confirmDeleteHandler}>Yes</button>
-                        <button onClick={() => setConfirmDelete(false)} className='cancel'>No</button>
+                    <div className='modal-footer'>
+                        <button onClick={confirmDeleteHandler} className="modal-button">Yes</button>
+                        <button onClick={() => setConfirmDelete(false)} className='modal-button cancel'>No</button>
                     </div>
                 </div>
             )}

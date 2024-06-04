@@ -282,18 +282,18 @@ const StudentSchedule = () => {
                             {lessons.sort((a, b) => a.time.localeCompare(b.time)).map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} at {classInfo.time} by {classInfo.professor}</span>
-                                    <button className='more' onClick={() => openSmoreInfoModal(classInfo)}>More</button>
+                                    <button className='home-components-modification-button' onClick={() => openSmoreInfoModal(classInfo)}>More</button>
                                     {oldBookedClasses.includes(classInfo) &&
-                                        <button className='more' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
+                                        <button className='home-components-modification-button' onClick={() => openCreateReviewModal(classInfo)}>Create Review</button>}
                                     {oldNotBookedClasses.includes(classInfo) &&
-                                        <button className='more'onClick={() => openReviewsModal(classInfo)}>View Review</button>}
+                                        <button className='home-components-modification-button'onClick={() => openReviewsModal(classInfo)}>View Review</button>}
                                     {futureBookedClasses.includes(classInfo) &&
-                                        <button className='more' onClick={() => openBookingDelete(classInfo)}>Cancel booking</button>}
+                                        <button className='home-components-modification-button' onClick={() => openBookingDelete(classInfo)}>Cancel booking</button>}
                                     {futureFullClasses.includes(classInfo) && <span className='future-full'>Full capacity</span>}
                                     {futureAvailableClasses.includes(classInfo) &&
-                                        <button className='more' onClick={() => openBooking(classInfo)}>Book lesson</button>}
+                                        <button className='home-components-modification-button' onClick={() => openBooking(classInfo)}>Book lesson</button>}
                                     {oldReviewedClasses.includes(classInfo) &&
-                                        <button className='more' onClick={() => openModifyReview(classInfo)}>Modify Review</button>}
+                                        <button className='home-components-modification-button' onClick={() => openModifyReview(classInfo)}>Modify Review</button>}
                                 </div>
                             ))}
                         </ul> ) : (<p>No available lessons on this date</p> )}

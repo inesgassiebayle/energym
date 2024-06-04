@@ -13,15 +13,47 @@
 
 .date-picker {
     margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .date-picker label {
     margin-right: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.date-picker input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.date-picker input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(50%);
+}
+
+.date-picker input[type="date"]:hover {
+    border-color: #0066cc;
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+}
+
+.date-picker input[type="date"]:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.8);
 }
 
 .schedule-info {
     border: 1px solid #ccc;
     padding: 20px;
+    margin-bottom: 10px;
     border-radius: 5px;
     background-color: #f9f9f9;
 }

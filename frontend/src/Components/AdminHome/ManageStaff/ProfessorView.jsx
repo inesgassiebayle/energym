@@ -1,4 +1,3 @@
-import './ProfessorView.css';
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import logo from '../../Assets/Logo.png';
@@ -72,10 +71,10 @@ const ProfessorView = () => {
 
 
     return (
-        <div className='manage-staff-container'>
-            <div className="manage-staff-header">
-                <div className="manage-staff-title">
-                    <div className="text">Trainer: {fullname.firstName} {fullname.lastName}</div>
+        <div className='home-components-container'>
+            <div className="home-components-header">
+                <div className="home-components-title">
+                    <div className="home-components-text">Trainer: {fullname.firstName} {fullname.lastName}</div>
                 </div>
                 <div className="logo">
                     <img src={logo} alt=""/>
@@ -100,7 +99,7 @@ const ProfessorView = () => {
                             {lessons.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} by {trainer} at {classInfo.time}</span>
-                                    <button className='more' onClick={() => handleInformation(classInfo)}>More</button>
+                                    <button className='home-components-modification-button' onClick={() => handleInformation(classInfo)}>More</button>
                                 </div>
                             ))}
 

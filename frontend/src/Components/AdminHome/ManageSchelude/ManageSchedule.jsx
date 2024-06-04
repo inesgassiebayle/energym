@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './ManageSchedule.css';
 import logo from '../../Assets/Logo.png';
 import axios from 'axios';
 import ModifyLessonModal from './ModifyLessonModal.jsx';
@@ -79,10 +78,10 @@ const ManageSchedule = () => {
     };
 
     return (
-        <div className="manage-schedule-container">
-            <div className="schedule-header">
-                <div className="schedule-title">
-                    <div className="text">Manage Schedule</div>
+        <div className="home-components-container">
+            <div className="home-components-header">
+                <div className="home-components-title">
+                    <div className="home-components-text">Manage Schedule</div>
                 </div>
                 <div className="logo">
                     <img src={logo} alt="Logo" />
@@ -101,28 +100,28 @@ const ManageSchedule = () => {
                             {classesForSelectedDate.map((classInfo, index) => (
                                 <div key={index} className='staff-item'>
                                     <span>{classInfo.name} by {classInfo.professor} at {classInfo.time}</span>
-                                    <button className="modification-button delete" onClick={() => handleDeleteLesson(classInfo)}>Delete</button>
-                                    <button className='modification-button' onClick={() => handleView(classInfo)}>View</button>
+                                    <button className="home-components-modification-button" onClick={() => handleDeleteLesson(classInfo)}>Delete</button>
+                                    <button className='home-components-modification-button' onClick={() => handleView(classInfo)}>View</button>
                                 </div>
                             ))}
                         </ul>
                     ) : <p>No classes planned for the selected day.</p>}
                 </div>
             )}
-            <div className="schedule-actions">
+            <div className="home-components-actions">
                 <Link to="/AdministratorHome/ManageSchedule/AddLesson">
-                    <button className="schedule-button">Add Lesson</button>
+                    <button className="home-components-button">Add Lesson</button>
                 </Link>
                 <Link to="/AdministratorHome">
-                    <button className="schedule-button back">Home</button>
+                    <button className="home-components-button back">Home</button>
                 </Link>
             </div>
             {confirmDelete && (
-                <div className="confirmation-message">
+                <div className="modal">
                     <p>Are you sure you want to delete the lesson {selectedLesson?.name}?</p>
-                    <div className="confirmation-actions">
-                        <button onClick={confirmDeleteHandler}>Yes</button>
-                        <button onClick={() => setConfirmDelete(false)} className="cancel">No</button>
+                    <div className="modal-footer">
+                        <button onClick={confirmDeleteHandler} className="modal-button cancel">Yes</button>
+                        <button onClick={() => setConfirmDelete(false)} className="modal-button">No</button>
                     </div>
                 </div>
             )}
