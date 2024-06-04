@@ -53,6 +53,15 @@ public class InitialDataBase {
         professors.persist(prof2);
     }
 
+    public void createStudent() {
+        User user = new User("stud1", "stud1", "inegassiebayle@gmail.com", "stud1", "Stud123");
+        Student student = new Student();
+        user.setType(UserType.STUDENT);
+        users.persist(user);
+        student.setUser(user);
+        students.persist(student);
+    }
+
     public void createActivities(){
         Activity activity = new Activity("Yoga");
         activities.persist(activity);
@@ -66,11 +75,41 @@ public class InitialDataBase {
         activities.persist(activity5);
     }
 
+    public void createRoom() {
+        Room room = new Room("Room1", 10);
+        room.setActivity(activities.findActivityByName("Yoga"));
+        room.setActivity(activities.findActivityByName("Pilates"));
+        room.setActivity(activities.findActivityByName("Functional"));
+        rooms.persist(room);
+    }
+
+    public void createLesson() {
+        LocalTime time = LocalTime.parse("10:00", DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate date = LocalDate.parse("2024-06-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Lesson lesson = new Lesson("Cardio Workout", time, date);
+        lesson.setActivity(activities.findActivityByName("Functional"));
+        lesson.setProfessor(professors.findProfessorByUsername("prof1"));
+        lesson.setRoom(rooms.findRoomByName("Room1"));
+        lessons.persist(lesson);
+    }
+
+    public void createBooking() {
+        Lesson lesson = lessons.findLessonByName("Cardio Workout");
+        Student student = students.findStudentByUsername("stud1");
+        BookedLesson booking = new BookedLesson(student, lesson);
+        booking.assisted();
+        lessonBookings.persist(booking);
+    }
+
+
     public void createInitialDataBase(){
         createAdministrator();
         createProfessors();
         createActivities();
-
+        createRoom();
+        createLesson();
+        createStudent();
+        createBooking();
     }
 
 }

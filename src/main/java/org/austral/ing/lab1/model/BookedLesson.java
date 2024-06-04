@@ -69,7 +69,7 @@ public class BookedLesson {
         state = true;
     }
 
-    public BookedLesson(EmailSender emailSender, ReminderService reminderService, Student student, Lesson lesson) {
+    public BookedLesson(Student student, Lesson lesson) {
         this.student = student;
         this.lesson = lesson;
         student.addBooking(this);

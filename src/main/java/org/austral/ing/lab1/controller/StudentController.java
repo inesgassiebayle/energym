@@ -130,7 +130,7 @@ public class StudentController {
         }
         List<BookedLesson> booking = lessonBookings.findBookingByDateAndTimeAndStudent(date, time, student);
         if (booking == null) {
-            return new Result(new BookedLesson(emailSender, reminderService, student, lesson));
+            return new Result(new BookedLesson(student, lesson));
         }
         boolean deactivated = false;
         BookedLesson b = null;
@@ -154,7 +154,7 @@ public class StudentController {
             b.activate();
             return new Result(b);
         }
-        return new Result(new BookedLesson(emailSender, reminderService, student, lesson));
+        return new Result(new BookedLesson(student, lesson));
     }
 
     public boolean correctDate(LocalDate date, LocalTime time) {
