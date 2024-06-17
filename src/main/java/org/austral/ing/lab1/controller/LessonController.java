@@ -187,7 +187,9 @@ public class LessonController{
             if(user == null){
                 return "User does not exist";
             }
-            reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+            if (review.state()) {
+                reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString()));
+            }
         }
         res.type("application/json");
         return gson.toJson(reviewDtos);
@@ -483,7 +485,9 @@ public class LessonController{
                     if(user == null){
                         return "User does not exist";
                     }
-                    reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), review.getLesson().getName(), review.getLesson().getStartDate().toString(), review.getLesson().getTime().toString()));
+                    if (review.state()) {
+                        reviewDtos.add(new ReviewDto(user.getUsername(), review.getComment(), review.getRating().toString(), review.getLesson().getName(), review.getLesson().getStartDate().toString(), review.getLesson().getTime().toString()));
+                    }
                 }
             }
         }

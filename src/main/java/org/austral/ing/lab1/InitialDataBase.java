@@ -60,6 +60,13 @@ public class InitialDataBase {
         users.persist(user);
         student.setUser(user);
         students.persist(student);
+
+        User user2 = new User("stud2", "stud2", "mclaralopez@gmail.com", "stud2", "Stud123");
+        Student student2 = new Student();
+        user2.setType(UserType.STUDENT);
+        users.persist(user2);
+        student2.setUser(user2);
+        students.persist(student2);
     }
 
     public void createActivities(){
@@ -84,21 +91,14 @@ public class InitialDataBase {
     }
 
     public void createLesson() {
-        LocalTime time = LocalTime.parse("10:00", DateTimeFormatter.ofPattern("HH:mm"));
-        LocalDate date = LocalDate.parse("2024-06-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalTime time = LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate date = LocalDate.parse("2024-06-04", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Lesson lesson = new Lesson("Cardio Workout", time, date);
         lesson.setActivity(activities.findActivityByName("Functional"));
         lesson.setProfessor(professors.findProfessorByUsername("prof1"));
         lesson.setRoom(rooms.findRoomByName("Room1"));
         lessons.persist(lesson);
 
-        LocalTime time1 = LocalTime.parse("09:00", DateTimeFormatter.ofPattern("HH:mm"));
-        LocalDate date1 = LocalDate.parse("2024-06-04", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        Lesson lesson1 = new Lesson("Workout", time1, date1);
-        lesson1.setActivity(activities.findActivityByName("Functional"));
-        lesson1.setProfessor(professors.findProfessorByUsername("prof1"));
-        lesson1.setRoom(rooms.findRoomByName("Room1"));
-        lessons.persist(lesson1);
     }
 
     public void createBooking() {
@@ -108,10 +108,11 @@ public class InitialDataBase {
         booking.assisted();
         lessonBookings.persist(booking);
 
-        Lesson lesson1 = lessons.findLessonByName("Workout");
-        Student student1 = students.findStudentByUsername("stud1");
-        BookedLesson booking1 = new BookedLesson(student1, lesson1);
-        lessonBookings.persist(booking1);
+        Lesson lesson2 = lessons.findLessonByName("Cardio Workout");
+        Student student2 = students.findStudentByUsername("stud2");
+        BookedLesson booking2 = new BookedLesson(student2, lesson2);
+        lessonBookings.persist(booking2);
+
     }
 
 

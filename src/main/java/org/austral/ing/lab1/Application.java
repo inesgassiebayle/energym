@@ -26,7 +26,9 @@ public class Application {
         final StudentController studentController = new StudentController(reminderService, emailSender);
         final RoomController roomController = new RoomController(emailSender, reminderService);
         final InitialDataBase initialDataBase = new InitialDataBase();
+        final MercadoPagoController mercadoPagoController = new MercadoPagoController();
         initialDataBase.createInitialDataBase();
+
         Spark.port(3333);
 
         before((req, resp) -> {
@@ -97,6 +99,9 @@ public class Application {
 
         Spark.get("/booking/concurrent", studentController::checkConcurrentBookings);
 
+        Spark.post("/mp/payment", mercadoPagoController::getList);
+        Spark.post("/api/mp/notifications/:id", mercadoPagoController::paymentNotifications);
+        Spark.get("membership/:username", mercadoPagoController::getMembership);
 
         after((request, response) -> closeEntityManager());
 

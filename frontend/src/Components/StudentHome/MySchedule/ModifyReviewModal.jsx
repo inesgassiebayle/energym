@@ -60,7 +60,7 @@ const ModifyReviewModal = ({isOpen, onClose, username, lessonName, reviewId, rat
                 </form>
             </div>
             <div className="modal-footer">
-                <button type="button" className="cancel" onClick={handleDelete}>Cancel</button>
+                <button type="button" className="cancel" onClick={handleDelete}>Delete</button>
                 <button type="submit" className="submit" onClick={handleSubmit}>Submit</button>
             </div>
         </div>

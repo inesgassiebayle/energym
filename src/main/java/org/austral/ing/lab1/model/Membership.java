@@ -7,15 +7,10 @@ import java.time.LocalDate;
 public class Membership {
     @Id
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
-    private Long classId;
+    private Long membershipId;
 
     @Column()
     private LocalDate expiration;
-
-    @Column
-    private String cardNumber;
-
-    @Column String code;
 
     @OneToOne
     private Student student;
@@ -24,14 +19,21 @@ public class Membership {
         return student;
     }
 
+    public void setExpiration(LocalDate expiration) {
+        this.expiration = expiration;
+    }
+
+    public LocalDate getExpiration() {
+        return expiration;
+    }
+
     public void setStudent(Student student) {
         this.student = student;
     }
 
-    public Membership(LocalDate expiration, String cardNumber, String code){
+    public Membership(LocalDate expiration, Student student){
         this.expiration = expiration;
-        this.cardNumber = cardNumber;
-        this.code = code;
+        this.student = student;
     }
 
     public Membership(){

@@ -8,6 +8,8 @@ const authentication = WrappedComponent => {
         const navigate = useNavigate();
 
         useEffect(() => {
+
+            console.log(username);
             const token = localStorage.getItem('token');
 
             if (!token) {
@@ -42,7 +44,28 @@ const authentication = WrappedComponent => {
                 }
             }
 
+
+            const verifyMembership = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:3333/membership/${username}`);
+
+                    if (response.data === 'True') {
+                        console.log('User is a member');
+                    }
+
+                    if (response.data === 'False') {
+                        console.log('User is not a member, redirecting to payment.');
+                        navigate(`/student/${username}/payment`);
+                    }
+
+                } catch (error) {
+                    console.error('Token validation failed:', error);
+                    navigate('/login');
+                }
+            }
+
             verifyToken();
+            verifyMembership();
         }, []);
         return <WrappedComponent {...props} />;
     };

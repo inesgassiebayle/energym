@@ -34,6 +34,10 @@ const StudentHome = () => {
         }
     };
 
+    const handlePaymentClick = () => {
+        navigate(`/student/${username}/payment`);
+    };
+
     return (
         <div className='home-container'>
             <div className='home-logo'>
@@ -44,11 +48,14 @@ const StudentHome = () => {
                 </button>
                 {showChangePasswordModal && (
                     <div className="modal-overlay">
-                            <ChangeStudentPasswordModal
-                                onClose={() => setShowChangePasswordModal(false)}
-                            />
+                        <ChangeStudentPasswordModal
+                            onClose={() => setShowChangePasswordModal(false)}
+                        />
                     </div>
                 )}
+                <button className='button' onClick={handlePaymentClick}>
+                    Manage payment
+                </button>
                 <button className='button' onClick={handleDeleteAccountClick}>
                     <img src={deleteIcon} alt="Delete account"/>
                 </button>
