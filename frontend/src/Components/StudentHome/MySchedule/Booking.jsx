@@ -173,4 +173,4 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
 };
 
 
-export default authentication(Booking);
+export default Booking;

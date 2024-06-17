@@ -17,6 +17,7 @@ public class InitialDataBase {
     private final Students students;
     private final Reviews reviews;
     private final LessonBookings lessonBookings;
+    private final Memberships memberships;
 
     public InitialDataBase(){
         this.administrators = new Administrators();
@@ -28,6 +29,7 @@ public class InitialDataBase {
         this.students = new Students();
         this.reviews = new Reviews();
         this.lessonBookings = new LessonBookings();
+        this.memberships = new Memberships();
     }
     public void createAdministrator(){
         User user = new User("admin", "admin", "admin@gmail.com", "admin", "Admin123");
@@ -60,6 +62,8 @@ public class InitialDataBase {
         users.persist(user);
         student.setUser(user);
         students.persist(student);
+        Membership membership = new Membership(LocalDate.now().plusYears(1), student);
+        memberships.persist(membership);
 
         User user2 = new User("stud2", "stud2", "mclaralopez@gmail.com", "stud2", "Stud123");
         Student student2 = new Student();

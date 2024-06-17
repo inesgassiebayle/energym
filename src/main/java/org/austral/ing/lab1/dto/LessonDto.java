@@ -8,6 +8,7 @@ public class LessonDto {
     private String room;
     private String activity;
     private String professor;
+
     public LessonDto(String id, String name, String date, String time, String room, String activity, String professor) {
         this.id = id;
         this.name = name;

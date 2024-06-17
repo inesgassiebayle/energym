@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.austral.ing.lab1.Result;
 import org.austral.ing.lab1.dto.BookingDto;
 import org.austral.ing.lab1.dto.ConcurrentBookingDto;
+import org.austral.ing.lab1.dto.LessonDto;
 import org.austral.ing.lab1.dto.ProfessorDateTimeDto;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
@@ -209,6 +210,69 @@ public class StudentController {
             return "Professor not active";
         }
         Lesson lesson = lessons.findLessonsByProfessorDateAndTime(professor, dto.getTime(), dto.getDate()).get(0);
+        if (lesson == null) {
+            res.status(400);
+            return "Lesson not found";
+        }
+        if (!lesson.getState()) {
+            res.status(400);
+            return "Lesson not active";
+        }
+        if (correctDate(lesson.getStartDate(), lesson.getTime())) {
+            List<BookedLesson> bookings =new ArrayList<>();
+            for (BookedLesson booking: lesson.getBookings()) {
+                if(booking.state()) {
+                    if (booking.getStudent().equals(student)) {
+                        return "Future class booked";
+                    }
+                    bookings.add(booking);
+                }
+            }
+            if (lesson.getRoom().getCapacity() <= bookings.size()) {
+                return "Future class full";
+            }
+            return "Future class available";
+        }
+        else {
+            List<BookedLesson> bookings =new ArrayList<>();
+            for (BookedLesson booking: lesson.getBookings()) {
+                if(booking.state()) {
+                    if (booking.getStudent().equals(student)) {
+                        Review review = reviews.findReviewByLessonAndStudent(lesson, student);
+                        if(review != null) {
+                            return "Past class booked and reviewed";
+                        }
+                        if (booking.hasAssisted()) {
+                            return "Past class booked";
+                        }
+                        else {
+                            return "Past class not booked";
+                        }
+                    }
+                    bookings.add(booking);
+                }
+            }
+            return "Past class not booked";
+        }
+    }
+
+    public String classifyLesson(Request req, Response res) {
+        String username = req.params(":username");
+        String id = req.params(":id");
+        if (id == null || id.isBlank() || username == null || username.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        Student student = students.findStudentByUsername(username);
+        if (student == null) {
+            res.status(400);
+            return "Student not found";
+        }
+        if (!student.getUser().state()) {
+            res.status(400);
+            return "Student not active";
+        }
+        Lesson lesson = lessons.findLessonById(Long.parseLong(id));
         if (lesson == null) {
             res.status(400);
             return "Lesson not found";
@@ -592,5 +656,35 @@ public class StudentController {
             }
         }
         return filteredBookings;
+    }
+
+    public String getStudentLessons(Request req, Response res) {
+        String username = req.params(":username");
+        if (username == null) {
+            res.status(400);
+            return "Invalid input";
+        }
+        if (username.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        Student student = students.findStudentByUsername(username);
+        if (student == null) {
+            res.status(400);
+            return "Student not found";
+        }
+        if (!student.getUser().state()) {
+            res.status(400);
+            return "Student not active";
+        }
+        Set<BookedLesson> bookings = student.getBookings();
+        List<LessonDto> activeBookings = new ArrayList<>();
+        for (BookedLesson booking: bookings) {
+            if (booking.state()) {
+                LessonDto dto = new LessonDto(booking.getLesson().getId().toString(), booking.getLesson().getName(), booking.getLesson().getStartDate().toString(), booking.getLesson().getTime().toString(), booking.getLesson().getRoom().getName(), booking.getLesson().getActivity().getName(), booking.getLesson().getProfessor().getUser().getUsername());
+                activeBookings.add(dto);
+            }
+        }
+        return gson.toJson(activeBookings);
     }
 }

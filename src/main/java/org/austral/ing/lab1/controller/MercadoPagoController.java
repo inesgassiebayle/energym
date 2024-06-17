@@ -88,7 +88,7 @@ public class MercadoPagoController {
 
       PreferenceRequest preferenceRequest = PreferenceRequest.builder()
         .items(items)
-        .notificationUrl("https://2373-190-190-202-110.ngrok-free.app/api/mp/notifications/" + user.getId())
+        .notificationUrl("https://9773-190-190-202-110.ngrok-free.app/api/mp/notifications/" + user.getId())
         .backUrls(backUrls)
         .build();
 

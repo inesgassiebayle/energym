@@ -73,10 +73,12 @@ public class Application {
         Spark.patch("/lesson/modify", lessonController::lessonModify);
         Spark.get("/lesson", lessonController::getLesson);
         Spark.delete("/lesson", lessonController::deleteLesson);
+        Spark.get("/getLessonById/:id", lessonController::getLessonById);
         Spark.get("/lesson/students", lessonController::getStudents);
         Spark.post("lesson/assistance", lessonController::assistanceCheck);
         Spark.get("/lesson/activity", lessonController::getActivity);
         Spark.get("/lesson/reviewsByActivity", lessonController::getReviewsByActivity);
+        Spark.get("/lessons", lessonController::getAllLessons);
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
@@ -95,7 +97,9 @@ public class Application {
         Spark.post("/student/book-lesson", studentController::bookClass);
         Spark.delete("/student/booking", studentController::deleteBooking);
         Spark.get("/student/classify-lessons", studentController::classifyLessons);
+        Spark.get("/lesson/classify/:id/:username", studentController::classifyLesson);
         Spark.get("/lesson/concurrent", studentController::checkConcurrency);
+        Spark.get("/student/lessons/:username", studentController::getStudentLessons);
 
         Spark.get("/booking/concurrent", studentController::checkConcurrentBookings);
 

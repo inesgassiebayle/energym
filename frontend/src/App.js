@@ -18,8 +18,8 @@ import CreateRoom from "./Components/AdminHome/ManageRooms/CreateRoom/CreateRoom
 import AddLesson from "./Components/AdminHome/ManageSchelude/AddLesson/AddLesson";
 import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
 import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
-import StudentSchedule from "./Components/StudentHome/MySchedule/MySchedule";
 import Payment from "./Components/StudentHome/Payment";
+import Calendar from "./Components/StudentHome/MySchedule/Calendar";
 
 function App() {
     const navigate = useNavigate();
@@ -42,8 +42,8 @@ function App() {
             <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
             <Route path="/student/:username" element={<StudentHome/>}/>
-            <Route path="/student/:username/schedule" element={<StudentSchedule/>}/>
-                <Route path="/student/:username/payment" element={<Payment/>}/>
+            <Route path="/student/:username/payment" element={<Payment/>}/>
+            <Route path="/student/:username/calendar" element={<Calendar/>}/>
         </Routes>
     );
 }

@@ -1,0 +1,110 @@
+/* Calendar.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.calendar-container {
+    max-width: 900px;
+    margin: 50px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.fc {
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.fc-toolbar {
+    background: #ffffff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fc-button {
+    background: #007bff;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.fc-button:hover {
+    background: #0056b3;
+}
+
+.fc-button:focus {
+    outline: none;
+}
+
+.fc-today-button {
+    background: #28a745;
+}
+
+.fc-title {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.fc-daygrid-day {
+    border: 1px solid #ddd;
+    transition: background 0.3s ease;
+}
+
+.fc-daygrid-day:hover {
+    background: #e9ecef;
+}
+
+.fc-day-today {
+    background: #cce5ff;
+}
+
+.fc-event {
+    border-radius: 4px;
+    padding: 2px 5px;
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8em;
+}
+
+.fc-event-time {
+    font-size: 0.7em;
+    margin-right: 2px; /* Reduce el espacio entre la hora y el título */
+}
+
+.fc-event-title {
+    font-size: 0.8em;
+}
+
+.fc-event.red {
+    background-color: #ffadad !important; /* Rosa pastel */
+    border-color: #ffadad !important;
+    color: black;
+}
+
+.fc-event.blue {
+    background-color: #a0c4ff !important; /* Azul cielo */
+    border-color: #a0c4ff !important;
+    color: black;
+}
+
+.event-title {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1;
+    font-size: 0.8em;
+}

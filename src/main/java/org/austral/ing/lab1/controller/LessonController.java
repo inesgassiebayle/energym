@@ -228,6 +228,26 @@ public class LessonController{
         return gson.toJson(reviewDtos);
     }
 
+    public String getLessonById(Request req, Response res) {
+        String id = req.params(":id");
+        if (id == null || id.isBlank()) {
+            res.status(400);
+            return "Invalid input";
+        }
+        Lesson lesson = lessons.findLessonById(Long.parseLong(id));
+        if (lesson == null) {
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        if (!lesson.getState()) {
+            res.status(400);
+            return "Lesson does not exist";
+        }
+        LessonDto lessonDto = new LessonDto(lesson.getId().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getRoom().getName(), lesson.getActivity().getName(), lesson.getProfessor().getUser().getUsername());
+        res.type("application/json");
+        return gson.toJson(lessonDto);
+    }
+
     public String getLesson(Request req, Response res){
         String dateParam = req.queryParams("startDate");
         String usernameParam = req.queryParams("username");
@@ -493,6 +513,19 @@ public class LessonController{
         }
         response.type("application/json");
         return gson.toJson(reviewDtos);
+    }
+
+    public String getAllLessons(Request req, Response res) {
+        List<Lesson> lessons1 = lessons.findAllLessons();
+        List<LessonDto> lessonDtos = new ArrayList<>();
+        for (Lesson lesson: lessons1) {
+            if (lesson.getState()) {
+                LessonDto dto = new LessonDto(lesson.getId().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getRoom().getName(), lesson.getActivity().getName(), lesson.getProfessor().getUser().getUsername());
+                lessonDtos.add(dto);
+            }
+        }
+        res.type("application/json");
+        return gson.toJson(lessonDtos);
     }
 }
 

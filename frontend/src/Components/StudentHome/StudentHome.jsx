@@ -44,7 +44,8 @@ const StudentHome = () => {
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='home-actions'>
-                <button className='button' onClick={() => navigate(`/student/${username}/schedule`)}>My Schedule
+                <button className='button' onClick={() => navigate(`/student/${username}/calendar`)}>
+                    Calendar
                 </button>
                 {showChangePasswordModal && (
                     <div className="modal-overlay">
@@ -66,4 +67,4 @@ const StudentHome = () => {
 }
 
 
-export default authentication(StudentHome);
+export default StudentHome;
