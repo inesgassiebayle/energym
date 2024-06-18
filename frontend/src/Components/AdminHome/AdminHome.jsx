@@ -41,19 +41,19 @@ const AdminHome = () => {
                 <button className='button' onClick={() => navigate('/AdministratorHome/ManageStaff')}>Manage
                     Staff
                 </button>
-                <button className='button' onClick={() => navigate('/AdministratorHome/ManageSchedule')}>Manage
-                    Schedule
-                </button>
                 <button className='button' onClick={() => navigate('/AdministratorHome/ManageRooms')}>Manage
                     Rooms
                 </button>
                 <button className='button' onClick={() => navigate('/AdministratorHome/ManageActivities')}>Manage
                     Activities
                 </button>
+                <button className='button' onClick={() => navigate('/AdministratorHome/Calendar')}>Manage
+                    Calendar
+                </button>
                 <button className='button logout' onClick={handleLogout}>Log Out</button>
 
                 <button className='button' onClick={handleDeleteAccountClick}>
-                    <img src={deleteIcon} alt="Delete account" />
+                    <img src={deleteIcon} alt="Delete account"/>
                 </button>
 
                 {showChangePasswordModal && (

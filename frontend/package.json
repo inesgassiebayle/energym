@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fullcalendar/core": "^6.1.14",
     "@fullcalendar/daygrid": "^6.1.14",
+    "@fullcalendar/interaction": "^6.1.14",
     "@fullcalendar/react": "^6.1.14",
     "@fullcalendar/timegrid": "^6.1.14",
     "@mercadopago/sdk-react": "^0.0.19",

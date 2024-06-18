@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../Modal.css';
 import authentication from "../Hoc/Hoc";
+import './AddLesson.css'
 
-const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
+const ModifyLessonModal = ({ isOpen, onClose, lesson, date, onSave }) => {
     const [name, setName] = useState('');
     const [time, setTime] = useState('');
     const [activity, setActivity] = useState('');
@@ -26,6 +27,7 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
     const [roomError, setRoomUnavailableError] = useState('');
     const [activityError, setActivityUnsupported] = useState('');
     const [dateError, setDateError] = useState('');
+    const [error, setError] = useState('');
 
 
     const fetchDetails = async () => {
@@ -37,19 +39,17 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
                     time: lesson.time
                 }
             });
-            setOldActivity(response.data.activity);
-            console.log(response.data.activity);
-            setActivity(response.data.activity);
-            console.log(response.data.professor);
-            setOldProfessor(response.data.professor);
-            setProfessor(response.data.professor);
-            console.log(response.data.room);
-            setOldRoom(response.data.room);
-            setRoomName(response.data.room);
-            setActivityUnsupported();
+            const lessonDetails = response.data;
+            setOldActivity(lessonDetails.activity);
+            setActivity(lessonDetails.activity);
+            setOldProfessor(lessonDetails.professor);
+            setProfessor(lessonDetails.professor);
+            setOldRoom(lessonDetails.room);
+            setRoomName(lessonDetails.room);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching lesson details:', error);
         }
+
         try {
             const [actRes, profRes, roomRes] = await Promise.all([
                 axios.get('http://localhost:3333/activity/get'),
@@ -64,9 +64,10 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         }
     };
 
-    const isPastDate = (date) => {
+    const isPastDate = (date, time) => {
         const today = new Date();
-        return new Date(date + 'T' + time) <= today;  // Se añade 'T' para combinar fecha con hora en formato ISO
+        const dateTime = new Date(`${date}T${time}`);
+        return dateTime < today;
     };
 
     useEffect(() => {
@@ -81,32 +82,31 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
         }
     }, [isOpen, lesson, date]);
 
-
     const handleSubmit = async (e) => {
-        if (isPastDate(startDate)) {
-            setDateError('Cannot modify classes from past dates');
+        e.preventDefault();
+        if (isPastDate(startDate, time)) {
+            setDateError('Cannot modify classes to a past date or time.');
             return;
         }
 
-        e.preventDefault();
         const updateData = {
-            oldName: oldName,
-            oldTime: oldTime,
+            oldName,
+            oldTime,
             oldDate: oldStartDate,
-            name: name,
-            time: time,
-            activity: activity,
-            professor: professor,
-            oldProfessor: oldProfessor,
-            roomName: roomName,
-            startDate: startDate,
-
+            name,
+            time,
+            activity,
+            professor,
+            oldProfessor,
+            roomName,
+            startDate,
         };
+
         try {
-            const responseUpdate = await axios.patch('http://localhost:3333/lesson/modify', updateData);
-            console.log(responseUpdate.data)
-            onSave();
-            onClose();
+            const response = await axios.patch('http://localhost:3333/lesson/modify', updateData);
+            console.log('Lesson updated:', response.data);
+            onSave(); // Invoke save callback to update the parent component
+            onClose(); // Close the modal
         } catch (error) {
             const errorMsg = error.response?.data || 'An unexpected error occurred.';
             console.error('Error while sending request:', errorMsg);
@@ -114,17 +114,19 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             setRoomUnavailableError('');
             setActivityUnsupported('');
             if (errorMsg.includes("Professor is not available")) {
-                setProfessorUnavailableError("Professor is unavailable at the new time/date");
+                setProfessorUnavailableError("Professor is unavailable at the new time/date.");
             } else if (errorMsg.includes("Room is not available or does not support the activity")) {
-                setRoomUnavailableError("Room is not available or does not support the activity")
+                setRoomUnavailableError("Room is not available or does not support the activity.");
             } else if (errorMsg.includes('New activity not supported in the selected room')){
-                setActivityUnsupported("New activity not supported in the selected room")
+                setActivityUnsupported("New activity not supported in the selected room.");
+            } else {
+                setError(errorMsg);
             }
         }
     };
 
     const generateHourOptions = () => {
-        let options = [];
+        const options = [];
         for (let i = 8; i <= 21; i++) {
             options.push(`${i.toString().padStart(2, '0')}:00`);
         }
@@ -141,70 +143,90 @@ const ModifyLessonModal = ({ isOpen, onClose, lesson, date , onSave }) => {
             </div>
             <div className="modal-body">
                 <form onSubmit={handleSubmit} className="modal-form">
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Lesson Name"/>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder="Lesson Name"
+                    />
 
-                    <select value={time} onChange={(e) => {
-                        setTime(e.target.value);
-                        setProfessorUnavailableError('');
-                        setRoomUnavailableError('');
-
-                    }} required>
+                    <select
+                        value={time}
+                        onChange={(e) => {
+                            setTime(e.target.value);
+                            setProfessorUnavailableError('');
+                            setRoomUnavailableError('');
+                        }}
+                        required
+                    >
                         <option value="">Select Lesson Time</option>
                         {generateHourOptions().map((hour, index) => (
                             <option key={index} value={hour}>{hour}</option>
                         ))}
                     </select>
 
-
-                    <select value={activity} onChange={(e) => {
-                        setActivity(e.target.value);
-                        setActivityUnsupported('');
-                    }} required>
+                    <select
+                        value={activity}
+                        onChange={(e) => {
+                            setActivity(e.target.value);
+                            setActivityUnsupported('');
+                        }}
+                        required
+                    >
                         <option value="">Select Activity</option>
                         {activities.map((activity, index) => (
                             <option key={index} value={activity}>{activity}</option>
                         ))}
                     </select>
-                    {activityError &&
-                        <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{activityError}</div>}
-                    <select value={professor}
-                            onChange={(e) => {
-                                setProfessor(e.target.value);
-                                setProfessorUnavailableError(''); //limpiar el error
+                    {activityError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{activityError}</div>}
 
-                            }} required>
+                    <select
+                        value={professor}
+                        onChange={(e) => {
+                            setProfessor(e.target.value);
+                            setProfessorUnavailableError(''); // Clear error
+                        }}
+                        required
+                    >
                         <option value="">Select Professor</option>
-                        {professors.map((professor, index) => (
-                            <option key={index} value={professor}>{professor}</option>
+                        {professors.map((prof, index) => (
+                            <option key={index} value={prof}>{prof}</option>
                         ))}
                     </select>
-                    {professorError &&
-                        <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{professorError}</div>}
+                    {professorError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{professorError}</div>}
 
-                    <select value={roomName} onChange={(e) => {
-                        setRoomName(e.target.value);
-                        setRoomUnavailableError('');
-                    }} required>
-
+                    <select
+                        value={roomName}
+                        onChange={(e) => {
+                            setRoomName(e.target.value);
+                            setRoomUnavailableError('');
+                        }}
+                        required
+                    >
                         <option value="">Select Room</option>
                         {rooms.map((room, index) => (
                             <option key={index} value={room}>{room}</option>
                         ))}
                     </select>
-                    {roomError && <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{roomError}</div>}
-                    {dateError && <div className="error-message" style={{color: 'red', textAlign: 'center'}}>{dateError}</div>}
-                    <input className="modal-date-picker" type="date" value={startDate} onChange={e => {
-                        setStartDate(e.target.value);
-                        setDateError('')
-                        setProfessorUnavailableError('');
-                        setRoomUnavailableError('');
-                    }}
-                           placeholder="Start Date (YYYY-MM-DD)"/>
+                    {roomError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{roomError}</div>}
+                    {dateError && <div className="error-message" style={{ color: 'red', textAlign: 'center' }}>{dateError}</div>}
+
+                    <input
+                        className="modal-date-picker"
+                        type="date"
+                        value={startDate}
+                        onChange={e => {
+                            setStartDate(e.target.value);
+                            setDateError('');
+                            setProfessorUnavailableError('');
+                            setRoomUnavailableError('');
+                        }}
+                        placeholder="Start Date (YYYY-MM-DD)"
+                    />
                 </form>
             </div>
             <div className="modal-footer">
                 <button type="submit" className="submit" onClick={handleSubmit}>Save Changes</button>
-
                 <button type="button" className="cancel" onClick={onClose}>Cancel</button>
             </div>
         </div>
