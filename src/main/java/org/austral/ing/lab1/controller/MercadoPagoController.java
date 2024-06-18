@@ -42,7 +42,7 @@ public class MercadoPagoController {
   int monthlyPrice = 10;
   int annualPrice = 100;
   private final PaymentExpirationReminderService paymentMailing;
-  private final String mercadoLibreToken = "APP_USR-2741626126526290-061613-11f40f9f163ef19d094e58154af2944d-1859643724";
+  private final String mercadoLibreToken = "";
   Gson gson = new Gson();
 
   public MercadoPagoController() {

@@ -5,7 +5,7 @@ import './Payment.css';
 import spinner from "../Assets/spinner.svg";
 import {useParams} from "react-router-dom";
 
-const publicKey = 'APP_USR-d9b3a458-a330-4f0e-947b-ce234a7aba10'; // Reemplaza con tu clave pública de producción
+const publicKey = ''; // Reemplaza con tu clave pública de producción
 
 const Payment = () => {
     const [plan, setPlan] = useState('');
