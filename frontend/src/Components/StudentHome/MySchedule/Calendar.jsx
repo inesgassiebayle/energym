@@ -6,6 +6,7 @@ import axios from 'axios';
 import '../../Calendar.css';
 import { Link, useParams } from 'react-router-dom';
 import Modal from './Modal';
+import authentication from "../Common/Hoc/Authentication";
 
 const Calendar = () => {
     const { username } = useParams();
@@ -98,4 +99,4 @@ const renderEventContent = (eventInfo) => (
     </div>
 );
 
-export default Calendar;
+export default authentication(Calendar);

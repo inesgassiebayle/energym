@@ -67,4 +67,4 @@ const StudentHome = () => {
 }
 
 
-export default StudentHome;
+export default authentication(StudentHome);

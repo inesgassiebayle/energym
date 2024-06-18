@@ -95,8 +95,8 @@ public class InitialDataBase {
     }
 
     public void createLesson() {
-        LocalTime time = LocalTime.parse("11:00", DateTimeFormatter.ofPattern("HH:mm"));
-        LocalDate date = LocalDate.parse("2024-06-04", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalTime time = LocalTime.parse("12:00", DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate date = LocalDate.parse("2024-06-18", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Lesson lesson = new Lesson("Cardio Workout", time, date);
         lesson.setActivity(activities.findActivityByName("Functional"));
         lesson.setProfessor(professors.findProfessorByUsername("prof1"));

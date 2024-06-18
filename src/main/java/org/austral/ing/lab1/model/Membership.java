@@ -9,6 +9,10 @@ public class Membership {
     @GeneratedValue(generator = "userGen", strategy = GenerationType.SEQUENCE)
     private Long membershipId;
 
+    public Long getId() {
+        return membershipId;
+    }
+
     @Column()
     private LocalDate expiration;
 

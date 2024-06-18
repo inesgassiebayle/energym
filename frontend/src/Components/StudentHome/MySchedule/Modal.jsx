@@ -7,6 +7,7 @@ import Booking from "./Booking";
 import DeleteBooking from "./DeleteBooking";
 import ModifyReviewModal from "./ModifyReviewModal";
 import ProfessorViewModal from "./ProfessorViewModal";
+import authentication from "../../AdminHome/Hoc/Hoc";
 
 const Modal = ({ lessonId, closeModal }) => {
     const { username } = useParams();
@@ -335,4 +336,4 @@ const Modal = ({ lessonId, closeModal }) => {
     );
 };
 
-export default Modal;
+export default authentication(Modal);

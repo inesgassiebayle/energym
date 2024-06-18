@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import spinner from "../../Assets/spinning-loading.gif";
 import authentication from "../Common/Hoc/Authentication";
-import './CheckList.css'
+import './CheckList.css';
 
-const Assistance = ({ isOpen, onClose, lessonName, date, time, username }) => {
-    let navigate = useNavigate();
+const StudentsModal = ({ isOpen, onClose, lessonName, date, time, username }) => {
     const [students, setStudents] = useState([]);
     const [loadingStudents, setLoadingStudents] = useState(false);
-    const [selectedStudents, setSelectedStudents] = useState([]);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -31,8 +28,6 @@ const Assistance = ({ isOpen, onClose, lessonName, date, time, username }) => {
                         hasAssisted: response.data[key]
                     }));
                     setStudents(studentsArray);
-                    setSelectedStudents(studentsArray.filter(s => s.hasAssisted).map(s => s.username));
-                    console.log(studentsArray);
                 }
             } catch (error) {
                 console.error('Error fetching students enrolled:', error);
@@ -46,29 +41,6 @@ const Assistance = ({ isOpen, onClose, lessonName, date, time, username }) => {
         }
     }, [isOpen, username, date, time]);
 
-
-    const handleSelect = (event, studentName) => {
-        if (event.target.checked) {
-            setSelectedStudents(prevSelected => [...prevSelected, studentName]);
-        } else {
-            setSelectedStudents(prevSelected => prevSelected.filter(s => s !== studentName));
-        }
-    };
-
-    const handleConfirm = async () => {
-        try {
-            await axios.post('http://localhost:3333/lesson/assistance', {
-                date: date,
-                time: time,
-                professor: username,
-                students: selectedStudents.join(',')
-            });
-            onClose();
-        } catch (error) {
-            console.error('Error sending assistance:', error);
-        }
-    };
-
     if (!isOpen) return null;
 
     return (
@@ -81,29 +53,25 @@ const Assistance = ({ isOpen, onClose, lessonName, date, time, username }) => {
                 {loadingStudents ? (
                     <img src={spinner} alt="Loading..." />
                 ) : (
-                    <ul className="students-list">
-                        {students.map((student, index) => (
-                            <li key={index}>
-                                <input
-                                    type="checkbox"
-                                    value={student.username}
-                                    checked={selectedStudents.includes(student.username)}
-                                    onChange={(e) => handleSelect(e, student.username)}
-                                />
-                                <label>{student.username}</label>
-                            </li>
-                        ))}
-                    </ul>
+                    students.length === 0 ? (
+                        <p>No students have enrolled yet</p>
+                    ) : (
+                        <ul className="students-list">
+                            {students.map((student, index) => (
+                                <li key={index}>
+                                    <label>{student.username}</label>
+                                </li>
+                            ))}
+                        </ul>
+                    )
                 )}
-
             </div>
 
             <div className="modal-footer">
                 <button className="cancel" onClick={onClose}>Close</button>
-                <button className="submit" onClick={handleConfirm}>Confirm</button>
             </div>
         </div>
     );
 };
 
-export default authentication(Assistance);
+export default authentication(StudentsModal);

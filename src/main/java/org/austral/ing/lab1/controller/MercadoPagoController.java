@@ -38,18 +38,19 @@ public class MercadoPagoController {
   private final Users users;
   private final Students students;
   private final Memberships memberships;
-  private final Set<String> processedTransactions = new HashSet<>(); // Conjunto para almacenar transacciones procesadas
+  private final Set<String> processedTransactions = new HashSet<>();
   int monthlyPrice = 10;
   int annualPrice = 100;
+  private final PaymentExpirationReminderService paymentMailing;
+  private final String mercadoLibreToken = "APP_USR-2741626126526290-061613-11f40f9f163ef19d094e58154af2944d-1859643724";
+  Gson gson = new Gson();
 
   public MercadoPagoController() {
     this.users = new Users();
     this.students = new Students();
     this.memberships = new Memberships();
+    this.paymentMailing = new PaymentExpirationReminderService(new EmailSender());
   }
-
-  private final String mercadoLibreToken = "APP_USR-2741626126526290-061613-11f40f9f163ef19d094e58154af2944d-1859643724";
-  Gson gson = new Gson();
 
   public String getList(Request req, Response res) {
     PurchaseDto purchaseDto = gson.fromJson(req.body(), PurchaseDto.class);
@@ -88,8 +89,9 @@ public class MercadoPagoController {
 
       PreferenceRequest preferenceRequest = PreferenceRequest.builder()
         .items(items)
-        .notificationUrl("https://9773-190-190-202-110.ngrok-free.app/api/mp/notifications/" + user.getId())
+        .notificationUrl("https://3f16-190-190-202-110.ngrok-free.app/api/mp/notifications/" + user.getId())
         .backUrls(backUrls)
+        .autoReturn("approved")
         .build();
 
       PreferenceClient client = new PreferenceClient();
@@ -174,9 +176,11 @@ public class MercadoPagoController {
     if (membership == null) {
       if (totalPaid == monthlyPrice) {
         Membership newMembership = new Membership(LocalDate.now().plusMonths(1), student);
+        paymentMailing.scheduleReminder(newMembership.getId(), newMembership.getExpiration(), student.getUser().getEmail());
         memberships.persist(newMembership);
       } else if (totalPaid == annualPrice) {
         Membership newMembership = new Membership(LocalDate.now().plusYears(1), student);
+        paymentMailing.scheduleReminder(newMembership.getId(), newMembership.getExpiration(), student.getUser().getEmail());
         memberships.persist(newMembership);
       }
     } else {
@@ -194,6 +198,7 @@ public class MercadoPagoController {
         }
       }
       memberships.persist(membership);
+      paymentMailing.scheduleReminder(membership.getId(), membership.getExpiration(), student.getUser().getEmail());
     }
   }
 

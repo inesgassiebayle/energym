@@ -12,10 +12,7 @@ import spark.Spark;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class LessonController{
@@ -321,12 +318,12 @@ public class LessonController{
             return "Lesson does not exist";
         }
         Set<BookedLesson> bookings = lesson.getBookings();
-        List<String> studentUsernames = new ArrayList<>();
+        Map<String, Boolean> studentUsernames = new HashMap<>();
         for(BookedLesson booking: bookings){
             if(booking.state()){
                 User user = booking.getStudent().getUser();
                 if(user.state()) {
-                    studentUsernames.add(user.getUsername());
+                    studentUsernames.put(user.getUsername(), booking.hasAssisted());
                 }
             }
         }

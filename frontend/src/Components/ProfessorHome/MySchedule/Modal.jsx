@@ -4,6 +4,7 @@ import axios from 'axios';
 import ClassInfoModal from "./ClassInfoModal";
 import ReviewsModal from "./ReviewsModal";
 import Assistance from "./Assistance";
+import StudentsModal from "./StudentsModal";
 
 const Modal = ({ lessonId, closeModal }) => {
     const { username } = useParams();
@@ -13,6 +14,7 @@ const Modal = ({ lessonId, closeModal }) => {
     const [showMoreModal, setShowMoreModal] = useState(false);
     const [showReviewsModal, setShowReviewModal] = useState(false);
     const [showAssistanceModal, setShowAssistanceModal] = useState(false);
+    const [showStudentsModal, setShowStudentsModal] = useState(false);
 
     const [lessonName, setLessonName] = useState('');
     const [lessonDate, setLessonDate] = useState('');
@@ -73,6 +75,9 @@ const Modal = ({ lessonId, closeModal }) => {
         setShowAssistanceModal(true);
     }
 
+    const openStudentsModal = () => {
+        setShowStudentsModal(true);
+    }
 
     useEffect(() => {
         if (lessonId) {
@@ -105,6 +110,10 @@ const Modal = ({ lessonId, closeModal }) => {
                                 onClick={() => openAssistanceModal()}>Assistance
                         </button>
                     )}
+                    {futureClass && (
+                        <button className='home-components-modification-button'
+                                onClick={() => openStudentsModal()}>More</button>
+                    )}
 
                 </div>
                 <div className="modal-footer">
@@ -131,6 +140,15 @@ const Modal = ({ lessonId, closeModal }) => {
             <Assistance
                 isOpen={showAssistanceModal}
                 onClose={() => setShowAssistanceModal(false)}
+                lessonName={lessonName}
+                date={lessonDate}
+                time={lessonTime}
+                username ={username}
+            />
+
+            <StudentsModal
+                isOpen={showStudentsModal}
+                onClose={() => setShowStudentsModal(false)}
                 lessonName={lessonName}
                 date={lessonDate}
                 time={lessonTime}

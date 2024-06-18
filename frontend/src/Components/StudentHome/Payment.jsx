@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import axios from 'axios';
 import logo from "../Assets/Logo.png";
 import './Payment.css';
+import spinner from "../Assets/spinner.svg";
 import {useParams} from "react-router-dom";
 
 const publicKey = 'APP_USR-d9b3a458-a330-4f0e-947b-ce234a7aba10'; // Reemplaza con tu clave pública de producción
@@ -9,6 +10,7 @@ const publicKey = 'APP_USR-d9b3a458-a330-4f0e-947b-ce234a7aba10'; // Reemplaza c
 const Payment = () => {
     const [plan, setPlan] = useState('');
     const {username} = useParams();
+    const [loading, setLoading] = useState(false);
 
     const handlePlanChange = (event) => {
         setPlan(event.target.value);
@@ -22,6 +24,8 @@ const Payment = () => {
 
         const title = plan === 'monthly' ? 'Plan Mensual' : 'Plan Anual';
         const price = plan === 'monthly' ? 10 : 100;
+
+        setLoading(true);
 
         try {
             console.log('Enviando solicitud de pago...');
@@ -58,6 +62,8 @@ const Payment = () => {
             }
         } catch (error) {
             console.error('Error al crear la preferencia:', error);
+        } finally {
+            setLoading(false);
         }
     }, [plan]);
 
@@ -104,7 +110,15 @@ const Payment = () => {
                 </div>
             </div>
             <div className='payment-actions'>
-                <button id="mp_button" className="payment-button">Pay through 'Mercado Pago'</button>
+                {loading ? (
+                    <div className="loading-container">
+                        <img src={spinner} alt="Loading..." className="spinner"/>
+                    </div>
+                ) : (
+                    <>
+                        <button id="mp_button" className="payment-button">Pay through 'Mercado Pago'</button>
+                    </>
+                )}
                 <div id="wallet_container"></div>
             </div>
         </div>
