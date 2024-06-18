@@ -7,11 +7,56 @@ import spinner from "../../Assets/spinner.svg";
 import "../../Reviews.css"
 import "../../Modal.css"
 
-const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonName, lessonRoom, lessonActivity}) => {
-    let navigate = useNavigate();
+const MoreModal = ({ isOpen, closeModal, lessonId}) => {
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [reviews, setReviews] = useState([]);
+    const [lessonName, setLessonName] = useState('');
+    const [lessonDate, setLessonDate] = useState('');
+    const [lessonTime, setLessonTime] = useState('');
+    const [lessonRoom, setLessonRoom] = useState('');
+    const [lessonActivity, setLessonActivity] = useState('');
+    const [lessonProfessor, setLessonProfessor] = useState('');
+    const [error, setError] = useState('');
+    const [showReviews, setShowReviews] = useState(false);
 
+    const getLesson = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3333/getLessonById/${lessonId}`);
+            const lesson = response.data;
+
+            setLessonName(lesson.name);
+            setLessonDate(lesson.date);
+            setLessonTime(lesson.time);
+            setLessonRoom(lesson.room);
+            setLessonActivity(lesson.activity);
+            setLessonProfessor(lesson.professor);
+        } catch (error) {
+            setError(`Error: ${error.response ? error.response.data : error.message}`);
+        }
+    };
+
+    const classifyLesson = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3333/compare-date/${lessonId}`);
+            const classification = response.data;
+
+            if (classification === "Past") {
+                setShowReviews(true);
+            }
+        }
+        catch (error) {
+            setError(`Error: ${error.response ? error.response.data : error.message}`);
+        }
+    };
+
+
+    useEffect(() => {
+        if (lessonId) {
+            getLesson();
+            classifyLesson();
+            fetchReviews();
+        }
+    }, [lessonId]);
 
     const fetchReviews = async () => {
         try {
@@ -53,46 +98,42 @@ const MoreModal = ({ isOpen, onClose, lessonId, lessonDate, lessonTime, lessonNa
         </div>
     );
 
-    useEffect(() => {
-        if (!isOpen) return;
-        fetchReviews();
-
-    }, [isOpen, navigate]);
-
-    if (!isOpen) return null;
-
     return (
-        <div className="modal">
-            <div className="modal-header">
-                <h5 className="modal-title">Details for {lessonName}</h5>
-                <button onClick={onClose} className="modal-close-button">&times;</button>
-            </div>
-            <div className="modal-body">
-                <p>Start Date: {lessonDate}</p>
-                <p>Time: {lessonTime}</p>
-                <p>Room: {lessonRoom}</p>
-                <p>Activity: {lessonActivity}</p>
-                <div className="reviews-container">
-                    <p>Class reviews: </p>
-                    {loadingReviews ? (
-                        <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
-                    ) : (
-                        reviews.length > 0 ? (
-                            <ul>
-                                {reviews.map((review, index) => (
-                                    <ReviewSquare key={index} review={review}/>
-                                ))}
-                            </ul>
+        <>
+            <div className="overlay" onClick={closeModal}></div>
+            <div className="modal">
+                <div className="modal-header">
+                    <button onClick={closeModal} className="modal-close-button">&times;</button>
+                </div>
+                <div className="modal-body">
+                    <p><strong>Lesson Name:</strong> {lessonName}</p>
+                    <p><strong>Date:</strong> {lessonDate}</p>
+                    <p><strong>Time:</strong> {lessonTime}</p>
+                    <p><strong>Room:</strong> {lessonRoom}</p>
+                    <p><strong>Activity:</strong> {lessonActivity}</p>
+                    <p><strong>Professor:</strong> {lessonProfessor}</p>
+                    {showReviews && (<div className="reviews-container">
+                        <p>Class reviews: </p>
+                        {loadingReviews ? (
+                            <img src={spinner} alt="Loading..." style={{width: '50px'}}/>
                         ) : (
-                            <p>No reviews for the selected class.</p>
-                        )
-                    )}
+                            reviews.length > 0 ? (
+                                <ul>
+                                    {reviews.map((review, index) => (
+                                        <ReviewSquare key={index} review={review}/>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No reviews for the selected class.</p>
+                            )
+                        )}
+                    </div>)}
+                </div>
+                <div className="modal-footer">
+                    <button className="cancel" onClick={closeModal}>Close</button>
                 </div>
             </div>
-            <div className="modal-footer">
-                <button  type="button" className="cancel" onClick={onClose}>Close</button>
-            </div>
-        </div>
+        </>
     );
 };
 

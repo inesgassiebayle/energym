@@ -1,7 +1,7 @@
 .reviews-container {
     margin-top: 20px;
     overflow-y: auto;
-    max-height: 40vh;
+    max-height: 300px;
 }
 
 .review-square {

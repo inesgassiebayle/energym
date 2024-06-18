@@ -119,6 +119,17 @@ public class InitialDataBase {
 
     }
 
+    public void createReviews() {
+        Lesson lesson = lessons.findLessonByName("Cardio Workout");
+        Student student = students.findStudentByUsername("stud1");
+        Review review = new Review("Great class", 5, student, lesson);
+        reviews.persist(review);
+        Student student1 = students.findStudentByUsername("stud2");
+        Review review2 = new Review("Regular class", 2, student1, lesson);
+        reviews.persist(review2);
+
+    }
+
 
     public void createInitialDataBase(){
         createAdministrator();
@@ -128,6 +139,7 @@ public class InitialDataBase {
         createLesson();
         createStudent();
         createBooking();
+        createReviews();
     }
 
 }
