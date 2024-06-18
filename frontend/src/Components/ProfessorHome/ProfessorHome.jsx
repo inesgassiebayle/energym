@@ -40,14 +40,18 @@ const ProfessorHome = () => {
                 <img src={logo} alt="Logo" style={{width: '150px'}}/>
             </div>
             <div className='home-actions'>
-                <button className='button' onClick={() => navigate(`/trainer/${username}/schedule`)}>My
-                    Schedule
+                <button className='button' onClick={() => navigate(`/trainer/${username}/schedule`)}>Quick view
                 </button>
+
+                <button className='button' onClick={() => navigate(`/trainer/${username}/calendar`)}>My
+                    Calendar
+                </button>
+
                 {showChangePasswordModal && (
                     <div className="modal-overlay">
-                            <ChangeProfessorPasswordModal
-                                onClose={() => setShowChangePasswordModal(false)}
-                            />
+                        <ChangeProfessorPasswordModal
+                            onClose={() => setShowChangePasswordModal(false)}
+                        />
                     </div>
                 )}
                 <button className='button' onClick={handleDeleteAccountClick}>

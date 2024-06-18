@@ -40,6 +40,18 @@ public class ProfessorController {
         return gson.toJson(names);
     }
 
+    public String getAllLessons(Request req, Response res){
+        List<Lesson> lessons1 = lessons.findLessonByProfessor(req.params(":username"));
+        List<LessonDto> lessonsInfo = new ArrayList<>();
+        for(Lesson lesson: lessons1){
+            if(lesson.getState()){
+                lessonsInfo.add(new LessonDto(lesson.getId().toString(), lesson.getName(), lesson.getStartDate().toString(), lesson.getTime().toString(), lesson.getRoom().getName(), lesson.getActivity().getName(), lesson.getProfessor().getUser().getUsername()));
+            }
+        }
+        res.type("application/json");
+        return gson.toJson(lessonsInfo);
+    }
+
     public String getLessons(Request req, Response res){
         ProfessorDateLessonsDto dto = new ProfessorDateLessonsDto(req.queryParams("username"), req.queryParams("date"));
 

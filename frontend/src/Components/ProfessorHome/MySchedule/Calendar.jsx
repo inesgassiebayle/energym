@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
-import './Calendar.css';
+import '../../Calendar.css';
 import { Link, useParams } from 'react-router-dom';
 import Modal from './Modal';
 
@@ -15,22 +15,18 @@ const Calendar = () => {
 
     const fetchLessons = async () => {
         try {
-            const response = await axios.get('http://localhost:3333/lessons');
+            const response = await axios.get(`http://localhost:3333/professor/getAllLessons/${username}`);
             const lessons = response.data;
 
-            const studentResponse = await axios.get(`http://localhost:3333/student/lessons/${username}`);
-            const studentLessons = studentResponse.data;
-
-            const studentLessonIds = new Set(studentLessons.map(lesson => lesson.id));
+            console.log('Lessons:', lessons)
 
             const formattedEvents = lessons.map(lesson => {
-                const isStudentLesson = studentLessonIds.has(lesson.id);
                 return {
                     id: lesson.id,
                     title: lesson.name,
                     start: `${lesson.date}T${lesson.time}:00`,
                     description: `Profesor: ${lesson.professor}, Sala: ${lesson.room}, Actividad: ${lesson.activity}`,
-                    classNames: isStudentLesson ? 'red' : 'blue',
+                    classNames: 'blue'
                 };
             });
 
@@ -84,7 +80,7 @@ const Calendar = () => {
                     />
                 )}
             </div>
-            <Link to={`/student/${username}`}>
+            <Link to={`/trainer/${username}`}>
                 <button className='staff-button back'>Home</button>
             </Link>
         </div>

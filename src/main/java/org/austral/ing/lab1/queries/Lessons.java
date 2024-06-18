@@ -20,6 +20,13 @@ public class Lessons {
         return entityManager().find(Lesson.class, id);
     }
 
+    public List<Lesson> findLessonByProfessor(String username) {
+        TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l WHERE l.professor.user.username =: username", Lesson.class);
+        query.setParameter("username", username);
+        return query.getResultList();
+    }
+
+
     public List<Lesson> findAllLessons(){
         TypedQuery<Lesson> query = entityManager().createQuery("SELECT l FROM Lesson l", Lesson.class);
         return query.getResultList();

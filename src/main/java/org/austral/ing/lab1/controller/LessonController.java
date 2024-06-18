@@ -473,6 +473,30 @@ public class LessonController{
         }
     }
 
+    public String compareDateSpecificClass(Request req, Response res) {
+        String id = req.params(":id");
+        Lesson lesson = lessons.findLessonById(Long.parseLong(id));
+        LocalDate nowDate = LocalDate.now();
+        if (lesson.getStartDate().isBefore(nowDate)) {
+            return "Past";
+        }
+        else if (lesson.getStartDate().isAfter(nowDate)) {
+            return "Future";
+        }
+        else {
+            LocalTime time = lesson.getTime();
+            LocalTime nowTime = LocalTime.now();
+
+            if ((nowTime.equals(time) || nowTime.isAfter(time)) && nowTime.isBefore(time.plusHours(1))) {
+                return "Present";
+            }
+            else if (nowTime.isBefore(time)) {
+                return "Future";
+            }
+            return "Past";
+        }
+    }
+
     public String getActivity(Request req, Response res) {
         String dateParam = req.queryParams("startDate");
         String usernameParam = req.queryParams("username");

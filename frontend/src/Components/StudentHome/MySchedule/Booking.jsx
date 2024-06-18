@@ -38,7 +38,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            if (isRecurring && concurrency) {
+            if (isRecurring && concurrency && selectedStartDate && selectedEndDate) {
                 const response = await axios.post('http://localhost:3333/student/book-lesson', {
                     professor: lessonProfessor,
                     student: username,

@@ -6,7 +6,7 @@ import ShowReviewsModal from "./ShowReviewsModal";
 import Booking from "./Booking";
 import DeleteBooking from "./DeleteBooking";
 import ModifyReviewModal from "./ModifyReviewModal";
-import InfoForStudentModal from "./InfoForStudentModal";
+import ProfessorViewModal from "./ProfessorViewModal";
 
 const Modal = ({ lessonId, closeModal }) => {
     const { username } = useParams();
@@ -136,6 +136,11 @@ const Modal = ({ lessonId, closeModal }) => {
         setShowBooking(true);
     }
 
+    const closeReviewView = () => {
+        setShowCreateReviewModal(false);
+        closeModal();
+    }
+
     function handleRating (e) {
         setRating(e);
     }
@@ -152,9 +157,7 @@ const Modal = ({ lessonId, closeModal }) => {
         try {
             const response = await axios.get(`http://localhost:3333/getLessonById/${lessonId}`);
             const lesson = response.data;
-            console.log(lesson)
 
-            // Actualiza los estados con los datos de la lección
             setLessonName(lesson.name);
             setLessonDate(lesson.date);
             setLessonTime(lesson.time);
@@ -192,6 +195,21 @@ const Modal = ({ lessonId, closeModal }) => {
         setShowModifyReviewModal(true);
     }
 
+    const closeBooking = () => {
+        setShowBooking(false);
+        closeModal();
+    }
+
+    const closeModifyReview = () => {
+        setShowModifyReviewModal(false);
+        closeModal();
+    }
+
+    const closeBookingDelete = () => {
+        setShowBookingDeletion(false);
+        closeModal();
+    }
+
     useEffect(() => {
         if (lessonId) {
             classifyClass();
@@ -204,7 +222,6 @@ const Modal = ({ lessonId, closeModal }) => {
             <div className="overlay" onClick={closeModal}></div>
             <div className="modal">
                 <div className="modal-header">
-                    <h5 className="modal-title">Lesson: {lessonId}</h5>
                     <button onClick={closeModal} className="modal-close-button">&times;</button>
                 </div>
                 <div className="modal-body">
@@ -238,7 +255,7 @@ const Modal = ({ lessonId, closeModal }) => {
                                 onClick={() => openModifyReview()}>Modify Review</button>
                     )}
                     <button className='home-components-modification-button'
-                            onClick={() => openMoreInfoModal()}>More
+                            onClick={() => openMoreInfoModal()}>More about {lessonProfessor}
                     </button>
 
                 </div>
@@ -249,7 +266,7 @@ const Modal = ({ lessonId, closeModal }) => {
 
             <CreateReviewModal
                 isOpen={showCreateReviewModal}
-                onClose={() => setShowCreateReviewModal(false)}
+                onClose={closeReviewView}
                 username ={username}
                 lessonName={lessonName}
                 lessonProfessor={lessonProfessor}
@@ -268,7 +285,7 @@ const Modal = ({ lessonId, closeModal }) => {
             />
             <Booking
                 isOpen={showBooking}
-                onClose={() => setShowBooking(false)}
+                onClose={closeBooking}
                 username ={username}
                 lessonName={lessonName}
                 lessonProfessor={lessonProfessor}
@@ -281,7 +298,7 @@ const Modal = ({ lessonId, closeModal }) => {
             />
             <DeleteBooking
                 isOpen={showBookingDelete}
-                onClose={() => setShowBookingDeletion(false)}
+                onClose={closeBookingDelete}
                 username ={username}
                 lessonName={lessonName}
                 lessonProfessor={lessonProfessor}
@@ -294,7 +311,7 @@ const Modal = ({ lessonId, closeModal }) => {
             />
             <ModifyReviewModal
                 isOpen={showModifyReviewModal}
-                onClose={() => setShowModifyReviewModal(false)}
+                onClose={closeModifyReview}
                 username ={username}
                 lessonName={lessonName}
                 reviewId = {reviewId}
@@ -304,11 +321,9 @@ const Modal = ({ lessonId, closeModal }) => {
                 handleComment={handleComment}
             />
 
-            <InfoForStudentModal
+            <ProfessorViewModal
                 isOpen={showMoreInfoModal}
                 onClose={() => setShowMoreInfoModal(false)}
-                lessonId={lessonId}
-                lessonName={lessonName}
                 date={lessonDate}
                 time={lessonTime}
                 username={lessonProfessor}

@@ -82,6 +82,8 @@ public class Application {
 
         Spark.get("/professor/get", professorController::getProfessors);
         Spark.get("/professor/lessons", professorController::getLessons);
+        Spark.get("/professor/getAllLessons/:username", professorController::getAllLessons);
+
         Spark.get("/professor/lessons2", professorController::getProfessorAverageRating);
         Spark.get("/professor/lessonsByUser", professorController::getLessonsOnlyUsername);
 
@@ -92,6 +94,8 @@ public class Application {
 
 
         Spark.get("/compare-date", lessonController::compareDate);
+        Spark.get("/compare-date/:id", lessonController::compareDateSpecificClass);
+
         Spark.get("/compareInitialDate", lessonController::compareTodayDate);
 
         Spark.post("/student/book-lesson", studentController::bookClass);

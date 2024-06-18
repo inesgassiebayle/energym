@@ -37,7 +37,7 @@ const Booking = ({isOpen, onClose, username, lessonName, lessonProfessor, lesson
     const handleDelete = async () => {
         try {
             setLoading(true);
-            if (isRecurring && concurrency) {
+            if (isRecurring && concurrency && selectedStartDate && selectedEndDate) {
                 const response =  await axios.delete('http://localhost:3333/student/booking', {
                     params: {
                         professor: lessonProfessor,

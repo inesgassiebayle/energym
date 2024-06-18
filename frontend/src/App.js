@@ -20,6 +20,8 @@ import ProfessorHome from "./Components/ProfessorHome/ProfessorHome";
 import MySchedule from "./Components/ProfessorHome/MySchedule/MySchedule";
 import Payment from "./Components/StudentHome/Payment";
 import Calendar from "./Components/StudentHome/MySchedule/Calendar";
+import ProfessorCalendar from "./Components/ProfessorHome/MySchedule/Calendar";
+
 
 function App() {
     const navigate = useNavigate();
@@ -41,7 +43,8 @@ function App() {
             <Route path="/AdministratorHome/ManageSchedule/AddLesson" element={<AddLesson/>}/>
             <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
-            <Route path="/student/:username" element={<StudentHome/>}/>
+                <Route path="/trainer/:username/calendar" element={<ProfessorCalendar/>}/>
+                <Route path="/student/:username" element={<StudentHome/>}/>
             <Route path="/student/:username/payment" element={<Payment/>}/>
             <Route path="/student/:username/calendar" element={<Calendar/>}/>
         </Routes>

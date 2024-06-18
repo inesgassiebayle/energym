@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
-import './Calendar.css';
+import '../../Calendar.css';
 import { Link, useParams } from 'react-router-dom';
 import Modal from './Modal';
 

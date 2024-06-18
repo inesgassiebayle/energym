@@ -10,7 +10,6 @@ import Assistance from "./Assistance";
 
 const MySchedule = () => {
     const { username } = useParams();
-    const [selectedDate, setSelectedDate] = useState('');
     const [error, setError] = useState('');
     const [lessons, setLessons] = useState([]);
     const [initialLessons, setInitialLessons] = useState([]);
@@ -28,10 +27,6 @@ const MySchedule = () => {
     const [initialFutureLessons, setInitialFutureLessons] = useState([]);
     const [selectedLessonId, setSelectedLessonId] = useState('');
 
-    const handleDateChange = (e) => {
-        const selectDate = e.target.value;
-        setSelectedDate(selectDate);
-    };
 
     const handleInformation = useCallback((lesson) => {
         setSelectedLesson(lesson.name);
@@ -60,33 +55,7 @@ const MySchedule = () => {
     }
 
     useEffect(() => {
-        if (selectedDate) {
-            const fetchClassesForSelectedDate = async () => {
-                try {
-                    const response = await axios.get('http://localhost:3333/professor/lessons', {
-                        params: {
-                            username: username,
-                            date: selectedDate
-                        }
-                    });
-                    setLessons(response.data);
-                    response.data.forEach(lesson => {
-                        console.log(lesson.name);
-                        console.log(lesson.date);
-                        console.log(lesson.id);
-                    })
-                } catch (error) {
-                    console.error('Error fetching classes:', error);
-                    setError('Failed to fetch classes.');
-                }
-            };
-            fetchClassesForSelectedDate();
-        }
-        console.log('Viewing details for trainer:', username);
-    }, [username, selectedDate]);
 
-    useEffect(() => {
-        if(!selectedDate){
             const fetchClasses = async () => {
                 try {
                     const response = await axios.get('http://localhost:3333/professor/lessonsByUser', {
@@ -101,12 +70,10 @@ const MySchedule = () => {
                 }
             };
             fetchClasses();
-        }
-    }, [username, selectedDate]);
+    }, [username]);
 
 
     useEffect(() => {
-        classifyClasses(lessons);
         classifyInitialClasses(initialLessons);
 
     }, [lessons, initialLessons]);
@@ -177,17 +144,6 @@ const MySchedule = () => {
     return (
         <div className ="my-schedule-container">
             <h2>My Schedule</h2>
-            <div className="date-picker">
-                <label htmlFor="date">Select a date:</label>
-                <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                />
-            </div>
-            {!selectedDate ? (
                 <>
                     <h3>Today's Classes:</h3>
                     {initialPresentLessons.length > 0 ? initialPresentLessons.map((classInfo, index) => (
@@ -215,41 +171,6 @@ const MySchedule = () => {
                         </div>
                     )) : <p>No future classes.</p>}
                 </>
-            ) : (
-                <div className="schedule-info">
-                    <h3>Classes for {selectedDate}:</h3>
-                    {lessons.length > 0 ? (
-                        <ul>
-                            {pastLessons.map((classInfo, index) => (
-                                <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='home-components-modification-button' onClick={() => openReviewsModal(classInfo)}>Reviews
-                                    </button>
-                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
-
-                                </div>
-                            ))}
-                            {presentLessons.map((classInfo, index) => (
-                                <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time}</span>
-                                    <button className='home-components-modification-button' onClick={() => openAssistanceModal(classInfo)}>Assistance
-                                    </button>
-                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
-
-                                </div>
-                            ))}
-                            {futureLessons.map((classInfo, index) => (
-                                <div key={index} className='staff-item'>
-                                    <span>{classInfo.name} at {classInfo.time} </span>
-                                    <button className='home-components-modification-button' onClick={() => openMoreModal(classInfo)}>More</button>
-                                </div>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No hay clases planeadas para el día seleccionado.</p>
-                    )}
-                </div>
-            )}
 
             <Link to={`/trainer/${username}`}>
                 <button className='staff-button back'>Home</button>
