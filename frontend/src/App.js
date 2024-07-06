@@ -26,6 +26,7 @@ function App() {
     const navigate = useNavigate();
     return (
         <Routes>
+            <Route path="/" element={<GetStarted/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/signup-trainer" element={<TrainerSignup/>}/>
