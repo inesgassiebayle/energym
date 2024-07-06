@@ -7,7 +7,7 @@ import Booking from "./Booking";
 import DeleteBooking from "./DeleteBooking";
 import ModifyReviewModal from "./ModifyReviewModal";
 import ProfessorViewModal from "./ProfessorViewModal";
-import authentication from "../../AdminHome/Hoc/Hoc";
+import authentication from "../../StudentHome/Common/Hoc/Authentication";
 
 const Modal = ({ lessonId, closeModal }) => {
     const { username } = useParams();
