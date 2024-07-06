@@ -3,22 +3,25 @@ import axios from 'axios';
 import logo from "../Assets/Logo.png";
 import './Payment.css';
 import spinner from "../Assets/spinner.svg";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
-const publicKey = ''; // Reemplaza con tu clave pública de producción
+const publicKey = 'APP_USR-3145c0d6-47ae-4279-a428-03d341a11036'; // Reemplaza con tu clave pública de producción
 
 const Payment = () => {
     const [plan, setPlan] = useState('');
     const {username} = useParams();
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     const handlePlanChange = (event) => {
+        setErrorMessage('')
         setPlan(event.target.value);
     };
 
     const handlePayment = useCallback(async () => {
         if (!plan) {
-            alert('Por favor selecciona un plan antes de continuar.');
+            setErrorMessage('Please select a plan');
             return;
         }
 
@@ -107,6 +110,8 @@ const Payment = () => {
                         <option value="monthly">Monthly Plan - $10</option>
                         <option value="annual">Yearly Plan - $100</option>
                     </select>
+                    {errorMessage && <div className="payment-error">{errorMessage}</div>}
+
                 </div>
             </div>
             <div className='payment-actions'>
@@ -121,6 +126,9 @@ const Payment = () => {
                 )}
                 <div id="wallet_container"></div>
             </div>
+            <Link to={`/student/${username}`}>
+                <button className='staff-button back'>Home</button>
+            </Link>
         </div>
     );
 };
