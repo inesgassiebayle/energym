@@ -11,6 +11,23 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.payment-error {
+    position: relative;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    margin-top: 8px;
+    padding: 10px;
+    background-color: #ffdddd;
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
 
 .payment-header {
     display: flex;

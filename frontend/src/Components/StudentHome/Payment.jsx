@@ -11,14 +11,17 @@ const Payment = () => {
     const [plan, setPlan] = useState('');
     const {username} = useParams();
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     const handlePlanChange = (event) => {
+        setErrorMessage('')
         setPlan(event.target.value);
     };
 
     const handlePayment = useCallback(async () => {
         if (!plan) {
-            alert('Por favor selecciona un plan antes de continuar.');
+            setErrorMessage('Please select a plan');
             return;
         }
 
@@ -107,6 +110,8 @@ const Payment = () => {
                         <option value="monthly">Monthly Plan - $10</option>
                         <option value="annual">Yearly Plan - $100</option>
                     </select>
+                    {errorMessage && <div className="payment-error">{errorMessage}</div>}
+
                 </div>
             </div>
             <div className='payment-actions'>
@@ -121,6 +126,9 @@ const Payment = () => {
                 )}
                 <div id="wallet_container"></div>
             </div>
+            <Link to={`/student/${username}`}>
+                <button className='staff-button back'>Home</button>
+            </Link>
         </div>
     );
 };
