@@ -98,6 +98,7 @@ public class Application {
 
         Spark.get("/compareInitialDate", lessonController::compareTodayDate);
 
+        Spark.get("/student/membership", studentController::getAllMemberships);
         Spark.post("/student/book-lesson", studentController::bookClass);
         Spark.delete("/student/booking", studentController::deleteBooking);
         Spark.get("/student/classify-lessons", studentController::classifyLessons);

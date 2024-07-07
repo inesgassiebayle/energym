@@ -20,6 +20,7 @@ import Payment from "./Components/StudentHome/Payment";
 import Calendar from "./Components/StudentHome/MySchedule/Calendar";
 import ProfessorCalendar from "./Components/ProfessorHome/MySchedule/Calendar";
 import AdminCalendar from "./Components/AdminHome/ManageSchelude/Calendar";
+import ViewMemberships from "./Components/AdminHome/ViewMembership/ViewMemberships";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Route path="/AdministratorHome/ManageActivities/AddActivity" element={<ActivityAddition/>}/>
             <Route path="/AdministratorHome/ManageRooms" element={<ManageRooms/>}/>
             <Route path="/AdministratorHome/ManageRooms/CreateRoom" element={<CreateRoom/>}/>
+            <Route path="/AdministratorHome/ViewMembership" element={<ViewMemberships/>}/>
             <Route path="/trainer/:username" element={<ProfessorHome/>}/>
             <Route path="/trainer/:username/schedule" element={<MySchedule/>}/>
                 <Route path="/trainer/:username/calendar" element={<ProfessorCalendar/>}/>

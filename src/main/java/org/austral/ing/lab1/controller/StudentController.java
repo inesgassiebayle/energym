@@ -2,10 +2,7 @@ package org.austral.ing.lab1.controller;
 
 import com.google.gson.Gson;
 import org.austral.ing.lab1.Result;
-import org.austral.ing.lab1.dto.BookingDto;
-import org.austral.ing.lab1.dto.ConcurrentBookingDto;
-import org.austral.ing.lab1.dto.LessonDto;
-import org.austral.ing.lab1.dto.ProfessorDateTimeDto;
+import org.austral.ing.lab1.dto.*;
 import org.austral.ing.lab1.model.*;
 import org.austral.ing.lab1.queries.*;
 import spark.Request;
@@ -17,6 +14,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.*;
 
 public class StudentController {
     private final Users users;
@@ -687,4 +685,22 @@ public class StudentController {
         }
         return gson.toJson(activeBookings);
     }
+
+    public String getAllMemberships(Request req, Response res) {
+        Memberships memberships = new Memberships();
+        List<Student> allStudents = students.findAllStudents();
+        List<MembershipDto> membershipInfoList = allStudents.stream().map(student -> {
+            Membership membership = memberships.findMembershipByStudent(student);
+            LocalDate expirationDate = (membership != null) ? membership.getExpiration() : null;
+            if (expirationDate != null && expirationDate.isBefore(LocalDate.now())) {
+                expirationDate = null;
+            }
+            return new MembershipDto(student.getUser().getUsername(),
+                expirationDate != null ? expirationDate.toString() : null);
+        }).collect(Collectors.toList());
+
+        return gson.toJson(membershipInfoList);
+    }
+
+
 }

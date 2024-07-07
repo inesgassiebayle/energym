@@ -42,7 +42,7 @@ public class MercadoPagoController {
   int monthlyPrice = 10;
   int annualPrice = 100;
   private final PaymentExpirationReminderService paymentMailing;
-  private final String mercadoLibreToken = "";
+  private final String mercadoLibreToken = "APP_USR-2741626126526290-061812-d5f751285abd16e9e0cb2d3addb790ba-1859643724";
   Gson gson = new Gson();
 
   public MercadoPagoController() {
@@ -89,7 +89,7 @@ public class MercadoPagoController {
 
       PreferenceRequest preferenceRequest = PreferenceRequest.builder()
         .items(items)
-        .notificationUrl("https://3f16-190-190-202-110.ngrok-free.app/api/mp/notifications/" + user.getId())
+        .notificationUrl("https://96c2-2803-9800-90ac-8088-905b-7d2a-b1e5-6cdd.ngrok-free.app/api/mp/notifications/" + user.getId())
         .backUrls(backUrls)
         .autoReturn("approved")
         .build();

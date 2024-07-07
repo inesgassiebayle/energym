@@ -3,9 +3,9 @@ import axios from 'axios';
 import logo from "../Assets/Logo.png";
 import './Payment.css';
 import spinner from "../Assets/spinner.svg";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
-const publicKey = ''; // Reemplaza con tu clave pública de producción
+const publicKey = 'APP_USR-3145c0d6-47ae-4279-a428-03d341a11036'; // Reemplaza con tu clave pública de producción
 
 const Payment = () => {
     const [plan, setPlan] = useState('');

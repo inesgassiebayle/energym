@@ -47,6 +47,9 @@ const AdminHome = () => {
                 <button className='button' onClick={() => navigate('/AdministratorHome/ManageActivities')}>Manage
                     Activities
                 </button>
+                <button className='button' onClick={() => navigate('/AdministratorHome/ViewMembership')}>View
+                    Memberships
+                </button>
                 <button className='button' onClick={() => navigate('/AdministratorHome/Calendar')}>Manage
                     Calendar
                 </button>
